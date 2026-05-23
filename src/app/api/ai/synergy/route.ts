@@ -24,9 +24,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error("AI Synergy Error:", error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("AI Synergy Error:", message);
     return NextResponse.json(
-      { error: "Failed to match synergy" },
+      { error: message },
       { status: 500 }
     );
   }

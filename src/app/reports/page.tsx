@@ -53,8 +53,8 @@ export default function ReportsPage() {
       const synergyData = synergyRes.ok ? await synergyRes.json() : null;
 
       if (!healthData) {
-        const errorText = healthRes.status === 500 ? "Server error (cek API key)" : "Gagal evaluasi kesehatan";
-        throw new Error(errorText);
+        const errorBody = await healthRes.json().catch(() => ({}));
+        throw new Error(errorBody.error || "Gagal evaluasi kesehatan");
       }
 
       setResult({
