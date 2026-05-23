@@ -36,7 +36,8 @@ async function callOpenRouter(messages: OpenRouterMessage[]): Promise<string> {
   });
 
   if (!res.ok) {
-    throw new Error(`OpenRouter API error: ${res.status} ${res.statusText}`);
+    const body = await res.text().catch(() => "");
+    throw new Error(`OpenRouter API error (${res.status}): ${res.statusText} — ${body.slice(0, 200)}`);
   }
 
   const data = (await res.json()) as OpenRouterResponse;
