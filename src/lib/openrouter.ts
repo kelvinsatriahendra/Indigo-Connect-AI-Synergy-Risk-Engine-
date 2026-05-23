@@ -1,5 +1,5 @@
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "google/gemini-1.5-flash";
+const MODEL = "google/gemini-2.0-flash-001";
 
 interface OpenRouterMessage {
   role: "system" | "user" | "assistant";
