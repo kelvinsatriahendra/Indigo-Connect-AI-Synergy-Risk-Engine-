@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  SYNERGY
+  FOUNDER
+}
+
+enum RiskLabel {
+  HIGH_GROWTH
+  STABLE
+  AT_RISK
+}
+
+enum ReportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+}
+
+enum StartupStatus {
+  ACTIVE
+  GRADUATED
+  INACTIVE
+}
+
+enum PipelineStatus {
+  PIPELINE
+  ON_GOING
+  SUCCESS
+  CANCELLED
+}
+
+enum AlertType {
+  RISK
+  GROWTH_DROP
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model User {
+  id            String   @id @default(uuid(7))
+  email         String   @unique
+  passwordHash  String   @map("password_hash")
+  name          String
+  role          Role     @default(FOUNDER)
+  avatarUrl     String?  @map("avatar_url")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  reports         Report[]
+  synergyPipelines SynergyPipeline[]
+
+  @@map("users")
+}
+
+model Startup {
+  id          String        @id @default(uuid(7))
+  name        String
+  founderName String        @map("founder_name")
+  sector      String
+  batch       String
+  description String?
+  logoUrl     String?       @map("logo_url")
+  website     String?
+  status      StartupStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  reports          Report[]
+  synergyPipelines SynergyPipeline[]
+  alertLogs        AlertLog[]
+  forecasts        Forecast[]
+
+  @@map("startups")
+}
+
+model Report {
+  id            String       @id @default(uuid(7))
+  startupId     String       @map("startup_id")
+  period        String       @map("period")
+  narrativeText String       @map("narrative_text")
+  metrics       Json?
+  submittedBy   String       @map("submitted_by")
+  status        ReportStatus @default(PENDING)
+  submittedAt   DateTime     @default(now()) @map("submitted_at")
+  processedAt   DateTime?    @map("processed_at")
+
+  startup          Startup           @relation(fields: [startupId], references: [id], onDelete: Cascade)
+  submittedByUser  User              @relation(fields: [submittedBy], references: [id])
+  healthEvaluation  HealthEvaluation?
+  executiveSummary  ExecutiveSummary?
+  synergyMatches    SynergyMatch[]
+  forecasts         Forecast[]
+
+  @@map("reports")
+}
+
+model HealthEvaluation {
+  id                String    @id @default(uuid(7))
+  reportId          String    @unique @map("report_id")
+  healthScore       Int       @map("health_score")
+  riskLabel         RiskLabel @map("risk_label")
+  sentimentScore    Float?    @map("sentiment_score")
+  operationalStatus String?   @map("operational_status")
+  aiRawResponse     Json?     @map("ai_raw_response")
+  modelUsed         String    @default("google/gemini-1.5-flash") @map("model_used")
+  evaluatedAt       DateTime  @default(now()) @map("evaluated_at")
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("health_evaluations")
+}
+
+model ExecutiveSummary {
+  id          String   @id @default(uuid(7))
+  reportId    String   @unique @map("report_id")
+  point1      String
+  point2      String
+  point3      String
+  aiRawResponse Json?  @map("ai_raw_response")
+  modelUsed   String   @default("google/gemini-1.5-flash") @map("model_used")
+  generatedAt DateTime @default(now()) @map("generated_at")
+
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("executive_summaries")
+}
+
+model TelkomBU {
+  id           String   @id @default(uuid(7))
+  name         String
+  description  String?
+  sector       String
+  keywords     Json?
+  logoUrl      String?  @map("logo_url")
+  contactEmail String?  @map("contact_email")
+  isActive     Boolean  @default(true) @map("is_active")
+
+  synergyMatches  SynergyMatch[]
+  synergyPipelines SynergyPipeline[]
+
+  @@map("telkom_bus")
+}
+
+model SynergyMatch {
+  id           String   @id @default(uuid(7))
+  reportId     String   @map("report_id")
+  telkomBuId   String   @map("telkom_bu_id")
+  matchReason  String   @map("match_reason")
+  matchScore   Float?   @map("match_score")
+  aiRawResponse Json?   @map("ai_raw_response")
+  matchedAt    DateTime @default(now()) @map("matched_at")
+
+  report  Report   @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  telkomBU TelkomBU @relation(fields: [telkomBuId], references: [id])
+
+  @@map("synergy_matches")
+}
+
+model SynergyPipeline {
+  id         String         @id @default(uuid(7))
+  startupId  String         @map("startup_id")
+  telkomBuId String         @map("telkom_bu_id")
+  status     PipelineStatus @default(PIPELINE)
+  notes      String?
+  assignedTo String?        @map("assigned_to")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+
+  startup   Startup  @relation(fields: [startupId], references: [id], onDelete: Cascade)
+  telkomBU  TelkomBU @relation(fields: [telkomBuId], references: [id])
+  assignedUser User? @relation(fields: [assignedTo], references: [id])
+
+  @@map("synergy_pipelines")
+}
+
+model AlertLog {
+  id            String        @id @default(uuid(7))
+  startupId     String        @map("startup_id")
+  alertType     AlertType     @default(RISK) @map("alert_type")
+  severity      AlertSeverity @default(MEDIUM)
+  emailSentTo   String        @map("email_sent_to")
+  emailContent  String?       @map("email_content")
+  aiSummary     String?       @map("ai_summary")
+  sentAt        DateTime      @default(now()) @map("sent_at")
+  readAt        DateTime?     @map("read_at")
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+
+  @@map("alert_logs")
+}
+
+model Forecast {
+  id                   String   @id @default(uuid(7))
+  startupId            String   @map("startup_id")
+  reportId             String   @map("report_id")
+  predictedGrowthRate  Float?   @map("predicted_growth_rate")
+  predictedRunwayMonths Int?    @map("predicted_runway_months")
+  confidenceScore      Float?   @map("confidence_score")
+  forecastData         Json?    @map("forecast_data")
+  aiRawResponse        Json?    @map("ai_raw_response")
+  generatedAt          DateTime @default(now()) @map("generated_at")
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+  report  Report  @relation(fields: [reportId], references: [id])
+
+  @@map("forecasts")
+}
