@@ -28,10 +28,10 @@ export default function Home() {
             Buka Dashboard
           </Link>
           <Link
-            href="/startups"
+            href="/reports"
             className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-700 px-8 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800"
           >
-            Lihat Startup
+            AI Evaluation
           </Link>
         </div>
       </div>
