@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
+import { FileText, Send, RefreshCw } from "lucide-react";
 
 export default function ReportsPage() {
   const [selectedStartup, setSelectedStartup] = useState<string>("");
@@ -75,108 +74,110 @@ export default function ReportsPage() {
   const selectedStartupData = startupsData.find((s) => s.id === selectedStartup);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="border-b border-slate-800 bg-slate-900/50">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <h1 className="text-2xl font-bold">AI Health Evaluation</h1>
-          <p className="text-sm text-slate-400">Submit laporan bulanan startup untuk evaluasi otomatis</p>
+    <AppShell>
+      <div className="p-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-3">
+            <FileText className="h-6 w-6 text-[#875bf7]" />
+            <h1 className="text-2xl font-bold text-[#161616]">AI Health Evaluation</h1>
+          </div>
+          <p className="mt-1 text-sm text-[#667085]">Submit laporan bulanan startup untuk evaluasi otomatis oleh AI</p>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-4xl px-6 py-8 space-y-8">
-        <Card className="bg-slate-900 border-slate-800">
-          <CardHeader>
-            <CardTitle className="text-white">Laporan Bulanan Startup</CardTitle>
-            <CardDescription className="text-slate-500">
-              Pilih startup dan tulis laporan untuk dievaluasi oleh AI
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="block text-sm text-slate-400 mb-2">Pilih Startup</label>
-              <select
-                className="w-full rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-white"
-                value={selectedStartup}
-                onChange={(e) => setSelectedStartup(e.target.value)}
-              >
-                <option value="">-- Pilih Startup --</option>
-                {startupsData.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.name} — {s.sector} ({s.batch})
-                  </option>
-                ))}
-              </select>
+        <div className="mx-auto max-w-4xl">
+          <div className="card-legion p-8">
+            <h2 className="text-lg font-bold text-[#161616]">Laporan Bulanan Startup</h2>
+            <p className="mt-1 text-sm text-[#667085]">Pilih startup dan tulis laporan untuk dievaluasi oleh AI</p>
+
+            <div className="mt-6 space-y-5">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
+                <select
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+                  value={selectedStartup}
+                  onChange={(e) => setSelectedStartup(e.target.value)}
+                >
+                  <option value="">-- Pilih Startup --</option>
+                  {startupsData.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} — {s.sector} ({s.batch})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-medium text-[#344054]">Narrative Report</label>
+                <textarea
+                  className="w-full min-h-[200px] rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7] resize-y"
+                  placeholder="Tulis laporan bulanan startup di sini. Contoh: Startup kami berhasil meningkatkan pendapatan 25% bulan ini dengan total 5.000 pengguna aktif..."
+                  value={narrativeText}
+                  onChange={(e) => setNarrativeText(e.target.value)}
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleEvaluate}
+                  disabled={!selectedStartup || !narrativeText.trim() || loading}
+                  className="btn-primary-solid gap-2 px-6 py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? (
+                    <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</>
+                  ) : (
+                    <><Send className="h-4 w-4" /> Evaluate with AI</>
+                  )}
+                </button>
+                {selectedStartupData && (
+                  <span className="inline-flex items-center rounded-full bg-[#f4f2fc] px-3 py-1 text-xs font-medium text-[#875bf7]">
+                    {selectedStartupData.name}
+                  </span>
+                )}
+              </div>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm text-slate-400 mb-2">Narrative Report</label>
-              <textarea
-                className="w-full min-h-[200px] rounded-lg bg-slate-800 border border-slate-700 px-4 py-3 text-white placeholder-slate-500 resize-y"
-                placeholder="Tulis laporan bulanan startup di sini..."
-                value={narrativeText}
-                onChange={(e) => setNarrativeText(e.target.value)}
+          {error && (
+            <div className="card-legion mt-6 border-red-200 bg-red-50 p-6">
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
+          {loading && (
+            <div className="card-legion mt-6 flex flex-col items-center justify-center py-16">
+              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+              <p className="text-sm font-medium text-[#344054]">AI sedang menganalisis laporan...</p>
+              <p className="mt-1 text-xs text-[#8c8f93]">Proses: Health Score + Executive Summary + Synergy Match</p>
+            </div>
+          )}
+
+          {result && (
+            <div className="mt-6">
+              <HealthScoreCard
+                healthScore={result.healthScore}
+                riskLabel={result.riskLabel}
+                sentimentScore={result.sentimentScore}
+                operationalStatus={result.operationalStatus}
+                summaryPoints={
+                  result.summary
+                    ? [result.summary.point1, result.summary.point2, result.summary.point3]
+                    : undefined
+                }
+                synergyMatches={
+                  result.synergy?.matches?.map((m) => {
+                    const bu = telkomBusData.find((b) => b.id === m.buId);
+                    return {
+                      name: bu?.name || m.buId,
+                      reason: m.reason,
+                      score: m.matchScore,
+                    };
+                  }) || undefined
+                }
               />
             </div>
-
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={handleEvaluate}
-                disabled={!selectedStartup || !narrativeText.trim() || loading}
-                className="bg-cyan-600 hover:bg-cyan-500 text-white"
-              >
-                {loading ? "Menganalisis..." : "Evaluate with AI ✨"}
-              </Button>
-              {selectedStartupData && (
-                <Badge variant="outline" className="bg-slate-800 text-slate-400 border-slate-700">
-                  {selectedStartupData.name}
-                </Badge>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        {error && (
-          <Card className="bg-slate-900 border-red-800">
-            <CardContent className="p-6">
-              <p className="text-red-400 text-sm">{error}</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {loading && (
-          <Card className="bg-slate-900 border-slate-800">
-            <CardContent className="p-12 flex flex-col items-center justify-center gap-4">
-              <div className="h-10 w-10 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
-              <p className="text-slate-400 text-sm">AI sedang menganalisis laporan...</p>
-              <p className="text-slate-600 text-xs">Proses: Health Score + Executive Summary + Synergy Match</p>
-            </CardContent>
-          </Card>
-        )}
-
-        {result && (
-          <HealthScoreCard
-            healthScore={result.healthScore}
-            riskLabel={result.riskLabel}
-            sentimentScore={result.sentimentScore}
-            operationalStatus={result.operationalStatus}
-            summaryPoints={
-              result.summary
-                ? [result.summary.point1, result.summary.point2, result.summary.point3]
-                : undefined
-            }
-            synergyMatches={
-              result.synergy?.matches?.map((m) => {
-                const bu = telkomBusData.find((b) => b.id === m.buId);
-                return {
-                  name: bu?.name || m.buId,
-                  reason: m.reason,
-                  score: m.matchScore,
-                };
-              }) || undefined
-            }
-          />
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </AppShell>
   );
 }

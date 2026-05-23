@@ -1,53 +1,138 @@
 import Link from "next/link";
+import { BarChart3, Shield, GitBranch, FileText, Lightbulb, Activity } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-slate-950 to-slate-900 text-white p-8">
-      <div className="max-w-2xl text-center space-y-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-800/50 px-4 py-1 text-sm text-slate-300">
-          Indigo by Telkom Indonesia
-        </div>
-
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Indigo Connect
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            AI Synergy & Risk Engine
-          </span>
-        </h1>
-
-        <p className="text-lg text-slate-400">
-          Executive Analytics Dashboard untuk evaluasi kesehatan bisnis startup,
-          deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
-        </p>
-
-        <div className="flex items-center justify-center gap-4 pt-4">
-          <Link
-            href="/dashboard"
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-white px-8 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-200"
-          >
+    <div className="min-h-screen">
+      {/* Header */}
+      <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#875bf7] text-xs font-bold text-white">
+            IC
+          </div>
+          <span className="text-sm font-bold text-[#161616]">Indigo Connect</span>
+        </Link>
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard" className="btn-primary-solid text-sm px-5 py-2">
             Buka Dashboard
           </Link>
-          <Link
-            href="/reports"
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-700 px-8 text-sm font-medium text-slate-300 transition-colors hover:bg-slate-800"
-          >
-            AI Evaluation
-          </Link>
         </div>
-      </div>
+      </header>
 
-      <div className="mt-16 grid gap-6 sm:grid-cols-3 max-w-3xl w-full">
-        {[
-          { title: "Health Score", desc: "Evaluasi otomatis kesehatan bisnis startup dengan AI" },
-          { title: "Risk Detection", desc: "Deteksi dini startup at risk sebelum terlambat" },
-          { title: "Synergy Match", desc: "Rekomendasi unit bisnis Telkom untuk kolaborasi" },
-        ].map((item) => (
-          <div key={item.title} className="rounded-xl border border-slate-800 bg-slate-900/50 p-6 text-left">
-            <h3 className="font-semibold text-white">{item.title}</h3>
-            <p className="mt-2 text-sm text-slate-400">{item.desc}</p>
+      {/* Hero */}
+      <section className="gradient-hero pt-32 pb-20 px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#e0e0e0] bg-white px-4 py-1 text-sm text-[#667085] mb-6">
+            Indigo by Telkom Indonesia
           </div>
-        ))}
-      </div>
+          <h1 className="text-4xl font-bold tracking-tight text-[#161616] sm:text-5xl lg:text-6xl">
+            Indigo Connect
+          </h1>
+          <p className="mt-3 text-2xl font-semibold text-[#875bf7] sm:text-3xl">
+            AI Synergy & Risk Engine
+          </p>
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-[#525252]">
+            Executive Analytics Dashboard untuk evaluasi kesehatan bisnis startup,
+            deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
+          </p>
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
+              Buka Dashboard
+            </Link>
+            <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+              AI Evaluation
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Grid — like Legion's role cards */}
+      <section className="py-20 px-6">
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center mb-14">
+            <h2 className="text-2xl font-bold text-[#161616]">What is Indigo Connect?</h2>
+            <p className="mt-2 text-[#525252]">AI-powered platform untuk monitoring dan sinergi startup</p>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                icon: BarChart3,
+                title: "Health Evaluator",
+                desc: "Evaluasi otomatis kesehatan bisnis startup dengan AI. Dapatkan health score, sentiment analysis, dan risk label real-time.",
+                color: "bg-[#f4f2fc] text-[#875bf7]",
+              },
+              {
+                icon: GitBranch,
+                title: "Synergy Matcher",
+                desc: "Temukan unit bisnis Telkom yang paling cocok untuk kolaborasi. AI mencocokkan berdasarkan profil dan kebutuhan startup.",
+                color: "bg-[#f0f9ff] text-[#2563eb]",
+              },
+              {
+                icon: Shield,
+                title: "Risk Detection",
+                desc: "Deteksi dini startup at risk dengan analisis sentimen dan operational status. Ambil tindakan sebelum terlambat.",
+                color: "bg-[#fef2f2] text-[#dc2626]",
+              },
+              {
+                icon: FileText,
+                title: "Executive Summary",
+                desc: "Ringkasan eksekutif otomatis dari laporan bulanan startup. Tiga poin singkat untuk keputusan cepat.",
+                color: "bg-[#f0fdf4] text-[#16a34a]",
+              },
+              {
+                icon: Lightbulb,
+                title: "AI Insights",
+                desc: "Wawasan cerdas dari data startup. Dapatkan rekomendasi strategis berbasis AI untuk pertumbuhan bisnis.",
+                color: "bg-[#fffbeb] text-[#d97706]",
+              },
+              {
+                icon: Activity,
+                title: "Forecasting",
+                desc: "Prediksi pertumbuhan dan runway startup 3 bulan ke depan. Antisipasi tantangan dengan data-driven decisions.",
+                color: "bg-[#f5f3ff] text-[#7c3aed]",
+              },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="card-subtle p-8">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.color}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-5 text-lg font-bold text-[#474d66]">{item.title}</h3>
+                  <p className="mt-2 text-sm text-[#8c8f93] leading-relaxed">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="border-t py-20 px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-2xl font-bold text-[#161616]">Mulai Evaluasi Startup Anda</h2>
+          <p className="mt-3 text-[#525252]">
+            Gunakan AI untuk memonitor portofolio startup Indigo dan temukan peluang sinergi dengan Telkom Group.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
+              Dashboard
+            </Link>
+            <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+              Submit Report
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t bg-white px-6 py-8">
+        <div className="mx-auto flex max-w-5xl items-center justify-between text-sm text-[#8c8f93]">
+          <p>&copy; 2026 Indigo by Telkom Indonesia</p>
+          <p>AI Synergy & Risk Engine</p>
+        </div>
+      </footer>
     </div>
   );
 }

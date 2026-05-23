@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
+import { Building2, Sparkles } from "lucide-react";
 
 type Startup = (typeof startupsData)[number];
 
@@ -41,61 +40,47 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
         const data = await res.json();
         setAiSummary(`1. ${data.point1}\n\n2. ${data.point2}\n\n3. ${data.point3}`);
       } else {
-        setAiSummary("AI Summary tidak tersedia saat ini. Mock data:\n1. Pendapatan meningkat 15%\n2. Pengguna aktif bertambah 500\n3. Target Q3 tercapai 80%");
+        setAiSummary("AI Summary tidak tersedia saat ini.");
       }
     } catch {
-      setAiSummary("AI Summary tidak tersedia saat ini. Mock data:\n1. Pendapatan meningkat 15%\n2. Pengguna aktif bertambah 500\n3. Target Q3 tercapai 80%");
+      setAiSummary("AI Summary tidak tersedia saat ini.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="border-b border-slate-800 bg-slate-900/50">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Startup</h1>
-              <p className="text-sm text-slate-400">
-                Daftar startup binaan Indigo
-              </p>
-            </div>
+    <AppShell>
+      <div className="p-8">
+        <div className="mb-8">
+          <div className="flex items-center gap-3">
+            <Building2 className="h-6 w-6 text-[#875bf7]" />
+            <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
           </div>
+          <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1 space-y-4">
-            <h2 className="text-lg font-semibold">Daftar Startup</h2>
+            <h2 className="text-sm font-bold text-[#344054] uppercase tracking-wider">Daftar Startup</h2>
             <div className="space-y-2">
               {startupsData.map((startup) => (
                 <button
                   key={startup.id}
                   onClick={() => handleAIAnalysis(startup)}
-                  className={`w-full text-left p-4 rounded-xl border transition-colors ${
+                  className={`w-full text-left rounded-xl border p-4 transition-all ${
                     selectedStartup?.id === startup.id
-                      ? "bg-slate-800 border-cyan-500/50"
-                      : "bg-slate-900 border-slate-800 hover:border-slate-700"
+                      ? "border-[#875bf7] bg-[#f4f2fc]"
+                      : "border-[#e0e0e0] bg-white hover:border-[#875bf7] hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-medium">{startup.name}</span>
-                    <Badge
-                      variant={startup.status === "ACTIVE" ? "default" : "destructive"}
-                      className={
-                        startup.status === "ACTIVE"
-                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                          : "bg-red-500/10 text-red-400 border-red-500/20"
-                      }
-                    >
+                    <span className="font-semibold text-[#161616]">{startup.name}</span>
+                    <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
                       {startup.status === "ACTIVE" ? "Aktif" : "At Risk"}
-                    </Badge>
+                    </span>
                   </div>
-                  <p className="text-sm text-slate-500 mt-1">
-                    {startup.sector} · {startup.batch}
-                  </p>
+                  <p className="mt-1 text-xs text-[#667085]">{startup.sector} · {startup.batch}</p>
                 </button>
               ))}
             </div>
@@ -103,100 +88,74 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
           <div className="lg:col-span-2">
             {selectedStartup ? (
-              <Card className="bg-slate-900 border-slate-800">
-                <CardHeader>
+              <div className="card-legion overflow-hidden">
+                <div className="p-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <CardTitle className="text-white text-2xl">
-                        {selectedStartup.name}
-                      </CardTitle>
-                      <CardDescription className="text-slate-500 mt-1">
-                        {selectedStartup.sector} · {selectedStartup.batch}
-                      </CardDescription>
+                      <div className="flex items-center gap-3">
+                        <h2 className="text-2xl font-bold text-[#161616]">{selectedStartup.name}</h2>
+                        <span className={selectedStartup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
+                          {selectedStartup.status === "ACTIVE" ? "High Growth" : "At Risk"}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-sm text-[#667085]">{selectedStartup.sector} · {selectedStartup.batch}</p>
                     </div>
-                    <Badge
-                      variant={
-                        selectedStartup.status === "ACTIVE"
-                          ? "default"
-                          : "destructive"
-                      }
-                      className={
-                        selectedStartup.status === "ACTIVE"
-                          ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-sm px-3 py-1"
-                          : "bg-red-500/10 text-red-400 border-red-500/20 text-sm px-3 py-1"
-                      }
-                    >
-                      {selectedStartup.status === "ACTIVE"
-                        ? "High Growth"
-                        : "At Risk"}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div>
-                    <h3 className="text-sm font-semibold text-slate-400 mb-2">
-                      Deskripsi
-                    </h3>
-                    <p className="text-slate-300">
-                      {selectedStartup.description}
-                    </p>
-                    <p className="text-sm text-slate-500 mt-2">
-                      Founder: {selectedStartup.founderName}
-                    </p>
                   </div>
 
-                  <div className="border-t border-slate-800 pt-6">
+                  <div className="mt-6">
+                    <h3 className="text-sm font-semibold text-[#344054] mb-2">Deskripsi</h3>
+                    <p className="text-sm text-[#525252] leading-relaxed">{selectedStartup.description}</p>
+                    <p className="mt-2 text-xs text-[#8c8f93]">Founder: {selectedStartup.founderName}</p>
+                  </div>
+
+                  <div className="mt-8 border-t border-[#f2f4f7] pt-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-semibold text-slate-400">
-                        AI Executive Summary
-                      </h3>
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-[#875bf7]" />
+                        <h3 className="text-sm font-semibold text-[#161616]">AI Executive Summary</h3>
+                      </div>
+                      <button
                         onClick={() => handleAIAnalysis(selectedStartup)}
                         disabled={loading}
-                        className="border-slate-700 text-slate-300 hover:bg-slate-800"
+                        className="btn-primary-outline gap-2 px-4 py-2 text-xs disabled:opacity-50"
                       >
                         {loading ? "Menganalisis..." : "Generate AI Summary"}
-                      </Button>
+                      </button>
                     </div>
 
                     {loading ? (
                       <div className="flex items-center justify-center py-12">
-                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
+                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
                       </div>
                     ) : aiSummary ? (
-                      <div className="space-y-3 rounded-lg bg-slate-800/50 p-4">
+                      <div className="space-y-3 rounded-xl bg-[#f2f4f7] p-5">
                         {aiSummary.split("\n\n").map((point, i) => (
-                          <p key={i} className="text-sm text-slate-300 leading-relaxed">
-                            {point}
-                          </p>
+                          <p key={i} className="text-sm text-[#344054] leading-relaxed">{point}</p>
                         ))}
-                        <p className="text-xs text-slate-500 pt-2 border-t border-slate-700">
-                          Dihasilkan oleh AI · Gemini 1.5 Flash via OpenRouter
+                        <p className="pt-3 border-t border-[#e0e0e0] text-xs text-[#8c8f93]">
+                          Dihasilkan oleh AI · Google Gemini 2.0 Flash via OpenRouter
                         </p>
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-500 text-center py-8">
+                      <p className="text-sm text-[#8c8f93] text-center py-8">
                         Klik &quot;Generate AI Summary&quot; untuk melihat ringkasan
                       </p>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ) : (
-              <div className="flex items-center justify-center h-full min-h-[400px] rounded-xl border border-slate-800 bg-slate-900/50">
+              <div className="card-legion flex items-center justify-center min-h-[400px]">
                 <div className="text-center">
-                  <p className="text-slate-500">Pilih startup untuk melihat detail</p>
-                  <p className="text-sm text-slate-600 mt-2">
-                    Klik salah satu startup di samping
-                  </p>
+                  <Building2 className="mx-auto h-10 w-10 text-[#d0d5dd]" />
+                  <p className="mt-3 text-sm font-medium text-[#667085]">Pilih startup untuk melihat detail</p>
+                  <p className="mt-1 text-xs text-[#8c8f93]">Klik salah satu startup di samping</p>
                 </div>
               </div>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers } from "lucide-react";
 
 type Startup = (typeof startupsData)[number];
 
@@ -30,25 +30,13 @@ export default function DashboardPage() {
 
   useEffect(() => {
     let result = [...startups];
-
-    if (filters.sector !== "all") {
-      result = result.filter((s) => s.sector === filters.sector);
-    }
-    if (filters.batch !== "all") {
-      result = result.filter((s) => s.batch === filters.batch);
-    }
-    if (filters.risk !== "all") {
-      result = result.filter((s) => s.status === filters.risk);
-    }
+    if (filters.sector !== "all") result = result.filter((s) => s.sector === filters.sector);
+    if (filters.batch !== "all") result = result.filter((s) => s.batch === filters.batch);
+    if (filters.risk !== "all") result = result.filter((s) => s.status === filters.risk);
     if (search) {
       const q = search.toLowerCase();
-      result = result.filter(
-        (s) =>
-          s.name.toLowerCase().includes(q) ||
-          s.sector.toLowerCase().includes(q)
-      );
+      result = result.filter((s) => s.name.toLowerCase().includes(q) || s.sector.toLowerCase().includes(q));
     }
-
     setFilteredStartups(result);
   }, [startups, filters, search]);
 
@@ -66,162 +54,137 @@ export default function DashboardPage() {
   const uniqueSectors = [...new Set(startups.map((s) => s.sector))];
   const uniqueBatches = [...new Set(startups.map((s) => s.batch))];
 
+  const totalStartups = filteredStartups.length;
+  const highGrowth = filteredStartups.filter((s) => s.status === "ACTIVE").length;
+  const atRisk = filteredStartups.filter((s) => s.status === "AT_RISK").length;
+
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
-      <div className="border-b border-slate-800 bg-slate-900/50">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">Indigo Connect</h1>
-              <p className="text-sm text-slate-400">Executive Analytics Dashboard</p>
+    <AppShell>
+      <div className="p-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-[#161616]">Dashboard</h1>
+          <p className="mt-1 text-sm text-[#667085]">Executive overview of startup portfolio</p>
+        </div>
+
+        {/* Stat Cards */}
+        <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="card-legion p-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-[#667085]">Total Startup</p>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#f4f2fc] text-[#875bf7]">
+                <Building2 className="h-4 w-4" />
+              </div>
             </div>
-            <Badge variant="secondary" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
-              AI Powered
-            </Badge>
+            <p className="mt-3 text-3xl font-bold text-[#161616]">{totalStartups}</p>
+          </div>
+
+          <div className="card-legion p-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-[#667085]">High Growth</p>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                <TrendingUp className="h-4 w-4" />
+              </div>
+            </div>
+            <p className="mt-3 text-3xl font-bold text-emerald-600">{highGrowth}</p>
+          </div>
+
+          <div className="card-legion p-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-[#667085]">At Risk</p>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                <AlertTriangle className="h-4 w-4" />
+              </div>
+            </div>
+            <p className="mt-3 text-3xl font-bold text-red-600">{atRisk}</p>
+          </div>
+
+          <div className="card-legion p-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-[#667085]">Batch Aktif</p>
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                <Layers className="h-4 w-4" />
+              </div>
+            </div>
+            <p className="mt-3 text-3xl font-bold text-[#161616]">{uniqueBatches.length}</p>
           </div>
         </div>
-      </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-8 space-y-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-400">Total Startup</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{filteredStartups.length}</p>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-400">High Growth</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-emerald-400">
-                {filteredStartups.filter((s) => s.status === "ACTIVE").length}
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-400">At Risk</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold text-red-400">
-                {filteredStartups.filter((s) => s.status === "AT_RISK").length}
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-slate-400">Batch Aktif</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-bold">{uniqueBatches.length}</p>
-            </CardContent>
-          </Card>
+        {/* Charts Row */}
+        <div className="mb-8 grid gap-6 lg:grid-cols-2">
+          <div className="card-legion p-6">
+            <h3 className="text-base font-bold text-[#161616]">Health Score Distribution</h3>
+            <div className="mt-6 space-y-5">
+              {healthDistribution.map((item) => (
+                <div key={item.label}>
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span className="font-medium text-[#344054]">{item.label}</span>
+                    <span className="text-[#667085]">{item.count}</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-[#f2f4f7]">
+                    <div
+                      className={`h-2.5 rounded-full ${item.color} transition-all`}
+                      style={{
+                        width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="card-legion p-6">
+            <h3 className="text-base font-bold text-[#161616]">Sektor Distribution</h3>
+            <div className="mt-6 space-y-5">
+              {Object.entries(sectorDistribution).map(([sector, count]) => (
+                <div key={sector}>
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className={`h-2.5 w-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"}`} />
+                      <span className="font-medium text-[#344054]">{sector}</span>
+                    </div>
+                    <span className="text-[#667085]">{count}</span>
+                  </div>
+                  <div className="h-2.5 rounded-full bg-[#f2f4f7]">
+                    <div
+                      className={`h-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"} transition-all`}
+                      style={{
+                        width: `${totalStartups > 0 ? (count / totalStartups) * 100 : 0}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-white">Health Score Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {healthDistribution.map((item) => (
-                  <div key={item.label} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-300">{item.label}</span>
-                      <span className="text-slate-400">{item.count}</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-slate-800">
-                      <div
-                        className={`h-2 rounded-full ${item.color} transition-all`}
-                        style={{
-                          width: `${
-                            filteredStartups.length > 0
-                              ? (item.count / filteredStartups.length) * 100
-                              : 0
-                          }%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-slate-900 border-slate-800">
-            <CardHeader>
-              <CardTitle className="text-white">Sektor Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {Object.entries(sectorDistribution).map(([sector, count]) => (
-                  <div key={sector} className="space-y-1">
-                    <div className="flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`h-2.5 w-2.5 rounded-full ${
-                            sectorColors[sector] || "bg-slate-500"
-                          }`}
-                        />
-                        <span className="text-slate-300">{sector}</span>
-                      </div>
-                      <span className="text-slate-400">{count}</span>
-                    </div>
-                    <div className="h-2 rounded-full bg-slate-800">
-                      <div
-                        className={`h-2 rounded-full ${
-                          sectorColors[sector] || "bg-slate-500"
-                        } transition-all`}
-                        style={{
-                          width: `${
-                            filteredStartups.length > 0
-                              ? (count / filteredStartups.length) * 100
-                              : 0
-                          }%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
+        {/* Filters */}
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <Filter className="h-4 w-4 text-[#667085]" />
           <select
-            className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white"
+            className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
             value={filters.sector}
             onChange={(e) => setFilters({ ...filters, sector: e.target.value })}
           >
             <option value="all">Semua Sektor</option>
             {uniqueSectors.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
-
           <select
-            className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white"
+            className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
             value={filters.batch}
             onChange={(e) => setFilters({ ...filters, batch: e.target.value })}
           >
             <option value="all">Semua Batch</option>
             {uniqueBatches.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
+              <option key={b} value={b}>{b}</option>
             ))}
           </select>
-
           <select
-            className="rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white"
+            className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
             value={filters.risk}
             onChange={(e) => setFilters({ ...filters, risk: e.target.value })}
           >
@@ -229,53 +192,51 @@ export default function DashboardPage() {
             <option value="ACTIVE">High Growth</option>
             <option value="AT_RISK">At Risk</option>
           </select>
-
-          <input
-            className="flex-1 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-sm text-white placeholder-slate-500 min-w-[200px]"
-            placeholder="Cari startup..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#667085]" />
+            <input
+              className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2 pl-10 pr-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              placeholder="Cari startup..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredStartups.map((startup) => (
-            <Card
-              key={startup.id}
-              className="bg-slate-900 border-slate-800 hover:border-slate-700 transition-colors"
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-white">{startup.name}</CardTitle>
-                    <CardDescription className="text-slate-500 mt-1">
-                      {startup.sector} · {startup.batch}
-                    </CardDescription>
+        {/* Startup Cards */}
+        {filteredStartups.length === 0 ? (
+          <div className="card-legion flex flex-col items-center justify-center py-16">
+            <Search className="mb-3 h-10 w-10 text-[#d0d5dd]" />
+            <p className="text-sm font-medium text-[#667085]">Tidak ada startup yang cocok</p>
+            <p className="text-xs text-[#8c8f93] mt-1">Coba ubah filter atau kata kunci pencarian</p>
+          </div>
+        ) : (
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredStartups.map((startup) => (
+              <div key={startup.id} className="card-legion overflow-hidden">
+                <div className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="text-base font-bold text-[#161616]">{startup.name}</h3>
+                      <p className="mt-0.5 text-xs text-[#667085]">{startup.sector} · {startup.batch}</p>
+                    </div>
+                    <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
+                      {startup.status === "ACTIVE" ? "High Growth" : "At Risk"}
+                    </span>
                   </div>
-                  <Badge
-                    variant={
-                      startup.status === "ACTIVE" ? "default" : "destructive"
-                    }
-                    className={
-                      startup.status === "ACTIVE"
-                        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                        : "bg-red-500/10 text-red-400 border-red-500/20"
-                    }
-                  >
-                    {startup.status === "ACTIVE" ? "High Growth" : "At Risk"}
-                  </Badge>
+                  <p className="mt-3 text-sm leading-relaxed text-[#525252]">{startup.description}</p>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400">{startup.description}</p>
-                <p className="mt-2 text-xs text-slate-500">
-                  Founder: {startup.founderName}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                <div className="border-t border-[#f2f4f7] px-6 py-3">
+                  <div className="flex items-center justify-between text-xs text-[#8c8f93]">
+                    <span>Founder: {startup.founderName}</span>
+                    <span>{startup.batch}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </AppShell>
   );
 }

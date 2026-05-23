@@ -1,7 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Shield, TrendingUp, AlertTriangle, Target, Lightbulb } from "lucide-react";
 
 interface HealthScoreProps {
   healthScore: number;
@@ -20,107 +19,123 @@ export function HealthScoreCard({
   summaryPoints,
   synergyMatches,
 }: HealthScoreProps) {
-  const getRiskColor = (label: string) => {
+  const getRiskStyle = (label: string) => {
     switch (label) {
       case "HIGH_GROWTH":
-        return { badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20", bar: "bg-emerald-500" };
+        return { badge: "badge-high-growth", bar: "bg-emerald-500", icon: TrendingUp, iconBg: "bg-emerald-50 text-emerald-600", label: "High Growth" };
       case "STABLE":
-        return { badge: "bg-blue-500/10 text-blue-400 border-blue-500/20", bar: "bg-blue-500" };
+        return { badge: "badge-stable", bar: "bg-blue-500", icon: Shield, iconBg: "bg-blue-50 text-blue-600", label: "Stable" };
       case "AT_RISK":
-        return { badge: "bg-red-500/10 text-red-400 border-red-500/20", bar: "bg-red-500" };
+        return { badge: "badge-at-risk", bar: "bg-red-500", icon: AlertTriangle, iconBg: "bg-red-50 text-red-600", label: "At Risk" };
       default:
-        return { badge: "bg-slate-500/10 text-slate-400 border-slate-500/20", bar: "bg-slate-500" };
+        return { badge: "bg-slate-50 text-slate-700", bar: "bg-slate-500", icon: Shield, iconBg: "bg-slate-50 text-slate-600", label: riskLabel };
     }
   };
 
-  const riskColor = getRiskColor(riskLabel);
-  const displayLabel = riskLabel === "HIGH_GROWTH" ? "High Growth" : riskLabel === "AT_RISK" ? "At Risk" : riskLabel;
+  const risk = getRiskStyle(riskLabel);
+  const RiskIcon = risk.icon;
 
   return (
     <div className="space-y-6">
-      <Card className="bg-slate-900 border-slate-800">
-        <CardHeader>
+      {/* Health Score Card */}
+      <div className="card-legion overflow-hidden">
+        <div className="p-6">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-white text-lg">AI Health Evaluation</CardTitle>
-            <Badge variant="outline" className={riskColor.badge}>
-              {displayLabel}
-            </Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-slate-400">Health Score</span>
-              <span className="text-white font-bold text-2xl">{healthScore}<span className="text-slate-500 text-sm font-normal">/100</span></span>
+            <div className="flex items-center gap-3">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${risk.iconBg}`}>
+                <RiskIcon className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#161616]">AI Health Evaluation</h3>
+                <p className="text-xs text-[#667085]">Real-time AI analysis</p>
+              </div>
             </div>
-            <div className="h-3 rounded-full bg-slate-800 overflow-hidden">
+            <span className={risk.badge}>{risk.label}</span>
+          </div>
+
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-[#344054]">Health Score</span>
+              <span className="text-2xl font-bold text-[#161616]">{healthScore}<span className="text-sm font-normal text-[#8c8f93]">/100</span></span>
+            </div>
+            <div className="h-3 rounded-full bg-[#f2f4f7] overflow-hidden">
               <div
-                className={`h-3 rounded-full transition-all duration-500 ${riskColor.bar}`}
+                className={`h-3 rounded-full transition-all duration-500 ${risk.bar}`}
                 style={{ width: `${healthScore}%` }}
               />
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
             {sentimentScore !== undefined && (
-              <div className="rounded-lg bg-slate-800/50 p-4">
-                <p className="text-xs text-slate-500 mb-1">Sentiment Score</p>
-                <p className="text-lg font-semibold text-white">{(sentimentScore * 100).toFixed(0)}%</p>
+              <div className="rounded-xl bg-[#f2f4f7] p-4">
+                <p className="text-xs font-medium text-[#667085] mb-1">Sentiment Score</p>
+                <p className="text-lg font-bold text-[#161616]">{(sentimentScore * 100).toFixed(0)}%</p>
               </div>
             )}
             {operationalStatus && (
-              <div className="rounded-lg bg-slate-800/50 p-4">
-                <p className="text-xs text-slate-500 mb-1">Operational Status</p>
-                <p className="text-sm text-slate-300">{operationalStatus}</p>
+              <div className="rounded-xl bg-[#f2f4f7] p-4">
+                <p className="text-xs font-medium text-[#667085] mb-1">Operational Status</p>
+                <p className="text-sm text-[#344054]">{operationalStatus}</p>
               </div>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
+      {/* Executive Summary */}
       {summaryPoints && summaryPoints.length > 0 && (
-        <Card className="bg-slate-900 border-slate-800">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">Executive Summary</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3">
-              {summaryPoints.map((point, i) => (
-                <li key={i} className="flex gap-3 text-sm text-slate-300">
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-bold">
-                    {i + 1}
-                  </span>
-                  {point}
-                </li>
-              ))}
-            </ul>
-            <p className="text-xs text-slate-600 mt-4">Generated by AI · Gemini 1.5 Flash via OpenRouter</p>
-          </CardContent>
-        </Card>
+        <div className="card-legion p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fef2f2] text-[#dc2626]">
+              <Target className="h-4 w-4" />
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-[#161616]">Executive Summary</h3>
+              <p className="text-xs text-[#667085]">AI-generated 3-point summary</p>
+            </div>
+          </div>
+          <ul className="space-y-3">
+            {summaryPoints.map((point, i) => (
+              <li key={i} className="flex gap-3 text-sm text-[#344054]">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f4f2fc] text-[#875bf7] text-xs font-bold">
+                  {i + 1}
+                </span>
+                {point}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs text-[#8c8f93]">Generated by AI · Google Gemini 2.0 Flash via OpenRouter</p>
+        </div>
       )}
 
+      {/* Synergy Recommendations */}
       {synergyMatches && synergyMatches.length > 0 && (
-        <Card className="bg-slate-900 border-slate-800">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">Synergy Recommendations</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {synergyMatches.map((match, i) => (
-                <div key={i} className="rounded-lg border border-slate-800 bg-slate-800/30 p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="font-medium text-white">{match.name}</p>
-                    <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
-                      {Math.round(match.score * 100)}% match
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-slate-400">{match.reason}</p>
-                </div>
-              ))}
+        <div className="card-legion p-6">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#fffbeb] text-[#d97706]">
+              <Lightbulb className="h-4 w-4" />
             </div>
-            <p className="text-xs text-slate-600 mt-4">Generated by AI · Gemini 1.5 Flash via OpenRouter</p>
-          </CardContent>
-        </Card>
+            <div>
+              <h3 className="text-base font-bold text-[#161616]">Synergy Recommendations</h3>
+              <p className="text-xs text-[#667085]">Telkom BU collaboration matches</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {synergyMatches.map((match, i) => (
+              <div key={i} className="rounded-xl border border-[#f2f4f7] bg-[#fafafa] p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="font-semibold text-[#161616]">{match.name}</p>
+                  <span className="inline-flex items-center rounded-full bg-[#f4f2fc] px-2.5 py-0.5 text-xs font-medium text-[#875bf7]">
+                    {Math.round(match.score * 100)}% match
+                  </span>
+                </div>
+                <p className="text-sm text-[#525252]">{match.reason}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-xs text-[#8c8f93]">Generated by AI · Google Gemini 2.0 Flash via OpenRouter</p>
+        </div>
       )}
     </div>
   );
@@ -154,7 +169,7 @@ export function ScoreGauge({ score, size = "md" }: { score: number; size?: "sm" 
           fill="none"
           stroke="currentColor"
           strokeWidth={strokeWidth}
-          className="text-slate-800"
+          className="text-[#f2f4f7]"
         />
         <circle
           cx={dimensions / 2}
@@ -169,10 +184,10 @@ export function ScoreGauge({ score, size = "md" }: { score: number; size?: "sm" 
           className={`${getColor(score)} transition-all duration-1000`}
         />
       </svg>
-      <span className={`font-bold ${size === "lg" ? "text-3xl" : size === "sm" ? "text-sm" : "text-xl"} text-white`}>
+      <span className={`font-bold ${size === "lg" ? "text-3xl" : size === "sm" ? "text-sm" : "text-xl"} text-[#161616]`}>
         {score}
       </span>
-      <span className={`${size === "sm" ? "text-[10px]" : "text-xs"} text-slate-500`}>{getLabel(score)}</span>
+      <span className={`${size === "sm" ? "text-[10px]" : "text-xs"} text-[#667085]`}>{getLabel(score)}</span>
     </div>
   );
 }
