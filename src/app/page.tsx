@@ -161,7 +161,7 @@ export default async function Home() {
               },
             ].map((item) => {
               return (
-                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 shadow-xl group hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col justify-between h-[400px]">
+                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 shadow-xl group hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col h-[350px]">
                   {/* Top Image with Gradient Transition */}
                   <div className="relative h-[180px] w-full overflow-hidden">
                     <img 
@@ -174,17 +174,9 @@ export default async function Home() {
                   </div>
 
                   {/* Content section */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-lg font-bold text-white mb-2 tracking-wide">{item.title}</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed line-clamp-3">{item.desc}</p>
-                    </div>
-                    
-                    {/* "Selengkapnya" Footer Link */}
-                    <div className="mt-4 flex items-center justify-end text-xs font-semibold text-white/60 group-hover:text-white transition-colors cursor-pointer gap-1">
-                      <span>Selengkapnya</span>
-                      <span className="text-sm transition-transform group-hover:translate-x-0.5">›</span>
-                    </div>
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-white mb-2 tracking-wide">{item.title}</h3>
+                    <p className="text-sm text-slate-400 leading-relaxed line-clamp-3">{item.desc}</p>
                   </div>
                 </div>
               );
