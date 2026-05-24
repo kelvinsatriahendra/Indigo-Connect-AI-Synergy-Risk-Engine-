@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -9,7 +10,7 @@ import {
   GitBranch,
   BarChart3,
   Shield,
-  Lightbulb,
+  Bell,
 } from "lucide-react";
 
 const navItems = [
@@ -18,11 +19,21 @@ const navItems = [
   { href: "/startups", label: "Startups", icon: BarChart3 },
   { href: "/synergy", label: "Synergy Pipeline", icon: GitBranch },
   { href: "/forecast", label: "Forecast", icon: Shield },
-  { href: "/insights", label: "Insights", icon: Lightbulb },
+  { href: "/alerts", label: "Alerts", icon: Bell },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/alerts?unread=true")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data) setUnreadCount(data.alerts.length);
+      })
+      .catch(() => {});
+  }, [pathname]);
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
@@ -40,6 +51,7 @@ export function Sidebar() {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const showBadge = item.href === "/alerts" && unreadCount > 0;
 
           return (
             <Link
@@ -53,9 +65,14 @@ export function Sidebar() {
               )}
             >
               <Icon className="h-4 w-4 shrink-0" />
-              <span>{item.label}</span>
-              {isActive && (
-                <span className="ml-auto h-2 w-2 rounded-full bg-[#875bf7]" />
+              <span className="flex-1">{item.label}</span>
+              {showBadge && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                  {unreadCount}
+                </span>
+              )}
+              {isActive && !showBadge && (
+                <span className="h-2 w-2 rounded-full bg-[#875bf7]" />
               )}
             </Link>
           );
