@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 
 type Startup = (typeof startupsData)[number];
 
@@ -29,7 +30,18 @@ const synergySectorMap: Record<string, string[]> = {
 
 type UserInfo = { name: string; email: string; role: string; userId?: string };
 
+const sectorColorMap: Record<string, string> = {
+  Logistik: "#3b82f6",
+  Agritech: "#22c55e",
+  Fintech: "#eab308",
+  Edtech: "#a855f7",
+  Healthtech: "#ef4444",
+  Energy: "#f97316",
+  Travel: "#ec4899",
+};
+
 export default function DashboardPage() {
+  const [mounted, setMounted] = useState(false);
   const [startups, setStartups] = useState<Startup[]>([]);
   const [filteredStartups, setFilteredStartups] = useState<Startup[]>([]);
   const [filters, setFilters] = useState({ sector: "all", batch: "all", risk: "all" });
@@ -40,6 +52,7 @@ export default function DashboardPage() {
   const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
+    setMounted(true);
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
@@ -128,6 +141,11 @@ export default function DashboardPage() {
     acc[s.sector] = (acc[s.sector] || 0) + 1;
     return acc;
   }, {});
+
+  const sectorData = Object.entries(sectorDistribution).map(([name, value]) => ({
+    name,
+    value,
+  }));
 
   const uniqueSectors = [...new Set(startups.map((s) => s.sector))];
   const uniqueBatches = [...new Set(startups.map((s) => s.batch))];
@@ -251,20 +269,24 @@ export default function DashboardPage() {
         </div>
 
         {/* Charts section - only for admin and synergy */}
-        {user?.role !== "founder" && (
+        {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
-            <div className="card-legion p-6">
-              <h3 className="text-base font-bold text-[#161616]">Health Score Distribution</h3>
-              <div className="mt-6 space-y-5">
+            {/* Health Score Distribution - Sleek Progress Cards */}
+            <div className="card-legion p-6 flex flex-col justify-between">
+              <div>
+                <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Health Score Distribution</h3>
+                <p className="text-xs text-[#8c8f93]">Perbandingan status performa portofolio startup</p>
+              </div>
+              <div className="mt-6 space-y-6">
                 {healthDistribution.map((item) => (
                   <div key={item.label}>
                     <div className="mb-2 flex items-center justify-between text-sm">
-                      <span className="font-medium text-[#344054]">{item.label}</span>
-                      <span className="text-[#667085]">{item.count}</span>
+                      <span className="font-semibold text-[#344054]">{item.label}</span>
+                      <span className="font-bold text-[#161616]">{item.count} <span className="text-xs text-[#8c8f93] font-normal">({totalStartups > 0 ? Math.round((item.count / totalStartups) * 100) : 0}%)</span></span>
                     </div>
-                    <div className="h-2.5 rounded-full bg-[#f2f4f7]">
+                    <div className="h-3 rounded-full bg-[#f2f4f7] overflow-hidden">
                       <div
-                        className={`h-2.5 rounded-full ${item.color} transition-all`}
+                        className={`h-full rounded-full ${item.color} transition-all duration-500`}
                         style={{ width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%` }}
                       />
                     </div>
@@ -273,25 +295,41 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="card-legion p-6">
-              <h3 className="text-base font-bold text-[#161616]">Sektor Distribution</h3>
-              <div className="mt-6 space-y-5">
-                {Object.entries(sectorDistribution).map(([sector, count]) => (
-                  <div key={sector}>
-                    <div className="mb-2 flex items-center justify-between text-sm">
-                      <div className="flex items-center gap-2">
-                        <div className={`h-2.5 w-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"}`} />
-                        <span className="font-medium text-[#344054]">{sector}</span>
-                      </div>
-                      <span className="text-[#667085]">{count}</span>
-                    </div>
-                    <div className="h-2.5 rounded-full bg-[#f2f4f7]">
-                      <div className={`h-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"} transition-all`}
-                        style={{ width: `${totalStartups > 0 ? (count / totalStartups) * 100 : 0}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+            {/* Sektor Distribution - Recharts Premium Donut Chart */}
+            <div className="card-legion p-6 flex flex-col justify-between">
+              <div>
+                <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Sector Distribution</h3>
+                <p className="text-xs text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
+              </div>
+              <div className="mt-4 h-[240px] w-full flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={sectorData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={3}
+                      dataKey="value"
+                    >
+                      {sectorData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ background: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Legend 
+                      verticalAlign="bottom" 
+                      height={36} 
+                      iconType="circle"
+                      iconSize={8}
+                      formatter={(value) => <span className="text-xs font-semibold text-[#525252]">{value}</span>}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
