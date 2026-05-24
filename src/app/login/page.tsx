@@ -22,8 +22,7 @@ export default function LoginPage() {
             alt="Indigo Logo"
             className="mx-auto mb-4 h-12 w-auto object-contain brightness-110"
           />
-          <h1 className="text-xl font-bold text-white">Masuk ke Indigo Connect</h1>
-          <p className="mt-1 text-sm text-slate-300">AI Synergy & Risk Engine — Internal Platform</p>
+          <p className="text-sm text-slate-300">AI Synergy & Risk Engine — Internal Platform</p>
         </div>
 
         <form action={action} className="card-legion space-y-5 p-6">
