@@ -30,11 +30,11 @@ const roleLabels: Record<string, string> = {
   founder: "Mitra Startup",
 };
 
-// Role badge colors
+// Role badge colors in dark mode (translucent background, light border)
 const roleBadgeColors: Record<string, string> = {
-  admin: "bg-[#FEF2F2] text-[#ED1C24]",
-  synergy: "bg-[#fffbeb] text-[#d97706]",
-  founder: "bg-[#f0f9ff] text-[#2563eb]",
+  admin: "bg-[#ED1C24]/15 text-[#ED1C24] border border-[#ED1C24]/30",
+  synergy: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
+  founder: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
 };
 
 export function Sidebar() {
@@ -69,12 +69,15 @@ export function Sidebar() {
     : allNavItems;
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
-      <div className="flex h-16 items-center gap-3 border-b px-6">
+    <aside 
+      className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 text-white"
+      style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+    >
+      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6">
         <img
           src="/indigo-red.png"
           alt="Indigo Logo"
-          className="h-8 w-auto object-contain"
+          className="h-8 w-auto object-contain brightness-110"
         />
       </div>
 
@@ -91,14 +94,14 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? "bg-[#FEF2F2] text-[#ED1C24]"
-                  : "text-[#5c5e61] hover:bg-[#f7f8f9] hover:text-[#161616]"
+                  ? "bg-white/10 text-white font-semibold"
+                  : "text-slate-400 hover:bg-white/5 hover:text-white"
               )}
             >
-              <Icon className="h-4 w-4 shrink-0" />
+              <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#ED1C24]" : "text-slate-400")} />
               <span className="flex-1">{item.label}</span>
               {showBadge && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ED1C24] px-1.5 text-[10px] font-bold text-white">
                   {unreadCount}
                 </span>
               )}
@@ -110,26 +113,26 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t px-4 py-4">
+      <div className="border-t border-white/5 px-4 py-4">
         {user && (
           <div className="mb-3 flex items-center gap-3 px-2">
             <div className={cn(
               "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
-              roleBadgeColors[user.role] || "bg-[#FEF2F2] text-[#ED1C24]"
+              roleBadgeColors[user.role] || "bg-[#ED1C24]/15 text-[#ED1C24] border border-[#ED1C24]/30"
             )}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#161616] truncate">{user.name}</p>
-              <p className="text-[10px] text-[#8c8f93]">{roleLabels[user.role] || user.role}</p>
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
+              <p className="text-[10px] text-slate-400">{roleLabels[user.role] || user.role}</p>
             </div>
           </div>
         )}
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#5c5e61] transition-all duration-150 hover:bg-[#fef2f2] hover:text-red-600"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-400 transition-all duration-150 hover:bg-white/5 hover:text-white"
         >
-          <LogOut className="h-4 w-4 shrink-0" />
+          <LogOut className="h-4 w-4 shrink-0 text-slate-400" />
           <span>Logout</span>
         </button>
       </div>
