@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { getSession } from "@/lib/dal";
 import { BarChart3, Shield, GitBranch, FileText, Lightbulb, Activity } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+
   return (
     <div className="min-h-screen">
-      {/* Header */}
       <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#875bf7] text-xs font-bold text-white">
@@ -13,13 +15,23 @@ export default function Home() {
           <span className="text-sm font-bold text-[#161616]">Indigo Connect</span>
         </Link>
         <div className="flex items-center gap-4">
-          <Link href="/dashboard" className="btn-primary-solid text-sm px-5 py-2">
-            Buka Dashboard
-          </Link>
+          {session?.userId ? (
+            <Link href="/dashboard" className="btn-primary-solid text-sm px-5 py-2">
+              Buka Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="text-sm font-medium text-[#5c5e61] hover:text-[#161616]">
+                Masuk
+              </Link>
+              <Link href="/signup" className="btn-primary-solid text-sm px-5 py-2">
+                Daftar
+              </Link>
+            </>
+          )}
         </div>
       </header>
 
-      {/* Hero */}
       <section className="gradient-hero pt-32 pb-20 px-6">
         <div className="mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-[#e0e0e0] bg-white px-4 py-1 text-sm text-[#667085] mb-6">
@@ -36,17 +48,29 @@ export default function Home() {
             deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
-            <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
-              Buka Dashboard
-            </Link>
-            <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
-              AI Evaluation
-            </Link>
+            {session?.userId ? (
+              <>
+                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
+                  Buka Dashboard
+                </Link>
+                <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+                  AI Evaluation
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/signup" className="btn-primary-solid text-sm px-8 py-3">
+                  Daftar Sekarang
+                </Link>
+                <Link href="/login" className="btn-primary-outline text-sm px-8 py-3">
+                  Masuk
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Features Grid — like Legion's role cards */}
       <section className="py-20 px-6">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-14">
@@ -108,7 +132,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="border-t py-20 px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-2xl font-bold text-[#161616]">Mulai Evaluasi Startup Anda</h2>
@@ -116,17 +139,24 @@ export default function Home() {
             Gunakan AI untuk memonitor portofolio startup Indigo dan temukan peluang sinergi dengan Telkom Group.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4">
-            <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
-              Dashboard
-            </Link>
-            <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
-              Submit Report
-            </Link>
+            {session?.userId ? (
+              <>
+                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
+                  Dashboard
+                </Link>
+                <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+                  Submit Report
+                </Link>
+              </>
+            ) : (
+              <Link href="/signup" className="btn-primary-solid text-sm px-8 py-3">
+                Daftar Sekarang
+              </Link>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t bg-white px-6 py-8">
         <div className="mx-auto flex max-w-5xl items-center justify-between text-sm text-[#8c8f93]">
           <p>&copy; 2026 Indigo by Telkom Indonesia</p>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -11,6 +11,7 @@ import {
   BarChart3,
   Shield,
   Bell,
+  LogOut,
 } from "lucide-react";
 
 const navItems = [
@@ -24,16 +25,30 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
 
   useEffect(() => {
     fetch("/api/alerts?unread=true")
-      .then((res) => res.ok ? res.json() : null)
+      .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data) setUnreadCount(data.alerts.length);
       })
       .catch(() => {});
+
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) setUser(data.user);
+      })
+      .catch(() => {});
   }, [pathname]);
+
+  const handleLogout = async () => {
+    const { logout } = await import("@/app/actions/auth");
+    await logout();
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
@@ -79,16 +94,25 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f2f4f7] text-xs font-semibold text-[#344054]">
-            T
+      <div className="border-t px-4 py-4">
+        {user && (
+          <div className="mb-3 flex items-center gap-3 px-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f2fc] text-xs font-semibold text-[#875bf7]">
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-[#161616] truncate">{user.name}</p>
+              <p className="text-[10px] text-[#8c8f93] capitalize">{user.role}</p>
+            </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[#161616] truncate">Telkom Indonesia</p>
-            <p className="text-xs text-[#8c8f93]">Indigo Incubator</p>
-          </div>
-        </div>
+        )}
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#5c5e61] transition-all duration-150 hover:bg-[#fef2f2] hover:text-red-600"
+        >
+          <LogOut className="h-4 w-4 shrink-0" />
+          <span>Logout</span>
+        </button>
       </div>
     </aside>
   );
