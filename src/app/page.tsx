@@ -185,26 +185,42 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-t py-20 px-6">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-2xl font-bold text-[#161616]">Mulai Evaluasi Startup Anda</h2>
-          <p className="mt-3 text-[#525252]">
-            Gunakan AI untuk memonitor portofolio startup Indigo dan temukan peluang sinergi dengan Telkom Group.
-          </p>
-          <div className="mt-8 flex items-center justify-center gap-4">
+      <section className="relative overflow-hidden bg-[#800a28] py-16 px-6">
+        {/* Curved abstract background graphics in Telkom Indigo branding style */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-10">
+          <svg className="absolute right-[-10%] top-[-20%] h-[150%] w-auto text-white" viewBox="0 0 500 200" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M150,-50 C250,50 350,50 450,-50" strokeWidth="6" />
+            <path d="M100,-10 C220,110 320,110 440,-10" strokeWidth="4" />
+            <path d="M50,30 C200,200 300,200 450,30" strokeWidth="2" strokeDasharray="10 5" />
+          </svg>
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="text-left max-w-2xl">
+            <h2 className="text-2xl md:text-3xl font-medium text-white tracking-wide">Mulai Evaluasi Startup Anda</h2>
+            <p className="mt-3 text-sm md:text-base text-white/80 leading-relaxed">
+              Gunakan AI untuk memonitor portofolio startup Indigo dan temukan peluang sinergi dengan Telkom Group.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0 w-full sm:w-auto">
             {session?.userId ? (
               <>
-                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
-                  Dashboard
-                </Link>
-                <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+                <Link href="/reports" className="w-full sm:w-auto text-center border border-white hover:bg-white/10 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
                   Submit Report
+                </Link>
+                <Link href="/dashboard" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
+                  Buka Dashboard
                 </Link>
               </>
             ) : (
-              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3">
-                Masuk ke Platform
-              </Link>
+              <>
+                <Link href="/login" className="w-full sm:w-auto text-center border border-white hover:bg-white/10 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
+                  Buka Demo
+                </Link>
+                <Link href="/login" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
+                  Masuk ke Platform
+                </Link>
+              </>
             )}
           </div>
         </div>
