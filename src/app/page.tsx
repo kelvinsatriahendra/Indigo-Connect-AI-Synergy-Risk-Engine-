@@ -9,9 +9,11 @@ export default async function Home() {
     <div className="min-h-screen">
       <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ED1C24] text-xs font-bold text-white">
-            IC
-          </div>
+          <img
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            className="h-8 w-auto object-contain"
+          />
           <span className="text-sm font-bold text-[#161616]">Indigo Connect</span>
         </Link>
         <div className="flex items-center gap-4">

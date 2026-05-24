@@ -10,9 +10,11 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#f7f8f9] px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#ED1C24] text-lg font-bold text-white">
-            IC
-          </div>
+          <img
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            className="mx-auto mb-4 h-12 w-auto object-contain"
+          />
           <h1 className="text-xl font-bold text-[#161616]">Masuk ke Indigo Connect</h1>
           <p className="mt-1 text-sm text-[#667085]">AI Synergy & Risk Engine — Internal Platform</p>
         </div>
