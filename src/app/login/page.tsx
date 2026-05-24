@@ -10,7 +10,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#f7f8f9] px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#875bf7] text-lg font-bold text-white">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#ED1C24] text-lg font-bold text-white">
             IC
           </div>
           <h1 className="text-xl font-bold text-[#161616]">Masuk ke Indigo Connect</h1>
@@ -27,7 +27,7 @@ export default function LoginPage() {
               name="identifier"
               type="text"
               placeholder="Masukkan NIK Anda"
-              className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
             />
             {state?.errors?.identifier && <p className="mt-1 text-xs text-red-500">{state.errors.identifier[0]}</p>}
           </div>
@@ -41,7 +41,7 @@ export default function LoginPage() {
               name="password"
               type="password"
               placeholder="••••••••"
-              className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
             />
             {state?.errors?.password && <p className="mt-1 text-xs text-red-500">{state.errors.password[0]}</p>}
           </div>
@@ -73,9 +73,9 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => loginAsDemo("admin")}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f4f2fc] hover:border-[#875bf7] hover:text-[#875bf7]"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#FEF2F2] hover:border-[#ED1C24] hover:text-[#ED1C24]"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-[#875bf7] text-[10px] font-bold text-white">A</span>
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-[#ED1C24] text-[10px] font-bold text-white">A</span>
               Telkom Executive — NIK 940123
             </button>
             <button

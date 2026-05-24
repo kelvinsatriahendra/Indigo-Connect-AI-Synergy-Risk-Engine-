@@ -98,7 +98,7 @@ export function HealthScoreCard({
           <ul className="space-y-3">
             {summaryPoints.map((point, i) => (
               <li key={i} className="flex gap-3 text-sm text-[#344054]">
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f4f2fc] text-[#875bf7] text-xs font-bold">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#FEF2F2] text-[#ED1C24] text-xs font-bold">
                   {i + 1}
                 </span>
                 {point}
@@ -126,7 +126,7 @@ export function HealthScoreCard({
               <div key={i} className="rounded-xl border border-[#f2f4f7] bg-[#fafafa] p-4">
                 <div className="flex items-center justify-between mb-2">
                   <p className="font-semibold text-[#161616]">{match.name}</p>
-                  <span className="inline-flex items-center rounded-full bg-[#f4f2fc] px-2.5 py-0.5 text-xs font-medium text-[#875bf7]">
+                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-0.5 text-xs font-medium text-[#ED1C24]">
                     {Math.round(match.score * 100)}% match
                   </span>
                 </div>

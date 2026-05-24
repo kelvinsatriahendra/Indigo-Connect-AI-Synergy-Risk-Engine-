@@ -86,7 +86,7 @@ export default function ReportsPage() {
       <div className="p-8">
         <div className="mb-8">
           <div className="flex items-center gap-3">
-            <FileText className="h-6 w-6 text-[#875bf7]" />
+            <FileText className="h-6 w-6 text-[#ED1C24]" />
             <h1 className="text-2xl font-bold text-[#161616]">AI Health Evaluation</h1>
           </div>
           <p className="mt-1 text-sm text-[#667085]">Submit laporan bulanan startup untuk evaluasi otomatis oleh AI</p>
@@ -101,7 +101,7 @@ export default function ReportsPage() {
               <div>
                 <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
                 <select
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                   value={selectedStartup}
                   onChange={(e) => setSelectedStartup(e.target.value)}
                 >
@@ -117,7 +117,7 @@ export default function ReportsPage() {
               <div>
                 <label className="mb-2 block text-sm font-medium text-[#344054]">Narrative Report</label>
                 <textarea
-                  className="w-full min-h-[200px] rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7] resize-y"
+                  className="w-full min-h-[200px] rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y"
                   placeholder="Tulis laporan bulanan startup di sini. Contoh: Startup kami berhasil meningkatkan pendapatan 25% bulan ini dengan total 5.000 pengguna aktif..."
                   value={narrativeText}
                   onChange={(e) => setNarrativeText(e.target.value)}
@@ -137,7 +137,7 @@ export default function ReportsPage() {
                   )}
                 </button>
                 {selectedStartupData && (
-                  <span className="inline-flex items-center rounded-full bg-[#f4f2fc] px-3 py-1 text-xs font-medium text-[#875bf7]">
+                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-3 py-1 text-xs font-medium text-[#ED1C24]">
                     {selectedStartupData.name}
                   </span>
                 )}
@@ -153,7 +153,7 @@ export default function ReportsPage() {
 
           {loading && (
             <div className="card-legion mt-6 flex flex-col items-center justify-center py-16">
-              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
               <p className="text-sm font-medium text-[#344054]">AI sedang menganalisis laporan...</p>
               <p className="mt-1 text-xs text-[#8c8f93]">Proses: Health Score + Executive Summary + Synergy Match</p>
             </div>

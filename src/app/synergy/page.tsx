@@ -35,7 +35,7 @@ interface Pipeline {
 }
 
 const columns: { status: PipelineStatus; label: string; color: string }[] = [
-  { status: "PIPELINE", label: "Pipeline", color: "border-t-[#875bf7]" },
+  { status: "PIPELINE", label: "Pipeline", color: "border-t-[#ED1C24]" },
   { status: "ON_GOING", label: "On Going", color: "border-t-[#f59e0b]" },
   { status: "SUCCESS", label: "Success", color: "border-t-[#10b981]" },
   { status: "CANCELLED", label: "Cancelled", color: "border-t-[#ef4444]" },
@@ -142,7 +142,7 @@ export default function SynergyPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <GitBranch className="h-6 w-6 text-[#875bf7]" />
+                <GitBranch className="h-6 w-6 text-[#ED1C24]" />
                 <h1 className="text-2xl font-bold text-[#161616]">Synergy Pipeline</h1>
               </div>
               <p className="mt-1 text-sm text-[#667085]">Kanban pipeline kolaborasi startup × Telkom Business Unit</p>
@@ -153,7 +153,7 @@ export default function SynergyPage() {
           </div>
           <div className="mt-4 flex gap-6 text-sm">
             <span className="text-[#667085]">Total: <strong className="text-[#161616]">{totalCount}</strong></span>
-            <span className="text-[#667085]">Pipeline: <strong className="text-[#875bf7]">{pipelineCount}</strong></span>
+            <span className="text-[#667085]">Pipeline: <strong className="text-[#ED1C24]">{pipelineCount}</strong></span>
             <span className="text-[#667085]">On Going: <strong className="text-[#f59e0b]">{ongoingCount}</strong></span>
             <span className="text-[#667085]">Success: <strong className="text-[#10b981]">{successCount}</strong></span>
           </div>
@@ -164,7 +164,7 @@ export default function SynergyPage() {
           <div className="flex h-full gap-5 p-8">
             {loading ? (
               <div className="flex w-full items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
               </div>
             ) : (
               grouped.map((col) => (
@@ -193,7 +193,7 @@ export default function SynergyPage() {
                                   <p className="text-sm font-bold text-[#161616] truncate">{getStartupName(item.startupId)}</p>
                                   <p className="text-xs text-[#667085] truncate">{getBuName(item.telkomBuId)}</p>
                                 </div>
-                                <span className="ml-2 shrink-0 rounded-full bg-[#f4f2fc] px-2 py-0.5 text-[10px] font-semibold text-[#875bf7]">
+                                <span className="ml-2 shrink-0 rounded-full bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-semibold text-[#ED1C24]">
                                   {Math.round(item.matchScore * 100)}%
                                 </span>
                               </div>
@@ -204,7 +204,7 @@ export default function SynergyPage() {
                               {editingNotes === item.id ? (
                                 <div className="mt-3 space-y-2">
                                   <textarea
-                                    className="w-full rounded-lg border border-[#e0e0e0] bg-white p-2 text-xs text-[#344054] resize-none focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+                                    className="w-full rounded-lg border border-[#e0e0e0] bg-white p-2 text-xs text-[#344054] resize-none focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                                     rows={3}
                                     value={noteText}
                                     onChange={(e) => setNoteText(e.target.value)}
@@ -256,7 +256,7 @@ export default function SynergyPage() {
                                         ? "text-emerald-600 hover:bg-emerald-50"
                                         : nextStatus === "CANCELLED"
                                         ? "text-red-600 hover:bg-red-50"
-                                        : "text-[#875bf7] hover:bg-[#f4f2fc]"
+                                        : "text-[#ED1C24] hover:bg-[#FEF2F2]"
                                     }`}
                                   >
                                     {nextStatus === "ON_GOING" && <><ChevronRight className="h-3 w-3" /> Start</>}
@@ -285,7 +285,7 @@ export default function SynergyPage() {
           <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#f4f2fc] text-[#875bf7]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FEF2F2] text-[#ED1C24]">
                   <Target className="h-4 w-4" />
                 </div>
                 <h2 className="text-lg font-bold text-[#161616]">New Pipeline</h2>
@@ -298,7 +298,7 @@ export default function SynergyPage() {
             <form onSubmit={createPipeline} className="space-y-4">
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-[#344054]">Startup</label>
-                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]">
+                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]">
                   <option value="">Pilih startup</option>
                   {startupsData.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} — {s.sector}</option>
@@ -308,7 +308,7 @@ export default function SynergyPage() {
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-[#344054]">Telkom Business Unit</label>
-                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]">
+                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]">
                   <option value="">Pilih BU</option>
                   {telkomBusData.map((bu) => (
                     <option key={bu.id} value={bu.id}>{bu.name} — {bu.sector}</option>
@@ -319,14 +319,14 @@ export default function SynergyPage() {
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-[#344054]">Match Score (0-100)</label>
                 <input type="number" name="matchScore" min="0" max="100" defaultValue={75}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                 />
               </div>
 
               <div>
                 <label className="mb-1.5 block text-sm font-medium text-[#344054]">Alasan Sinergi</label>
                 <textarea name="reason" rows={3} placeholder="Deskripsi alasan kolaborasi..."
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7] resize-none"
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-none"
                 />
               </div>
 

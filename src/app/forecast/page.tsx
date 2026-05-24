@@ -84,7 +84,7 @@ export default function ForecastPage() {
       <div className="p-8">
         <div className="mb-8">
           <div className="flex items-center gap-3">
-            <BarChart3 className="h-6 w-6 text-[#875bf7]" />
+            <BarChart3 className="h-6 w-6 text-[#ED1C24]" />
             <h1 className="text-2xl font-bold text-[#161616]">Forecasting</h1>
           </div>
           <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
@@ -99,7 +99,7 @@ export default function ForecastPage() {
                 <select
                   value={selectedStartup}
                   onChange={(e) => setSelectedStartup(e.target.value)}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                 >
                   <option value="">-- Pilih Startup --</option>
                   {startupsData.map((s) => (
@@ -125,7 +125,7 @@ export default function ForecastPage() {
 
           {loading && (
             <div className="card-legion flex flex-col items-center justify-center py-20">
-              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
               <p className="text-sm font-medium text-[#344054]">AI sedang memproyeksikan data...</p>
               <p className="mt-1 text-xs text-[#8c8f93]">Menganalisis tren historis 6 bulan terakhir</p>
             </div>
@@ -190,9 +190,9 @@ export default function ForecastPage() {
                       yAxisId="left"
                       type="monotone"
                       dataKey="Revenue"
-                      stroke="#875bf7"
+                      stroke="#ED1C24"
                       strokeWidth={2}
-                      dot={{ r: 4, fill: "#875bf7" }}
+                      dot={{ r: 4, fill: "#ED1C24" }}
                       connectNulls
                     />
                     <Line
@@ -208,13 +208,13 @@ export default function ForecastPage() {
                 </ResponsiveContainer>
                 <div className="mt-3 flex items-center gap-4 text-xs text-[#8c8f93]">
                   <span className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#875bf7]" /> Revenue (juta)
+                    <span className="h-2.5 w-2.5 rounded-full bg-[#ED1C24]" /> Revenue (juta)
                   </span>
                   <span className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" /> Users (ribu)
                   </span>
-                  <span className="ml-auto flex items-center gap-1 text-[#875bf7]">
-                    <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-[#875bf7]" /> Projected
+                  <span className="ml-auto flex items-center gap-1 text-[#ED1C24]">
+                    <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-[#ED1C24]" /> Projected
                   </span>
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function ForecastPage() {
               {/* AI Notes */}
               <div className="card-legion p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f4f2fc] text-[#875bf7]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FEF2F2] text-[#ED1C24]">
                     <Lightbulb className="h-5 w-5" />
                   </div>
                   <div>
@@ -292,7 +292,7 @@ export default function ForecastPage() {
                             <td className="px-6 py-3 text-right text-[#525252]">Rp{p.burnRate}jt</td>
                             <td className="px-6 py-3 text-center">
                               <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                                isProj ? "bg-[#f4f2fc] text-[#875bf7]" : "bg-[#f2f4f7] text-[#667085]"
+                                isProj ? "bg-[#FEF2F2] text-[#ED1C24]" : "bg-[#f2f4f7] text-[#667085]"
                               }`}>
                                 {isProj ? "Projected" : "Historical"}
                               </span>

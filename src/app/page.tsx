@@ -9,7 +9,7 @@ export default async function Home() {
     <div className="min-h-screen">
       <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#875bf7] text-xs font-bold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ED1C24] text-xs font-bold text-white">
             IC
           </div>
           <span className="text-sm font-bold text-[#161616]">Indigo Connect</span>
@@ -35,7 +35,7 @@ export default async function Home() {
           <h1 className="text-4xl font-bold tracking-tight text-[#161616] sm:text-5xl lg:text-6xl">
             Indigo Connect
           </h1>
-          <p className="mt-3 text-2xl font-semibold text-[#875bf7] sm:text-3xl">
+          <p className="mt-3 text-2xl font-semibold text-[#ED1C24] sm:text-3xl">
             AI Synergy & Risk Engine
           </p>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-[#525252]">
@@ -74,7 +74,7 @@ export default async function Home() {
                 icon: BarChart3,
                 title: "Health Evaluator",
                 desc: "Evaluasi otomatis kesehatan bisnis startup dengan AI. Dapatkan health score, sentiment analysis, dan risk label real-time.",
-                color: "bg-[#f4f2fc] text-[#875bf7]",
+                color: "bg-[#FEF2F2] text-[#ED1C24]",
               },
               {
                 icon: GitBranch,

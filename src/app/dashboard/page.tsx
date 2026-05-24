@@ -164,7 +164,7 @@ export default function DashboardPage() {
 
         {/* Role-specific welcome banner for Founder */}
         {user?.role === "founder" && (
-          <div className="mb-8 rounded-xl bg-gradient-to-r from-[#875bf7] to-[#6941c6] p-6 text-white">
+          <div className="mb-8 rounded-xl bg-gradient-to-r from-[#ED1C24] to-[#B91C1C] p-6 text-white">
             <p className="text-sm font-medium opacity-80">Selamat datang,</p>
             <p className="mt-1 text-xl font-bold">{user.name}</p>
             <p className="mt-2 text-sm opacity-80">
@@ -192,7 +192,7 @@ export default function DashboardPage() {
               <p className="text-sm font-medium text-[#667085]">
                 {user?.role === "founder" ? "Startup Saya" : "Total Startup"}
               </p>
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#f4f2fc] text-[#875bf7]">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FEF2F2] text-[#ED1C24]">
                 <Building2 className="h-4 w-4" />
               </div>
             </div>
@@ -286,8 +286,8 @@ export default function DashboardPage() {
         {/* Founder gets a quick action section instead of charts */}
         {user?.role === "founder" && (
           <div className="mb-8 grid gap-5 sm:grid-cols-2">
-            <a href="/reports" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#875bf7]">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f4f2fc] text-[#875bf7] group-hover:bg-[#875bf7] group-hover:text-white transition-colors">
+            <a href="/reports" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
                 <FileText className="h-5 w-5" />
               </div>
               <div>
@@ -295,7 +295,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-[#667085]">Kirim laporan bulanan untuk evaluasi AI</p>
               </div>
             </a>
-            <a href="/forecast" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#875bf7]">
+            <a href="/forecast" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24]">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
                 <TrendingUp className="h-5 w-5" />
               </div>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
           <div className="mb-6 flex flex-wrap items-center gap-3">
             <Filter className="h-4 w-4 text-[#667085]" />
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
               value={filters.sector}
               onChange={(e) => setFilters({ ...filters, sector: e.target.value })}
             >
@@ -322,7 +322,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
               value={filters.batch}
               onChange={(e) => setFilters({ ...filters, batch: e.target.value })}
             >
@@ -332,7 +332,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
               value={filters.risk}
               onChange={(e) => setFilters({ ...filters, risk: e.target.value })}
             >
@@ -342,9 +342,9 @@ export default function DashboardPage() {
             </select>
 
             <div className="relative flex flex-1 min-w-[300px]">
-              <div className="flex w-full items-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-1 focus-within:border-[#875bf7] focus-within:ring-1 focus-within:ring-[#875bf7]">
+              <div className="flex w-full items-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-1 focus-within:border-[#ED1C24] focus-within:ring-1 focus-within:ring-[#ED1C24]">
                 {aiSearch ? (
-                  <Sparkles className="h-4 w-4 text-[#875bf7]" />
+                  <Sparkles className="h-4 w-4 text-[#ED1C24]" />
                 ) : (
                   <Search className="h-4 w-4 text-[#667085]" />
                 )}
@@ -368,8 +368,8 @@ export default function DashboardPage() {
                 onClick={() => { setAiSearch(!aiSearch); if (aiSearchActive) clearAiSearch(); }}
                 className={`ml-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap ${
                   aiSearch
-                    ? "border-[#875bf7] bg-[#f4f2fc] text-[#875bf7]"
-                    : "border-[#e0e0e0] text-[#667085] hover:border-[#875bf7]"
+                    ? "border-[#ED1C24] bg-[#FEF2F2] text-[#ED1C24]"
+                    : "border-[#e0e0e0] text-[#667085] hover:border-[#ED1C24]"
                 }`}
               >
                 <Sparkles className="h-3.5 w-3.5" />
@@ -380,7 +380,7 @@ export default function DashboardPage() {
         )}
 
         {aiSearchActive && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg bg-[#f4f2fc] px-4 py-2 text-sm text-[#875bf7]">
+          <div className="mb-4 flex items-center gap-2 rounded-lg bg-[#FEF2F2] px-4 py-2 text-sm text-[#ED1C24]">
             <Sparkles className="h-4 w-4" />
             <span>AI Search active</span>
             <button onClick={clearAiSearch} className="ml-auto text-xs underline">Clear</button>

@@ -32,7 +32,7 @@ const roleLabels: Record<string, string> = {
 
 // Role badge colors
 const roleBadgeColors: Record<string, string> = {
-  admin: "bg-[#f4f2fc] text-[#875bf7]",
+  admin: "bg-[#FEF2F2] text-[#ED1C24]",
   synergy: "bg-[#fffbeb] text-[#d97706]",
   founder: "bg-[#f0f9ff] text-[#2563eb]",
 };
@@ -71,7 +71,7 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
       <div className="flex h-16 items-center gap-3 border-b px-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#875bf7] text-xs font-bold text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ED1C24] text-xs font-bold text-white">
           IC
         </div>
         <div>
@@ -93,7 +93,7 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                 isActive
-                  ? "bg-[#f4f2fc] text-[#875bf7]"
+                  ? "bg-[#FEF2F2] text-[#ED1C24]"
                   : "text-[#5c5e61] hover:bg-[#f7f8f9] hover:text-[#161616]"
               )}
             >
@@ -105,7 +105,7 @@ export function Sidebar() {
                 </span>
               )}
               {isActive && !showBadge && (
-                <span className="h-2 w-2 rounded-full bg-[#875bf7]" />
+                <span className="h-2 w-2 rounded-full bg-[#ED1C24]" />
               )}
             </Link>
           );
@@ -117,7 +117,7 @@ export function Sidebar() {
           <div className="mb-3 flex items-center gap-3 px-2">
             <div className={cn(
               "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
-              roleBadgeColors[user.role] || "bg-[#f4f2fc] text-[#875bf7]"
+              roleBadgeColors[user.role] || "bg-[#FEF2F2] text-[#ED1C24]"
             )}>
               {user.name.charAt(0).toUpperCase()}
             </div>

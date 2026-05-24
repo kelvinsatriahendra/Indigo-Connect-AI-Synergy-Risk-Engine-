@@ -97,7 +97,7 @@ export default function AlertsPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <Bell className="h-6 w-6 text-[#875bf7]" />
+              <Bell className="h-6 w-6 text-[#ED1C24]" />
               <h1 className="text-2xl font-bold text-[#161616]">Alerts</h1>
               {unreadCount > 0 && (
                 <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600">
@@ -111,7 +111,7 @@ export default function AlertsPage() {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
+              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
             >
               <option value="all">Semua Tipe</option>
               <option value="RISK">Risk</option>
@@ -128,7 +128,7 @@ export default function AlertsPage() {
 
         {loading ? (
           <div className="card-legion flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
           </div>
         ) : alerts.length === 0 ? (
           <div className="card-legion flex flex-col items-center justify-center py-20">
@@ -155,7 +155,7 @@ export default function AlertsPage() {
                         <div>
                           <h3 className="text-sm font-bold text-[#161616]">{alert.title}</h3>
                           {startupName && (
-                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#f4f2fc] px-2 py-0.5 text-[10px] font-medium text-[#875bf7]">
+                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-medium text-[#ED1C24]">
                               {startupName}
                             </span>
                           )}
@@ -169,7 +169,7 @@ export default function AlertsPage() {
                           {!alert.read && (
                             <button
                               onClick={() => markRead(alert.id)}
-                              className="rounded-md px-2 py-1 text-[10px] font-medium text-[#875bf7] hover:bg-[#f4f2fc] transition-colors"
+                              className="rounded-md px-2 py-1 text-[10px] font-medium text-[#ED1C24] hover:bg-[#FEF2F2] transition-colors"
                             >
                               Mark read
                             </button>

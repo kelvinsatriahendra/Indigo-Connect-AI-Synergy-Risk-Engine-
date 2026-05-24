@@ -54,7 +54,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
       <div className="p-8">
         <div className="mb-8">
           <div className="flex items-center gap-3">
-            <Building2 className="h-6 w-6 text-[#875bf7]" />
+            <Building2 className="h-6 w-6 text-[#ED1C24]" />
             <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
           </div>
           <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
@@ -70,8 +70,8 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   onClick={() => handleAIAnalysis(startup)}
                   className={`w-full text-left rounded-xl border p-4 transition-all ${
                     selectedStartup?.id === startup.id
-                      ? "border-[#875bf7] bg-[#f4f2fc]"
-                      : "border-[#e0e0e0] bg-white hover:border-[#875bf7] hover:shadow-sm"
+                      ? "border-[#ED1C24] bg-[#FEF2F2]"
+                      : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -111,7 +111,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   <div className="mt-8 border-t border-[#f2f4f7] pt-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-[#875bf7]" />
+                        <Sparkles className="h-4 w-4 text-[#ED1C24]" />
                         <h3 className="text-sm font-semibold text-[#161616]">AI Executive Summary</h3>
                       </div>
                       <button
@@ -125,7 +125,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
                     {loading ? (
                       <div className="flex items-center justify-center py-12">
-                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#875bf7] border-t-transparent" />
+                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
                       </div>
                     ) : aiSummary ? (
                       <div className="space-y-3 rounded-xl bg-[#f2f4f7] p-5">
