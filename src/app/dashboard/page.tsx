@@ -408,29 +408,89 @@ export default function DashboardPage() {
             <p className="text-xs text-[#8c8f93] mt-1">Coba ubah filter atau kata kunci pencarian</p>
           </div>
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredStartups.map((startup) => (
-              <div key={startup.id} className="card-legion overflow-hidden">
-                <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-base font-bold text-[#161616]">{startup.name}</h3>
-                      <p className="mt-0.5 text-xs text-[#667085]">{startup.sector} · {startup.batch}</p>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredStartups.map((startup) => {
+              const isHigh = startup.status === "ACTIVE";
+              const healthScore = isHigh ? 92 : 45;
+              const healthLabel = isHigh ? "Excellent" : "Critical Risk";
+              const healthColor = isHigh ? "text-emerald-600 bg-emerald-50 border-emerald-200" : "text-rose-600 bg-rose-50 border-rose-200";
+              const healthProgressColor = isHigh ? "bg-emerald-500" : "bg-rose-500";
+              
+              // Map Synergy target based on sector
+              const synergyMap: Record<string, { target: string; match: number }> = {
+                "Fintech": { target: "LinkAja / PADI UMKM", match: 94 },
+                "Logistik": { target: "Logee / Pos Indo", match: 88 },
+                "Agritech": { target: "Sayurbox / T-Con", match: 91 },
+                "Healthtech": { target: "Adamedika / Telkomsel", match: 79 },
+                "Edtech": { target: "Pijar Mahir", match: 86 },
+                "Energy": { target: "Telkom Infra", match: 82 },
+                "Travel": { target: "Mitra Tours", match: 85 },
+              };
+              const synergy = synergyMap[startup.sector] || { target: "Telkom Group", match: 85 };
+
+              return (
+                <div 
+                  key={startup.id} 
+                  className="card-legion overflow-hidden relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                >
+                  {/* Left accent bar matching sector color */}
+                  <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${sectorColors[startup.sector] || "bg-slate-400"}`} />
+                  
+                  <div className="p-6 pl-7 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-base font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
+                        <p className="mt-1 text-xs font-semibold text-[#8c8f93] tracking-wide uppercase">{startup.sector} · {startup.batch}</p>
+                      </div>
+                      <span className={isHigh ? "badge-high-growth shadow-sm" : "badge-at-risk shadow-sm"}>
+                        {isHigh ? "High Growth" : "At Risk"}
+                      </span>
                     </div>
-                    <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
-                      {startup.status === "ACTIVE" ? "High Growth" : "At Risk"}
-                    </span>
+
+                    <p className="mt-4 text-sm leading-relaxed text-[#525252] line-clamp-2">{startup.description}</p>
+
+                    {/* AI Engine Metrics Integration (Premium Dashboard Aesthetic) */}
+                    <div className="mt-5 pt-4 border-t border-[#f2f4f7] space-y-4">
+                      {/* Health Index Bar */}
+                      <div>
+                        <div className="flex items-center justify-between text-xs mb-1.5">
+                          <span className="font-semibold text-[#667085]">Health Index</span>
+                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${healthColor}`}>
+                            {healthScore}% · {healthLabel}
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-[#f2f4f7] overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full ${healthProgressColor} transition-all duration-500`}
+                            style={{ width: `${healthScore}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* AI Synergy Potential Card */}
+                      <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
+                        <div>
+                          <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</p>
+                          <p className="text-xs font-bold text-[#344054] mt-0.5">{synergy.target}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
+                          <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <p className="mt-3 text-sm leading-relaxed text-[#525252]">{startup.description}</p>
-                </div>
-                <div className="border-t border-[#f2f4f7] px-6 py-3">
-                  <div className="flex items-center justify-between text-xs text-[#8c8f93]">
-                    <span>Founder: {startup.founderName}</span>
-                    <span>{startup.batch}</span>
+
+                  <div className="border-t border-[#f2f4f7] bg-[#fafbfc] px-6 py-3 pl-7 flex items-center justify-between text-xs text-[#8c8f93]">
+                    <span className="font-medium">Founder: <strong className="text-[#344054]">{startup.founderName}</strong></span>
+                    <button className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1">
+                      <span>Analisis</span>
+                      <span className="text-sm">›</span>
+                    </button>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
