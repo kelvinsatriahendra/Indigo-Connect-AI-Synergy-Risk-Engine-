@@ -71,9 +71,11 @@ export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
       <div className="flex h-16 items-center gap-3 border-b px-6">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#ED1C24] text-xs font-bold text-white">
-          IC
-        </div>
+        <img
+          src="/indigo-red.png"
+          alt="Indigo Logo"
+          className="h-8 w-auto object-contain"
+        />
         <div>
           <p className="text-sm font-bold text-[#161616]">Indigo Connect</p>
           <p className="text-[10px] font-medium text-[#8c8f93]">AI Synergy & Risk Engine</p>
