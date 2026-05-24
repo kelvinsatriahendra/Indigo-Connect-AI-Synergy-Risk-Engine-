@@ -51,6 +51,7 @@ enum AlertSeverity {
 
 model User {
   id            String   @id @default(uuid(7))
+  nik           String   @unique
   email         String   @unique
   passwordHash  String   @map("password_hash")
   name          String

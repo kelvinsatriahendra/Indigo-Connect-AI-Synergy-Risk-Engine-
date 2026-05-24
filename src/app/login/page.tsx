@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState } from "react";
-import { login } from "@/app/actions/auth";
+import { login, loginAsDemo } from "@/app/actions/auth";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
@@ -15,22 +14,22 @@ export default function LoginPage() {
             IC
           </div>
           <h1 className="text-xl font-bold text-[#161616]">Masuk ke Indigo Connect</h1>
-          <p className="mt-1 text-sm text-[#667085]">AI Synergy & Risk Engine</p>
+          <p className="mt-1 text-sm text-[#667085]">AI Synergy & Risk Engine — Internal Platform</p>
         </div>
 
         <form action={action} className="card-legion space-y-5 p-6">
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-[#344054]">
-              Email
+            <label htmlFor="identifier" className="mb-1.5 block text-sm font-medium text-[#344054]">
+              Nomor Induk Karyawan (NIK)
             </label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="nama@email.com"
+              id="identifier"
+              name="identifier"
+              type="text"
+              placeholder="Masukkan NIK Anda"
               className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
             />
-            {state?.errors?.email && <p className="mt-1 text-xs text-red-500">{state.errors.email[0]}</p>}
+            {state?.errors?.identifier && <p className="mt-1 text-xs text-red-500">{state.errors.identifier[0]}</p>}
           </div>
 
           <div>
@@ -59,11 +58,47 @@ export default function LoginPage() {
             {pending ? "Memproses..." : "Masuk"}
           </button>
 
-          <p className="text-center text-sm text-[#667085]">
-            Belum punya akun?{" "}
-            <Link href="/signup" className="font-medium text-[#875bf7] hover:underline">
-              Daftar
-            </Link>
+          {/* Separator */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#e0e0e0]" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-white px-3 text-[#8c8f93]">atau masuk sebagai demo</span>
+            </div>
+          </div>
+
+          {/* Demo Quick Login Buttons */}
+          <div className="space-y-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                const form = document.createElement("form");
+                form.method = "POST";
+                const input = document.createElement("input");
+                input.name = "role";
+                input.value = "admin";
+                form.appendChild(input);
+                const formData = new FormData(form);
+                loginAsDemo("admin");
+              }}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f4f2fc] hover:border-[#875bf7] hover:text-[#875bf7]"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-[#875bf7] text-[10px] font-bold text-white">A</span>
+              Telkom Executive — NIK 940123
+            </button>
+            <button
+              type="button"
+              onClick={() => loginAsDemo("user")}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f0f9ff] hover:border-[#2563eb] hover:text-[#2563eb]"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-[#2563eb] text-[10px] font-bold text-white">F</span>
+              Mitra Startup — NIK 850456
+            </button>
+          </div>
+
+          <p className="text-center text-xs text-[#8c8f93]">
+            Akun dikelola oleh administrator sistem.
           </p>
         </form>
       </div>

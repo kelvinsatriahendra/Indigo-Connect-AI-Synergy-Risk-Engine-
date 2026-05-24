@@ -20,14 +20,9 @@ export default async function Home() {
               Buka Dashboard
             </Link>
           ) : (
-            <>
-              <Link href="/login" className="text-sm font-medium text-[#5c5e61] hover:text-[#161616]">
-                Masuk
-              </Link>
-              <Link href="/signup" className="btn-primary-solid text-sm px-5 py-2">
-                Daftar
-              </Link>
-            </>
+            <Link href="/login" className="btn-primary-solid text-sm px-5 py-2">
+              Masuk
+            </Link>
           )}
         </div>
       </header>
@@ -58,14 +53,9 @@ export default async function Home() {
                 </Link>
               </>
             ) : (
-              <>
-                <Link href="/signup" className="btn-primary-solid text-sm px-8 py-3">
-                  Daftar Sekarang
-                </Link>
-                <Link href="/login" className="btn-primary-outline text-sm px-8 py-3">
-                  Masuk
-                </Link>
-              </>
+              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3">
+                Masuk ke Platform
+              </Link>
             )}
           </div>
         </div>
@@ -149,8 +139,8 @@ export default async function Home() {
                 </Link>
               </>
             ) : (
-              <Link href="/signup" className="btn-primary-solid text-sm px-8 py-3">
-                Daftar Sekarang
+              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3">
+                Masuk ke Platform
               </Link>
             )}
           </div>

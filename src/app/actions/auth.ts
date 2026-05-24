@@ -4,13 +4,25 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
-import { SignupFormSchema, LoginFormSchema, FormState } from "@/lib/definitions";
+import { LoginFormSchema, FormState } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
 
 const USERS_FILE = path.join(process.cwd(), "src/data/users.json");
 
-function readUsers(): Array<{ id: string; name: string; email: string; password: string; role: string }> {
+interface UserStore {
+  id: string;
+  name: string;
+  email: string;
+  nik: string;
+  passwordHash: string;
+  role: string;
+}
+
+function readUsers(): UserStore[] {
   try {
+    if (!fs.existsSync(USERS_FILE)) {
+      return [];
+    }
     return JSON.parse(fs.readFileSync(USERS_FILE, "utf-8"));
   } catch {
     return [];
@@ -18,45 +30,47 @@ function readUsers(): Array<{ id: string; name: string; email: string; password:
 }
 
 function writeUsers(users: unknown) {
+  const dir = path.dirname(USERS_FILE);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
   fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2), "utf-8");
 }
 
-export async function signup(state: FormState, formData: FormData) {
-  const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
-
-  if (!validatedFields.success) {
-    return { errors: validatedFields.error.flatten().fieldErrors };
-  }
-
-  const { name, email, password } = validatedFields.data;
+// Auto-seed demo accounts if empty
+async function seedDemoUsersIfNeeded() {
   const users = readUsers();
+  if (users.length === 0) {
+    const adminHash = await bcrypt.hash("admin123", 10);
+    const founderHash = await bcrypt.hash("founder123", 10);
 
-  if (users.find((u) => u.email === email)) {
-    return { message: "Email sudah terdaftar" };
+    const demoUsers: UserStore[] = [
+      {
+        id: "demo-admin-id",
+        name: "Hendra Wijaya",
+        email: "hendra.wijaya@telkom.co.id",
+        nik: "940123",
+        passwordHash: adminHash,
+        role: "admin",
+      },
+      {
+        id: "demo-founder-id",
+        name: "Yusuf Pratama",
+        email: "yusuf@antarestar.com",
+        nik: "850456",
+        passwordHash: founderHash,
+        role: "user",
+      },
+    ];
+    writeUsers(demoUsers);
   }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = {
-    id: crypto.randomUUID(),
-    name,
-    email,
-    password: hashedPassword,
-    role: users.length === 0 ? "admin" : "user",
-  };
-
-  writeUsers([...users, newUser]);
-
-  await createSession(newUser.id, newUser.email, newUser.name, newUser.role);
-  redirect("/dashboard");
 }
 
 export async function login(state: FormState, formData: FormData) {
+  await seedDemoUsersIfNeeded();
+
   const validatedFields = LoginFormSchema.safeParse({
-    email: formData.get("email"),
+    identifier: formData.get("identifier"),
     password: formData.get("password"),
   });
 
@@ -64,21 +78,35 @@ export async function login(state: FormState, formData: FormData) {
     return { errors: validatedFields.error.flatten().fieldErrors };
   }
 
-  const { email, password } = validatedFields.data;
+  const { identifier, password } = validatedFields.data;
   const users = readUsers();
-  const user = users.find((u) => u.email === email);
+
+  // Search by NIK
+  const user = users.find((u) => u.nik === identifier);
 
   if (!user) {
-    return { message: "Email atau password salah" };
+    return { message: "NIK atau password salah." };
   }
 
-  const passwordMatch = await bcrypt.compare(password, user.password);
+  const passwordMatch = await bcrypt.compare(password, user.passwordHash);
   if (!passwordMatch) {
-    return { message: "Email atau password salah" };
+    return { message: "NIK atau password salah." };
   }
 
   await createSession(user.id, user.email, user.name, user.role);
   redirect("/dashboard");
+}
+
+// Quick login for demo/presentation purposes
+export async function loginAsDemo(role: "admin" | "user") {
+  await seedDemoUsersIfNeeded();
+  const users = readUsers();
+  const user = users.find((u) => u.role === role);
+
+  if (user) {
+    await createSession(user.id, user.email, user.name, user.role);
+    redirect("/dashboard");
+  }
 }
 
 export async function logout() {
