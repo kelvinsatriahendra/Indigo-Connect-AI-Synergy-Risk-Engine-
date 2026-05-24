@@ -28,37 +28,94 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="gradient-hero pt-32 pb-20 px-6">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#e0e0e0] bg-white px-4 py-1 text-sm text-[#667085] mb-6">
+      <section className="gradient-hero relative overflow-hidden pt-36 pb-40 px-6 text-white">
+        {/* Glow ambient spots */}
+        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.08)' }} />
+        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.08)' }} />
+
+        {/* Decorative Swooping Vector Lines */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+          {/* Left side swooping curves */}
+          <path d="M-50,220 C120,250 180,420 60,520" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+          <path d="M-20,270 C100,290 140,370 140,470" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" fill="none" />
+          
+          {/* Right side swooping curves */}
+          <path d="M1500,80 C1280,130 1080,280 1280,430" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" fill="none" />
+          <path d="M1400,60 C1130,180 1130,430 1330,580" stroke="rgba(255,255,255,0.4)" strokeWidth="1.5" fill="none" strokeDasharray="4 4" />
+          <path d="M1230,280 C1080,380 1130,530 1280,630" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" fill="none" />
+        </svg>
+
+        {/* Circular Startup & Collaboration Images (Matching Mockup) */}
+        {/* Left Side Circles */}
+        <div className="hidden lg:block absolute left-[-40px] top-[22%] w-[180px] h-[180px] rounded-full border border-white/20 overflow-hidden shadow-2xl shadow-indigo-500/10 pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80"
+            alt="Startup Team"
+            className="w-full h-full object-cover animate-fade-in"
+          />
+        </div>
+        <div className="hidden lg:block absolute left-[8%] bottom-[12%] w-[110px] h-[110px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=300&q=80"
+            alt="Pitch Session"
+            className="w-full h-full object-cover animate-fade-in"
+          />
+        </div>
+
+        {/* Right Side Circles */}
+        <div className="hidden lg:block absolute right-[-30px] top-[14%] w-[130px] h-[130px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=300&q=80"
+            alt="Collaboration Space"
+            className="w-full h-full object-cover animate-fade-in"
+          />
+        </div>
+        <div className="hidden lg:block absolute right-[3%] bottom-[10%] w-[190px] h-[190px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&w=400&q=80"
+            alt="Executive Meeting"
+            className="w-full h-full object-cover animate-fade-in"
+          />
+        </div>
+
+        <div className="relative z-20 mx-auto max-w-4xl text-center">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-white/80 backdrop-blur-md mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#ED1C24] animate-pulse" />
             Indigo by Telkom Indonesia
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-[#161616] sm:text-5xl lg:text-6xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
             Indigo Connect
           </h1>
-          <p className="mt-3 text-2xl font-semibold text-[#ED1C24] sm:text-3xl">
+          <p className="mt-3 text-2xl font-bold text-[#ED1C24] sm:text-3xl tracking-wide drop-shadow-sm">
             AI Synergy & Risk Engine
           </p>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-[#525252]">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 leading-relaxed">
             Executive Analytics Dashboard untuk evaluasi kesehatan bisnis startup,
             deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
             {session?.userId ? (
               <>
-                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3">
+                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
                   Buka Dashboard
                 </Link>
-                <Link href="/reports" className="btn-primary-outline text-sm px-8 py-3">
+                <Link href="/reports" className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-sm px-8 py-3 transition-all hover:scale-[1.02]">
                   AI Evaluation
                 </Link>
               </>
             ) : (
-              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3">
+              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
                 Masuk ke Platform
               </Link>
             )}
           </div>
+        </div>
+
+        {/* Concave Curved Separation Shape at the bottom */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 w-full overflow-hidden leading-none">
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none" className="relative block w-full h-[50px] md:h-[80px] text-white fill-current">
+            <path d="M0,40 C480,120 960,120 1440,40 L1440,120 L0,120 Z"></path>
+          </svg>
         </div>
       </section>
 

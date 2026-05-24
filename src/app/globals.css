@@ -105,7 +105,8 @@
 }
 
 .gradient-hero {
-  background: radial-gradient(50% 100% at 49.96% 100%, #fbf5ff 43.23%, rgba(251,245,255,0) 100%);
+  background: radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%);
+  position: relative;
 }
 
 .card-legion {
