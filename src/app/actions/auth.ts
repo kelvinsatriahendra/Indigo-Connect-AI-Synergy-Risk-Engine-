@@ -42,6 +42,7 @@ async function seedDemoUsersIfNeeded() {
   const users = readUsers();
   if (users.length === 0) {
     const adminHash = await bcrypt.hash("admin123", 10);
+    const synergyHash = await bcrypt.hash("synergy123", 10);
     const founderHash = await bcrypt.hash("founder123", 10);
 
     const demoUsers: UserStore[] = [
@@ -54,12 +55,20 @@ async function seedDemoUsersIfNeeded() {
         role: "admin",
       },
       {
+        id: "demo-synergy-id",
+        name: "Rina Kusuma",
+        email: "rina.kusuma@telkom.co.id",
+        nik: "940789",
+        passwordHash: synergyHash,
+        role: "synergy",
+      },
+      {
         id: "demo-founder-id",
         name: "Yusuf Pratama",
         email: "yusuf@antarestar.com",
         nik: "850456",
         passwordHash: founderHash,
-        role: "user",
+        role: "founder",
       },
     ];
     writeUsers(demoUsers);
@@ -98,7 +107,7 @@ export async function login(state: FormState, formData: FormData) {
 }
 
 // Quick login for demo/presentation purposes
-export async function loginAsDemo(role: "admin" | "user") {
+export async function loginAsDemo(role: "admin" | "synergy" | "founder") {
   await seedDemoUsersIfNeeded();
   const users = readUsers();
   const user = users.find((u) => u.role === role);

@@ -72,16 +72,7 @@ export default function LoginPage() {
           <div className="space-y-2.5">
             <button
               type="button"
-              onClick={() => {
-                const form = document.createElement("form");
-                form.method = "POST";
-                const input = document.createElement("input");
-                input.name = "role";
-                input.value = "admin";
-                form.appendChild(input);
-                const formData = new FormData(form);
-                loginAsDemo("admin");
-              }}
+              onClick={() => loginAsDemo("admin")}
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f4f2fc] hover:border-[#875bf7] hover:text-[#875bf7]"
             >
               <span className="flex h-5 w-5 items-center justify-center rounded bg-[#875bf7] text-[10px] font-bold text-white">A</span>
@@ -89,7 +80,15 @@ export default function LoginPage() {
             </button>
             <button
               type="button"
-              onClick={() => loginAsDemo("user")}
+              onClick={() => loginAsDemo("synergy")}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#fffbeb] hover:border-[#d97706] hover:text-[#d97706]"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-[#d97706] text-[10px] font-bold text-white">S</span>
+              Synergy Manager — NIK 940789
+            </button>
+            <button
+              type="button"
+              onClick={() => loginAsDemo("founder")}
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm font-medium text-[#344054] transition-colors hover:bg-[#f0f9ff] hover:border-[#2563eb] hover:text-[#2563eb]"
             >
               <span className="flex h-5 w-5 items-center justify-center rounded bg-[#2563eb] text-[10px] font-bold text-white">F</span>

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "demo-admin-id",
+    "name": "Hendra Wijaya",
+    "email": "hendra.wijaya@telkom.co.id",
+    "nik": "940123",
+    "passwordHash": "$2b$10$SIHJ46l.olatkgHro9zCK.r.aVVGtPvzF7C.r7RfKMC3lp8aZVos2",
+    "role": "admin"
+  },
+  {
+    "id": "demo-synergy-id",
+    "name": "Rina Kusuma",
+    "email": "rina.kusuma@telkom.co.id",
+    "nik": "940789",
+    "passwordHash": "$2b$10$F7h67Ba.l36UfxB4NMcZk.SiCjHhaz4IGU3liLDRRd6dZ6yhYB26m",
+    "role": "synergy"
+  },
+  {
+    "id": "demo-founder-id",
+    "name": "Yusuf Pratama",
+    "email": "yusuf@antarestar.com",
+    "nik": "850456",
+    "passwordHash": "$2b$10$9gU8N7ioivxme8CmrGTEhu0oSz4YYrKPVN5INri6Ly0BaXh/JdCXO",
+    "role": "founder"
+  }
+]
