@@ -14,7 +14,6 @@ export default async function Home() {
             alt="Indigo Logo"
             className="h-8 w-auto object-contain"
           />
-          <span className="text-sm font-bold text-[#161616]">Indigo Connect</span>
         </Link>
         <div className="flex items-center gap-4">
           {session?.userId ? (
