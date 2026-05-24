@@ -164,13 +164,27 @@ export default function DashboardPage() {
 
         {/* Role-specific welcome banner for Founder */}
         {user?.role === "founder" && (
-          <div className="mb-8 rounded-xl bg-gradient-to-r from-[#ED1C24] to-[#B91C1C] p-6 text-white">
-            <p className="text-sm font-medium opacity-80">Selamat datang,</p>
-            <p className="mt-1 text-xl font-bold">{user.name}</p>
-            <p className="mt-2 text-sm opacity-80">
-              Anda memiliki {totalStartups} startup terdaftar di program Indigo.
-              {atRisk > 0 && ` ⚠️ ${atRisk} startup membutuhkan perhatian.`}
-            </p>
+          <div 
+            className="mb-8 rounded-xl p-6 text-white border border-white/5 relative overflow-hidden shadow-xl"
+            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+          >
+            {/* Glowing accent blobs inside */}
+            <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-purple-600/10 rounded-full blur-[50px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-red-600/5 rounded-full blur-[50px] pointer-events-none" />
+
+            <div className="relative z-10">
+              <p className="text-xs font-semibold text-[#ED1C24] uppercase tracking-wider">Mitra Startup</p>
+              <p className="text-sm font-medium opacity-80 mt-1">Selamat datang,</p>
+              <p className="mt-1 text-2xl font-extrabold text-white tracking-wide">{user.name}</p>
+              <p className="mt-2 text-sm text-slate-300">
+                Anda memiliki <span className="font-bold text-white">{totalStartups} startup</span> terdaftar di program Indigo.
+                {atRisk > 0 && (
+                  <span className="ml-2 inline-flex items-center gap-1 bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-xs border border-red-500/10">
+                    ⚠️ {atRisk} startup membutuhkan perhatian
+                  </span>
+                )}
+              </p>
+            </div>
           </div>
         )}
 
