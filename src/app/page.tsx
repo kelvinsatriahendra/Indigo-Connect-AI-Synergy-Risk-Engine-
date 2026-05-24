@@ -119,60 +119,73 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="py-20 px-6">
+      <section className="py-24 px-6 bg-[#f9fafb]">
         <div className="mx-auto max-w-5xl">
-          <div className="text-center mb-14">
-            <h2 className="text-2xl font-bold text-[#161616]">What is Indigo Connect?</h2>
-            <p className="mt-2 text-[#525252]">AI-powered platform untuk monitoring dan sinergi startup</p>
+          <div className="text-center mb-16">
+            <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Features</span>
+            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">What is Indigo Connect?</h2>
+            <p className="mt-3 text-slate-500 max-w-lg mx-auto">AI-powered platform untuk monitoring, deteksi risiko, dan sinergi portofolio startup</p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                icon: BarChart3,
                 title: "Health Evaluator",
                 desc: "Evaluasi otomatis kesehatan bisnis startup dengan AI. Dapatkan health score, sentiment analysis, dan risk label real-time.",
-                color: "bg-[#FEF2F2] text-[#ED1C24]",
+                imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80",
               },
               {
-                icon: GitBranch,
                 title: "Synergy Matcher",
                 desc: "Temukan unit bisnis Telkom yang paling cocok untuk kolaborasi. AI mencocokkan berdasarkan profil dan kebutuhan startup.",
-                color: "bg-[#f0f9ff] text-[#2563eb]",
+                imageUrl: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80",
               },
               {
-                icon: Shield,
                 title: "Risk Detection",
                 desc: "Deteksi dini startup at risk dengan analisis sentimen dan operational status. Ambil tindakan sebelum terlambat.",
-                color: "bg-[#fef2f2] text-[#dc2626]",
+                imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80",
               },
               {
-                icon: FileText,
                 title: "Executive Summary",
                 desc: "Ringkasan eksekutif otomatis dari laporan bulanan startup. Tiga poin singkat untuk keputusan cepat.",
-                color: "bg-[#f0fdf4] text-[#16a34a]",
+                imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80",
               },
               {
-                icon: Lightbulb,
                 title: "AI Insights",
                 desc: "Wawasan cerdas dari data startup. Dapatkan rekomendasi strategis berbasis AI untuk pertumbuhan bisnis.",
-                color: "bg-[#fffbeb] text-[#d97706]",
+                imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
               },
               {
-                icon: Activity,
                 title: "Forecasting",
                 desc: "Prediksi pertumbuhan dan runway startup 3 bulan ke depan. Antisipasi tantangan dengan data-driven decisions.",
-                color: "bg-[#f5f3ff] text-[#7c3aed]",
+                imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
               },
             ].map((item) => {
-              const Icon = item.icon;
               return (
-                <div key={item.title} className="card-subtle p-8">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.color}`}>
-                    <Icon className="h-5 w-5" />
+                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 shadow-xl group hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col justify-between h-[400px]">
+                  {/* Top Image with Gradient Transition */}
+                  <div className="relative h-[180px] w-full overflow-hidden">
+                    <img 
+                      src={item.imageUrl} 
+                      alt={item.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    />
+                    {/* Gradient Overlay fading to dark background */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#131722] via-[#131722]/40 to-transparent" />
                   </div>
-                  <h3 className="mt-5 text-lg font-bold text-[#474d66]">{item.title}</h3>
-                  <p className="mt-2 text-sm text-[#8c8f93] leading-relaxed">{item.desc}</p>
+
+                  {/* Content section */}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-2 tracking-wide">{item.title}</h3>
+                      <p className="text-sm text-slate-400 leading-relaxed line-clamp-3">{item.desc}</p>
+                    </div>
+                    
+                    {/* "Selengkapnya" Footer Link */}
+                    <div className="mt-4 flex items-center justify-end text-xs font-semibold text-white/60 group-hover:text-white transition-colors cursor-pointer gap-1">
+                      <span>Selengkapnya</span>
+                      <span className="text-sm transition-transform group-hover:translate-x-0.5">›</span>
+                    </div>
+                  </div>
                 </div>
               );
             })}
