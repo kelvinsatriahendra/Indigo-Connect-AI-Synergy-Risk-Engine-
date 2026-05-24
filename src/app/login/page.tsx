@@ -7,16 +7,23 @@ export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f7f8f9] px-4">
-      <div className="w-full max-w-sm">
+    <div 
+      className="flex min-h-screen items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: 'radial-gradient(circle at 50% 30%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+    >
+      {/* Glow ambient spots */}
+      <div className="absolute top-[20%] left-[20%] w-[250px] h-[250px] rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.06)' }} />
+      <div className="absolute bottom-[20%] right-[20%] w-[250px] h-[250px] rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.06)' }} />
+
+      <div className="w-full max-w-sm relative z-10">
         <div className="mb-8 text-center">
           <img
             src="/indigo-red.png"
             alt="Indigo Logo"
-            className="mx-auto mb-4 h-12 w-auto object-contain"
+            className="mx-auto mb-4 h-12 w-auto object-contain brightness-110"
           />
-          <h1 className="text-xl font-bold text-[#161616]">Masuk ke Indigo Connect</h1>
-          <p className="mt-1 text-sm text-[#667085]">AI Synergy & Risk Engine — Internal Platform</p>
+          <h1 className="text-xl font-bold text-white">Masuk ke Indigo Connect</h1>
+          <p className="mt-1 text-sm text-slate-300">AI Synergy & Risk Engine — Internal Platform</p>
         </div>
 
         <form action={action} className="card-legion space-y-5 p-6">
