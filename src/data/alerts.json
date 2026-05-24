@@ -1,0 +1,82 @@
+[
+  {
+    "id": "a1",
+    "type": "RISK",
+    "title": "HealthSync menuju status AT_RISK",
+    "message": "HealthSync mengalami penurunan pendapatan 3 bulan berturut-turut. Pendapatan turun dari Rp60jt ke Rp48jt dan growth rate hanya 1%. Segera lakukan evaluasi.",
+    "startupId": "s5",
+    "severity": "high",
+    "read": false,
+    "createdAt": "2026-05-23T08:30:00Z"
+  },
+  {
+    "id": "a2",
+    "type": "RISK",
+    "title": "PayDesa memasuki zona risiko",
+    "message": "PayDesa menunjukkan pertumbuhan melambat (4% bulan ini) dengan pendapatan stagnan di Rp25jt. Burn rate meningkat 2x lipat dalam 3 bulan.",
+    "startupId": "s8",
+    "severity": "high",
+    "read": false,
+    "createdAt": "2026-05-22T14:15:00Z"
+  },
+  {
+    "id": "a3",
+    "type": "MILESTONE",
+    "title": "EduKita mencapai 8.200 pengguna aktif",
+    "message": "EduKita mencatat pertumbuhan 32% bulan ini dengan total 8.200 pengguna aktif. Pendapatan mencapai Rp95jt. Performa sangat baik!",
+    "startupId": "s4",
+    "severity": "low",
+    "read": false,
+    "createdAt": "2026-05-21T10:00:00Z"
+  },
+  {
+    "id": "a4",
+    "type": "MILESTONE",
+    "title": "Logee dan Logee BU resmi kolaborasi",
+    "message": "Pipeline synergy antara Logee (startup) dan Logee (Telkom BU) resmi berstatus ON_GOING. Integrasi API logistik sedang dikembangkan.",
+    "startupId": "s1",
+    "severity": "low",
+    "read": true,
+    "createdAt": "2026-05-20T09:45:00Z"
+  },
+  {
+    "id": "a5",
+    "type": "REMINDER",
+    "title": "Laporan bulanan FinAccess belum disubmit",
+    "message": "FinAccess belum mengirim laporan bulan Mei. Deadline submission adalah 3 hari lagi. Segera ingatkan founder untuk submit laporan.",
+    "startupId": "s3",
+    "severity": "medium",
+    "read": true,
+    "createdAt": "2026-05-19T07:00:00Z"
+  },
+  {
+    "id": "a6",
+    "type": "MILESTONE",
+    "title": "GreenEnergy tumbuh 28% bulan ini",
+    "message": "GreenEnergy mencatat pertumbuhan tertinggi di batch 7 dengan 1.300 pengguna dan pendapatan Rp82jt. Proyeksi Q3 sangat positif.",
+    "startupId": "s6",
+    "severity": "low",
+    "read": true,
+    "createdAt": "2026-05-18T16:30:00Z"
+  },
+  {
+    "id": "a7",
+    "type": "RISK",
+    "title": "Peringatan: 2 startup dalam status AT_RISK",
+    "message": "Saat ini terdapat 2 startup (HealthSync dan PayDesa) dalam status AT_RISK. Disarankan review portofolio dan jadwalkan meeting dengan founder.",
+    "startupId": null,
+    "severity": "high",
+    "read": false,
+    "createdAt": "2026-05-24T06:00:00Z"
+  },
+  {
+    "id": "a8",
+    "type": "REMINDER",
+    "title": "Q3 target review minggu depan",
+    "message": "Review target Q3 akan dilaksanakan pada 1 Juni 2026. Siapkan data evaluasi untuk seluruh startup di portofolio Indigo.",
+    "startupId": null,
+    "severity": "medium",
+    "read": false,
+    "createdAt": "2026-05-24T00:00:00Z"
+  }
+]
