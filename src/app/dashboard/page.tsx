@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
-import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers } from "lucide-react";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw } from "lucide-react";
 
 type Startup = (typeof startupsData)[number];
 
@@ -22,6 +22,9 @@ export default function DashboardPage() {
   const [filteredStartups, setFilteredStartups] = useState<Startup[]>([]);
   const [filters, setFilters] = useState({ sector: "all", batch: "all", risk: "all" });
   const [search, setSearch] = useState("");
+  const [aiSearch, setAiSearch] = useState(false);
+  const [aiSearchLoading, setAiSearchLoading] = useState(false);
+  const [aiSearchActive, setAiSearchActive] = useState(false);
 
   useEffect(() => {
     setStartups(startupsData);
@@ -29,16 +32,58 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
+    if (aiSearchActive || aiSearchLoading) return;
+
     let result = [...startups];
     if (filters.sector !== "all") result = result.filter((s) => s.sector === filters.sector);
     if (filters.batch !== "all") result = result.filter((s) => s.batch === filters.batch);
     if (filters.risk !== "all") result = result.filter((s) => s.status === filters.risk);
-    if (search) {
+    if (search && !aiSearchActive) {
       const q = search.toLowerCase();
       result = result.filter((s) => s.name.toLowerCase().includes(q) || s.sector.toLowerCase().includes(q));
     }
     setFilteredStartups(result);
-  }, [startups, filters, search]);
+  }, [startups, filters, search, aiSearchActive, aiSearchLoading]);
+
+  const handleAiSearch = async () => {
+    if (!search.trim()) return;
+    setAiSearchLoading(true);
+    setAiSearchActive(true);
+
+    try {
+      const res = await fetch("/api/ai/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: search }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.filteredIds && Array.isArray(data.filteredIds)) {
+          const filtered = startups.filter((s) => data.filteredIds.includes(s.id));
+          setFilteredStartups(filtered);
+        }
+      }
+    } catch {
+      // fallback to text search
+      const q = search.toLowerCase();
+      setFilteredStartups(startups.filter((s) => s.name.toLowerCase().includes(q) || s.sector.toLowerCase().includes(q)));
+    } finally {
+      setAiSearchLoading(false);
+    }
+  };
+
+  const clearAiSearch = () => {
+    setAiSearchActive(false);
+    setSearch("");
+    setFilteredStartups(startups);
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && aiSearch) {
+      handleAiSearch();
+    }
+  };
 
   const healthDistribution = [
     { label: "High Growth", count: filteredStartups.filter((s) => s.status === "ACTIVE").length, color: "bg-emerald-500" },
@@ -61,13 +106,11 @@ export default function DashboardPage() {
   return (
     <AppShell>
       <div className="p-8">
-        {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-[#161616]">Dashboard</h1>
           <p className="mt-1 text-sm text-[#667085]">Executive overview of startup portfolio</p>
         </div>
 
-        {/* Stat Cards */}
         <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <div className="card-legion p-6">
             <div className="flex items-center justify-between">
@@ -110,7 +153,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Charts Row */}
         <div className="mb-8 grid gap-6 lg:grid-cols-2">
           <div className="card-legion p-6">
             <h3 className="text-base font-bold text-[#161616]">Health Score Distribution</h3>
@@ -124,9 +166,7 @@ export default function DashboardPage() {
                   <div className="h-2.5 rounded-full bg-[#f2f4f7]">
                     <div
                       className={`h-2.5 rounded-full ${item.color} transition-all`}
-                      style={{
-                        width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%`,
-                      }}
+                      style={{ width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%` }}
                     />
                   </div>
                 </div>
@@ -147,11 +187,8 @@ export default function DashboardPage() {
                     <span className="text-[#667085]">{count}</span>
                   </div>
                   <div className="h-2.5 rounded-full bg-[#f2f4f7]">
-                    <div
-                      className={`h-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"} transition-all`}
-                      style={{
-                        width: `${totalStartups > 0 ? (count / totalStartups) * 100 : 0}%`,
-                      }}
+                    <div className={`h-2.5 rounded-full ${sectorColors[sector] || "bg-slate-500"} transition-all`}
+                      style={{ width: `${totalStartups > 0 ? (count / totalStartups) * 100 : 0}%` }}
                     />
                   </div>
                 </div>
@@ -160,7 +197,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Filters */}
         <div className="mb-6 flex flex-wrap items-center gap-3">
           <Filter className="h-4 w-4 text-[#667085]" />
           <select
@@ -192,18 +228,52 @@ export default function DashboardPage() {
             <option value="ACTIVE">High Growth</option>
             <option value="AT_RISK">At Risk</option>
           </select>
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#667085]" />
-            <input
-              className="w-full rounded-lg border border-[#e0e0e0] bg-white py-2 pl-10 pr-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#875bf7] focus:ring-1 focus:ring-[#875bf7]"
-              placeholder="Cari startup..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+
+          <div className="relative flex flex-1 min-w-[300px]">
+            <div className="flex w-full items-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-1 focus-within:border-[#875bf7] focus-within:ring-1 focus-within:ring-[#875bf7]">
+              {aiSearch ? (
+                <Sparkles className="h-4 w-4 text-[#875bf7]" />
+              ) : (
+                <Search className="h-4 w-4 text-[#667085]" />
+              )}
+              <input
+                className="flex-1 border-0 bg-transparent py-2 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:outline-none"
+                placeholder={aiSearch ? 'Contoh: "cari startup fintech at risk" atau "perusahaan logistik batch 6"' : "Cari startup..."}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+              />
+              {aiSearch && search && (
+                <button onClick={handleAiSearch} disabled={aiSearchLoading} className="btn-primary-solid rounded-md px-3 py-1.5 text-xs disabled:opacity-50">
+                  {aiSearchLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : "Cari"}
+                </button>
+              )}
+              {aiSearchActive && (
+                <button onClick={clearAiSearch} className="text-[#8c8f93] hover:text-[#161616] text-xs">✕</button>
+              )}
+            </div>
+            <button
+              onClick={() => { setAiSearch(!aiSearch); if (aiSearchActive) clearAiSearch(); }}
+              className={`ml-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap ${
+                aiSearch
+                  ? "border-[#875bf7] bg-[#f4f2fc] text-[#875bf7]"
+                  : "border-[#e0e0e0] text-[#667085] hover:border-[#875bf7]"
+              }`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              AI Search
+            </button>
           </div>
         </div>
 
-        {/* Startup Cards */}
+        {aiSearchActive && (
+          <div className="mb-4 flex items-center gap-2 rounded-lg bg-[#f4f2fc] px-4 py-2 text-sm text-[#875bf7]">
+            <Sparkles className="h-4 w-4" />
+            <span>AI Search active</span>
+            <button onClick={clearAiSearch} className="ml-auto text-xs underline">Clear</button>
+          </div>
+        )}
+
         {filteredStartups.length === 0 ? (
           <div className="card-legion flex flex-col items-center justify-center py-16">
             <Search className="mb-3 h-10 w-10 text-[#d0d5dd]" />
