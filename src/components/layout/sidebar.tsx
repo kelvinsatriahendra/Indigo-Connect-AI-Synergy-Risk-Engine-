@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -14,18 +14,31 @@ import {
   LogOut,
 } from "lucide-react";
 
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/reports", label: "AI Evaluation", icon: FileText },
-  { href: "/startups", label: "Startups", icon: BarChart3 },
-  { href: "/synergy", label: "Synergy Pipeline", icon: GitBranch },
-  { href: "/forecast", label: "Forecast", icon: Shield },
-  { href: "/alerts", label: "Alerts", icon: Bell },
+const allNavItems = [
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "synergy", "founder"] },
+  { href: "/reports", label: "AI Evaluation", icon: FileText, roles: ["admin", "founder"] },
+  { href: "/startups", label: "Startups", icon: BarChart3, roles: ["admin"] },
+  { href: "/synergy", label: "Synergy Pipeline", icon: GitBranch, roles: ["admin", "synergy"] },
+  { href: "/forecast", label: "Forecast", icon: Shield, roles: ["admin", "founder"] },
+  { href: "/alerts", label: "Alerts", icon: Bell, roles: ["admin", "synergy"] },
 ];
+
+// Role display labels
+const roleLabels: Record<string, string> = {
+  admin: "Telkom Executive",
+  synergy: "Synergy Manager",
+  founder: "Mitra Startup",
+};
+
+// Role badge colors
+const roleBadgeColors: Record<string, string> = {
+  admin: "bg-[#f4f2fc] text-[#875bf7]",
+  synergy: "bg-[#fffbeb] text-[#d97706]",
+  founder: "bg-[#f0f9ff] text-[#2563eb]",
+};
 
 export function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const [unreadCount, setUnreadCount] = useState(0);
   const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
 
@@ -49,6 +62,11 @@ export function Sidebar() {
     const { logout } = await import("@/app/actions/auth");
     await logout();
   };
+
+  // Filter nav items based on user role
+  const navItems = user
+    ? allNavItems.filter((item) => item.roles.includes(user.role))
+    : allNavItems;
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r bg-white">
@@ -97,12 +115,15 @@ export function Sidebar() {
       <div className="border-t px-4 py-4">
         {user && (
           <div className="mb-3 flex items-center gap-3 px-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#f4f2fc] text-xs font-semibold text-[#875bf7]">
+            <div className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold",
+              roleBadgeColors[user.role] || "bg-[#f4f2fc] text-[#875bf7]"
+            )}>
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-[#161616] truncate">{user.name}</p>
-              <p className="text-[10px] text-[#8c8f93] capitalize">{user.role}</p>
+              <p className="text-[10px] text-[#8c8f93]">{roleLabels[user.role] || user.role}</p>
             </div>
           </div>
         )}
