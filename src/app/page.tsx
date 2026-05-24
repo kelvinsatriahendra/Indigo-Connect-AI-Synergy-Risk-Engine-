@@ -226,10 +226,14 @@ export default async function Home() {
         </div>
       </section>
 
-      <footer className="border-t bg-white px-6 py-8">
-        <div className="mx-auto flex max-w-5xl items-center justify-between text-sm text-[#8c8f93]">
-          <p>&copy; 2026 Indigo by Telkom Indonesia</p>
-          <p>AI Synergy & Risk Engine</p>
+      <footer className="bg-[#111625] text-slate-400 px-6 py-10 border-t border-white/5">
+        <div className="mx-auto flex max-w-5xl flex-col sm:flex-row items-center justify-between gap-6 text-sm text-slate-400">
+          <div className="flex items-center gap-3">
+            <img src="/indigo-red.png" alt="Indigo Logo" className="h-6 w-auto object-contain brightness-110" />
+            <span className="text-white/20 hidden sm:inline">|</span>
+            <p>&copy; 2026 Indigo by Telkom Indonesia</p>
+          </div>
+          <p className="text-slate-500 font-medium">AI Synergy & Risk Engine</p>
         </div>
       </footer>
     </div>
