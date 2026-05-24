@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
-import { FileText, Send, RefreshCw } from "lucide-react";
+import { FileText, Send, RefreshCw, Download } from "lucide-react";
+import { exportToPdf } from "@/lib/pdf-export";
 
 export default function ReportsPage() {
+  const reportRef = useRef<HTMLDivElement>(null);
   const [selectedStartup, setSelectedStartup] = useState<string>("");
   const [narrativeText, setNarrativeText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -69,6 +71,12 @@ export default function ReportsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!reportRef.current) return;
+    const startup = startupsData.find((s) => s.id === selectedStartup);
+    await exportToPdf(reportRef.current, `Indigo-Connect-Evaluation-${startup?.name || "Startup"}.pdf`);
   };
 
   const selectedStartupData = startupsData.find((s) => s.id === selectedStartup);
@@ -153,7 +161,13 @@ export default function ReportsPage() {
 
           {result && (
             <div className="mt-6">
-              <HealthScoreCard
+              <div className="mb-4 flex items-center justify-end">
+                <button onClick={handleDownloadPdf} className="btn-primary-outline gap-2 px-4 py-2 text-sm">
+                  <Download className="h-4 w-4" /> Download PDF
+                </button>
+              </div>
+              <div ref={reportRef}>
+                <HealthScoreCard
                 healthScore={result.healthScore}
                 riskLabel={result.riskLabel}
                 sentimentScore={result.sentimentScore}
@@ -174,6 +188,7 @@ export default function ReportsPage() {
                   }) || undefined
                 }
               />
+              </div>
             </div>
           )}
         </div>
