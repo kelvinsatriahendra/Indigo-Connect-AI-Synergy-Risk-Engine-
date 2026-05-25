@@ -216,8 +216,8 @@ export default function SynergyPage() {
         </div>
 
         {/* Kanban Board */}
-        <div className="flex-1 overflow-x-auto overflow-y-auto p-8 lg:overflow-x-hidden">
-          <div className="grid h-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start min-w-[800px] xl:min-w-0">
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
+          <div className="grid h-full grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-6 items-start">
             {loading ? (
               <div className="flex w-full h-full items-center justify-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
