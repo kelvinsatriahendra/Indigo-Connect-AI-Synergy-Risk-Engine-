@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import {
@@ -8,6 +8,17 @@ import {
   Area, AreaChart,
 } from "recharts";
 import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap } from "lucide-react";
+
+type Startup = (typeof startupsData)[number];
+type UserInfo = { name: string; email: string; role: string; userId?: string };
+
+// Mock Maps
+const founderStartupMap: Record<string, string[]> = {
+  "demo-founder-id": ["s3", "s8"],
+};
+const synergySectorMap: Record<string, string[]> = {
+  "demo-synergy-id": ["Fintech", "Logistik", "Agritech"],
+};
 
 interface MetricPeriod {
   period: string;
@@ -25,6 +36,9 @@ interface Prediction {
 }
 
 export default function ForecastPage() {
+  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
+  const [availableStartups, setAvailableStartups] = useState<Startup[]>([]);
   const [selectedStartup, setSelectedStartup] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{
@@ -34,6 +48,33 @@ export default function ForecastPage() {
     prediction: Prediction;
   } | null>(null);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          setUser(data.user);
+          let roleStartups = startupsData;
+          if (data.user.role === "founder" && data.user.userId) {
+            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"]; 
+            roleStartups = startupsData.filter((s) => myIds.includes(s.id));
+          } else if (data.user.role === "synergy" && data.user.userId) {
+            const mySectors = synergySectorMap[data.user.userId] || [];
+            roleStartups = startupsData.filter((s) => mySectors.includes(s.sector));
+          }
+          setAvailableStartups(roleStartups);
+          
+          if (data.user.role === "founder" && roleStartups.length === 1) {
+            setSelectedStartup(roleStartups[0].id);
+          }
+        }
+      })
+      .catch(() => {
+        setAvailableStartups(startupsData);
+      });
+  }, []);
 
   const handleForecast = async () => {
     if (!selectedStartup) return;
@@ -106,7 +147,7 @@ export default function ForecastPage() {
                   className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                 >
                   <option value="">-- Pilih Startup --</option>
-                  {startupsData.map((s) => (
+                  {availableStartups.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
                   ))}
                 </select>

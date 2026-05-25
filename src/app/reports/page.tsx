@@ -13,8 +13,7 @@ type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 // Mock Maps
 const founderStartupMap: Record<string, string[]> = {
-  // Untuk demo, kita set founder ini hanya punya 1 startup (s3) agar dropdown tersembunyi otomatis
-  "demo-founder-id": ["s3"], 
+  "demo-founder-id": ["s3", "s8"], // Founder mengelola FinAccess & PayDesa
 };
 const synergySectorMap: Record<string, string[]> = {
   "demo-synergy-id": ["Fintech", "Logistik", "Agritech"],
@@ -51,7 +50,7 @@ export default function ReportsPage() {
           setUser(data.user);
           let roleStartups = startupsData;
           if (data.user.role === "founder" && data.user.userId) {
-            const myIds = founderStartupMap[data.user.userId] || ["s3"]; 
+            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"]; 
             roleStartups = startupsData.filter((s) => myIds.includes(s.id));
           } else if (data.user.role === "synergy" && data.user.userId) {
             const mySectors = synergySectorMap[data.user.userId] || [];
