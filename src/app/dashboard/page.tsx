@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
-import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, BarChart3 } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis } from "recharts";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 
 type Startup = (typeof startupsData)[number];
 
@@ -345,123 +345,128 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Founder Ecosystem View: Quick Actions, Benchmarking, and Resource Hub */}
-        {user?.role === "founder" && (
+        {/* Founder gets a quick action section instead of charts */}
+        {user?.role === "founder" && mounted && (
           <div className="mb-8 space-y-6">
-            
-            {/* Action Cards & Benchmarking Row */}
-            <div className="grid gap-6 lg:grid-cols-12">
-              
-              {/* Quick Actions (Left, 4 columns) */}
-              <div className="lg:col-span-4 flex flex-col gap-4">
-                <a href="/reports" className="card-legion flex-1 group flex items-center gap-4 p-5 transition-all hover:border-[#ED1C24] hover:shadow-lg">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
-                    <FileText className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-extrabold text-[#161616]">Submit Laporan Baru</p>
-                    <p className="text-[11px] text-[#667085] mt-0.5">Kirim laporan bulanan untuk evaluasi AI</p>
-                  </div>
-                </a>
-                <a href="/forecast" className="card-legion flex-1 group flex items-center gap-4 p-5 transition-all hover:border-[#ED1C24] hover:shadow-lg">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
-                    <TrendingUp className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-[13px] font-extrabold text-[#161616]">Lihat Prediksi Forecast</p>
-                    <p className="text-[11px] text-[#667085] mt-0.5">Prediksi metrik pertumbuhan 3 bulan ke depan</p>
-                  </div>
-                </a>
-                
-                {/* Mini Stat Card */}
-                <div className="card-legion p-5 bg-slate-50/50 flex-1 flex flex-col justify-center">
-                  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1">Rank di Industri Anda</p>
-                  <p className="text-2xl font-extrabold text-[#161616]">Top 15%</p>
-                  <p className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-1">
-                    <TrendingUp className="h-3 w-3" /> Naik 2% dari bulan lalu
-                  </p>
+            {/* Quick Actions */}
+            <div className="grid gap-5 sm:grid-cols-2">
+              <a href="/reports" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
+                  <FileText className="h-5 w-5" />
                 </div>
-              </div>
+                <div>
+                  <p className="text-sm font-bold text-[#161616]">Submit Laporan Baru</p>
+                  <p className="text-xs text-[#667085]">Kirim laporan bulanan untuk evaluasi AI</p>
+                </div>
+              </a>
+              <a href="/forecast" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#16a34a] hover:shadow-lg hover:shadow-green-500/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-[#161616]">Lihat Forecast</p>
+                  <p className="text-xs text-[#667085]">Prediksi pertumbuhan 3 bulan ke depan</p>
+                </div>
+              </a>
+            </div>
 
-              {/* Peer Benchmarking Chart (Right, 8 columns) */}
-              <div className="lg:col-span-8 card-legion p-6 flex flex-col">
-                <div className="mb-6 flex justify-between items-start">
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">
-                      <BarChart3 className="h-5 w-5 text-indigo-600" /> Peer Benchmarking
-                    </h3>
-                    <p className="text-[11px] text-[#8c8f93] mt-1">Perbandingan performa startup Anda vs rata-rata ekosistem Indigo (Anonim)</p>
+            {/* Peer Benchmarking & Resource Hub Grid */}
+            <div className="grid gap-6 lg:grid-cols-2">
+              
+              {/* Peer Benchmarking (Anonim) */}
+              <div className="card-legion p-6 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="h-4 w-4 text-indigo-600" />
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Peer Benchmarking</h3>
                   </div>
-                  <span className="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-1 rounded border border-indigo-100">Live Data</span>
+                  <p className="text-xs text-[#8c8f93]">Perbandingan performa (anonim) terhadap ekosistem Indigo</p>
                 </div>
-                
-                <div className="flex-1 min-h-[220px] w-full">
+                <div className="mt-6 h-[220px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart
                       data={[
-                        { metric: "Health Score", myStartup: 88, average: 75 },
-                        { metric: "Revenue Grwth (%)", myStartup: 15, average: 12 },
-                        { metric: "Synergy Match", myStartup: 92, average: 65 },
+                        { metric: "Health Score", you: 92, avg: 76 },
+                        { metric: "MoM Growth", you: 15, avg: 8 },
+                        { metric: "Runway (Mo)", you: 18, avg: 12 },
                       ]}
                       margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
-                      barGap={6}
                     >
-                      <XAxis dataKey="metric" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#667085', fontWeight: 600 }} dy={10} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#667085' }} />
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis dataKey="metric" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} dy={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
                       <Tooltip 
-                        cursor={{ fill: '#f8fafc' }}
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)', fontSize: '12px', fontWeight: 600 }}
+                        cursor={{fill: '#f8fafc'}}
+                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                        labelStyle={{ color: '#0f172a', fontWeight: 'bold', marginBottom: '4px' }}
                       />
-                      <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-                      <Bar dataKey="myStartup" name="Startup Saya" fill="#ED1C24" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      <Bar dataKey="average" name="Rata-rata Indigo" fill="#94a3b8" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px', paddingTop: '10px', fontWeight: 600 }} />
+                      <Bar dataKey="you" name="Startup Anda" fill="#ED1C24" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="avg" name="Rata-rata Indigo" fill="#cbd5e1" radius={[4, 4, 0, 0]} maxBarSize={40} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
-            </div>
 
-            {/* Resource Hub & Perks */}
-            <div className="card-legion overflow-hidden border-t-4 border-t-indigo-500">
-              <div className="p-6 bg-gradient-to-r from-slate-50 to-white border-b border-slate-100">
-                <h3 className="text-base font-extrabold text-[#161616] flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-indigo-500" /> Resource Hub & Perks
-                </h3>
-                <p className="text-xs text-[#667085] mt-1">Klaim keuntungan eksklusif sebagai bagian dari Indigo Connect Network.</p>
+              {/* Resource Hub & Perks */}
+              <div className="card-legion p-6 flex flex-col">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Gift className="h-4 w-4 text-emerald-600" />
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Resource Hub & Perks</h3>
+                  </div>
+                  <p className="text-xs text-[#8c8f93]">Klaim benefit eksklusif jaringan Telkom Group</p>
+                </div>
+                <div className="mt-5 space-y-3 flex-1">
+                  
+                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
+                        <Cloud className="h-5 w-5 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#161616]">AWS Activate Credits</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Hingga $100k credit untuk startup aktif</p>
+                      </div>
+                    </div>
+                    <button className="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-full border border-orange-200 transition-colors cursor-pointer">
+                      Claim
+                    </button>
+                  </div>
+
+                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
+                        <TerminalSquare className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#161616]">Telkom API Sandbox</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Akses gratis API Telkomsel & IndiHome</p>
+                      </div>
+                    </div>
+                    <button className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full border border-blue-200 transition-colors cursor-pointer">
+                      Connect
+                    </button>
+                  </div>
+
+                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
+                        <Building2 className="h-5 w-5 text-indigo-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#161616]">Legal & Compliance Vault</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">Ruang dokumen aman untuk due diligence</p>
+                      </div>
+                    </div>
+                    <button className="text-[10px] font-bold text-slate-600 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-300 transition-colors cursor-pointer">
+                      Open
+                    </button>
+                  </div>
+
+                </div>
               </div>
-              <div className="p-6 grid gap-4 sm:grid-cols-3 bg-slate-50/30">
-                
-                <div className="rounded-xl border border-orange-200/60 bg-white p-5 shadow-sm hover:shadow-md transition-all group">
-                  <div className="h-10 w-10 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500 mb-4 border border-orange-100">
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                  </div>
-                  <h4 className="font-bold text-[#161616]">AWS Activate</h4>
-                  <p className="text-[10px] font-bold text-orange-600 bg-orange-50 inline-block px-2 py-0.5 rounded mt-1 mb-2">Nilai: $100,000</p>
-                  <p className="text-xs text-slate-500 mb-4 line-clamp-2">Kredit cloud gratis selama 1 tahun untuk menunjang infrastruktur startup Anda.</p>
-                  <button className="w-full py-2 text-xs font-bold text-orange-600 border border-orange-200 rounded-lg hover:bg-orange-50 transition-colors">Klaim Sekarang</button>
-                </div>
 
-                <div className="rounded-xl border border-red-200/60 bg-white p-5 shadow-sm hover:shadow-md transition-all group">
-                  <div className="h-10 w-10 rounded-lg bg-red-50 flex items-center justify-center text-red-500 mb-4 border border-red-100">
-                    <Layers className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-[#161616]">Telkom API Sandbox</h4>
-                  <p className="text-[10px] font-bold text-red-600 bg-red-50 inline-block px-2 py-0.5 rounded mt-1 mb-2">Akses Premium</p>
-                  <p className="text-xs text-slate-500 mb-4 line-clamp-2">Akses gratis untuk menguji integrasi SMS Gateway, OTP, dan sistem Billing Telkomsel.</p>
-                  <button className="w-full py-2 text-xs font-bold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors">Buka Dokumentasi</button>
-                </div>
-
-                <div className="rounded-xl border border-blue-200/60 bg-white p-5 shadow-sm hover:shadow-md transition-all group">
-                  <div className="h-10 w-10 rounded-lg bg-blue-50 flex items-center justify-center text-blue-500 mb-4 border border-blue-100">
-                    <Building2 className="w-5 h-5" />
-                  </div>
-                  <h4 className="font-bold text-[#161616]">Google for Startups</h4>
-                  <p className="text-[10px] font-bold text-blue-600 bg-blue-50 inline-block px-2 py-0.5 rounded mt-1 mb-2">Nilai: $200,000</p>
-                  <p className="text-xs text-slate-500 mb-4 line-clamp-2">Kredit GCP dan lisensi Google Workspace gratis selama 2 tahun.</p>
-                  <button className="w-full py-2 text-xs font-bold text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors">Telah Diklaim</button>
-                </div>
-
-              </div>
             </div>
           </div>
         )}
