@@ -10,13 +10,13 @@ import { exportToPdf } from "@/lib/pdf-export";
 type Startup = (typeof startupsData)[number];
 
 const sectorColors: Record<string, string> = {
-  Logistik: "bg-blue-500",
-  Agritech: "bg-green-500",
-  Fintech: "bg-yellow-500",
-  Edtech: "bg-purple-500",
-  Healthtech: "bg-red-500",
-  Energy: "bg-orange-500",
-  Travel: "bg-pink-500",
+  Logistik: "bg-blue-700",
+  Agritech: "bg-emerald-700",
+  Fintech: "bg-amber-700",
+  Edtech: "bg-indigo-700",
+  Healthtech: "bg-[#ED1C24]",
+  Energy: "bg-orange-700",
+  Travel: "bg-rose-700",
 };
 
 // Mapping: founder user ID → startup IDs they own
@@ -32,13 +32,13 @@ const synergySectorMap: Record<string, string[]> = {
 type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 const sectorColorMap: Record<string, string> = {
-  Logistik: "#3b82f6",
-  Agritech: "#22c55e",
-  Fintech: "#eab308",
-  Edtech: "#a855f7",
-  Healthtech: "#ef4444",
-  Energy: "#f97316",
-  Travel: "#ec4899",
+  Logistik: "#1d4ed8",
+  Agritech: "#047857",
+  Fintech: "#b45309",
+  Edtech: "#4338ca",
+  Healthtech: "#ED1C24",
+  Energy: "#c2410c",
+  Travel: "#be123c",
 };
 
 export default function DashboardPage() {

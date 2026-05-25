@@ -11,8 +11,8 @@
   --card-foreground: #161616;
   --primary: #ED1C24;
   --primary-foreground: #ffffff;
-  --primary-hover: #7839ee;
-  --primary-active: #6927da;
+  --primary-hover: #CC161E;
+  --primary-active: #A30F14;
   --secondary: #f2f4f7;
   --secondary-foreground: #344054;
   --muted: #f2f4f7;
@@ -170,7 +170,7 @@
 }
 
 .btn-primary-outline:hover {
-  background: #f5f3ff;
+  background: #FEF2F2;
 }
 
 .badge-high-growth {
