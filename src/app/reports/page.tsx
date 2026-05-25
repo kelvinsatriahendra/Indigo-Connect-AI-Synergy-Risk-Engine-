@@ -215,8 +215,8 @@ export default function ReportsPage() {
         <div className="mx-auto max-w-[1400px]">
           <div className="flex flex-col lg:flex-row gap-6">
             
-            {/* Left Column: Form Input */}
-            <div className="flex-1 min-w-0">
+            {/* Left Column: Form Input & History */}
+            <div className="flex-1 min-w-0 space-y-6">
               <div className="card-legion p-6 lg:p-8">
                 <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
                 <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
@@ -325,7 +325,7 @@ export default function ReportsPage() {
               </div>
 
               {error && (
-                <div className="card-legion mt-6 border-red-200 bg-red-50 p-6 flex items-center gap-3">
+                <div className="card-legion border-red-200 bg-red-50 p-6 flex items-center gap-3">
                   <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
                     <span className="text-red-600 font-bold">!</span>
                   </div>
@@ -334,88 +334,89 @@ export default function ReportsPage() {
               )}
 
               {loading && (
-                <div className="card-legion mt-6 flex flex-col items-center justify-center py-16">
+                <div className="card-legion flex flex-col items-center justify-center py-16">
                   <div className="mb-5 h-12 w-12 animate-spin rounded-full border-[3px] border-[#ED1C24] border-t-transparent" />
                   <p className="text-base font-bold text-[#161616]">AI sedang memproses laporan...</p>
                   <p className="mt-2 text-sm text-[#667085] text-center max-w-sm">Mengekstrak konteks finansial, menganalisis profil risiko, dan mencari potensi sinergi dengan Telkom Group.</p>
                 </div>
               )}
+
+              {/* History Container - Sitting beneath the Form */}
+              <div className="card-legion p-6 lg:p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="bg-[#fef2f2] p-2.5 rounded-xl">
+                    <History className="h-5 w-5 text-[#ED1C24]" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
+                    <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
+                  </div>
+                </div>
+                
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {reportHistory.map((hist, i) => (
+                    <div key={i} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
+                          <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
+                        </div>
+                        <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
+                          <ChevronRight className="h-4 w-4 text-[#d0d5dd] group-hover:text-[#ED1C24] transition-transform group-hover:translate-x-0.5" />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between border-t border-[#f2f4f7] pt-3 mt-3">
+                        <span className="text-xs font-bold text-[#667085] uppercase tracking-wider">AI Health Score</span>
+                        <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold shadow-sm ${hist.healthScore >= 80 ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' : 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'}`}>
+                          {hist.healthScore}% · {hist.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <button className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
+                  Lihat Semua Riwayat
+                </button>
+              </div>
             </div>
 
-            {/* Right Column: AI Result or History */}
-            <div className="w-full lg:w-[480px] shrink-0">
-               {result ? (
-                 <div className="sticky top-6">
-                    <div className="mb-4 flex items-center justify-between">
-                      <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
-                      <button onClick={handleDownloadPdf} className="btn-primary-outline gap-2 px-4 py-2 text-xs">
-                        <Download className="h-4 w-4" /> Download PDF
-                      </button>
-                    </div>
-                    <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
-                      <HealthScoreCard
-                        healthScore={result.healthScore}
-                        riskLabel={result.riskLabel}
-                        sentimentScore={result.sentimentScore}
-                        operationalStatus={result.operationalStatus}
-                        summaryPoints={
-                          result.summary
-                            ? [result.summary.point1, result.summary.point2, result.summary.point3]
-                            : undefined
-                        }
-                        synergyMatches={
-                          result.synergy?.matches?.map((m) => {
-                            const bu = telkomBusData.find((b) => b.id === m.buId);
-                            return {
-                              name: bu?.name || m.buId,
-                              reason: m.reason,
-                              score: m.matchScore,
-                            };
-                          }) || undefined
-                        }
-                      />
-                    </div>
-                 </div>
-               ) : (
-                 <div className="card-legion sticky top-6 p-6 lg:p-8">
-                   <div className="mb-6 flex items-center gap-3">
-                     <div className="bg-[#fef2f2] p-2.5 rounded-xl">
-                       <History className="h-5 w-5 text-[#ED1C24]" />
-                     </div>
-                     <div>
-                       <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
-                       <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
-                     </div>
-                   </div>
-                   
-                   <div className="space-y-4">
-                     {reportHistory.map((hist, i) => (
-                       <div key={i} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md">
-                         <div className="flex items-center justify-between mb-3">
-                           <div>
-                             <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
-                             <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
-                           </div>
-                           <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
-                             <ChevronRight className="h-4 w-4 text-[#d0d5dd] group-hover:text-[#ED1C24] transition-transform group-hover:translate-x-0.5" />
-                           </div>
-                         </div>
-                         <div className="flex items-center justify-between border-t border-[#f2f4f7] pt-3 mt-3">
-                           <span className="text-xs font-bold text-[#667085] uppercase tracking-wider">AI Health Score</span>
-                           <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold shadow-sm ${hist.healthScore >= 80 ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' : 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'}`}>
-                             {hist.healthScore}% · {hist.status}
-                           </span>
-                         </div>
-                       </div>
-                     ))}
-                   </div>
-                   
-                   <button className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
-                     Lihat Semua Riwayat
-                   </button>
-                 </div>
-               )}
-            </div>
+            {/* Right Column: AI Result */}
+            {result && (
+              <div className="w-full lg:w-[480px] shrink-0">
+                <div className="sticky top-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
+                    <button onClick={handleDownloadPdf} className="btn-primary-outline gap-2 px-4 py-2 text-xs">
+                      <Download className="h-4 w-4" /> Download PDF
+                    </button>
+                  </div>
+                  <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
+                    <HealthScoreCard
+                      healthScore={result.healthScore}
+                      riskLabel={result.riskLabel}
+                      sentimentScore={result.sentimentScore}
+                      operationalStatus={result.operationalStatus}
+                      summaryPoints={
+                        result.summary
+                          ? [result.summary.point1, result.summary.point2, result.summary.point3]
+                          : undefined
+                      }
+                      synergyMatches={
+                        result.synergy?.matches?.map((m) => {
+                          const bu = telkomBusData.find((b) => b.id === m.buId);
+                          return {
+                            name: bu?.name || m.buId,
+                            reason: m.reason,
+                            score: m.matchScore,
+                          };
+                        }) || undefined
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
           </div>
         </div>
