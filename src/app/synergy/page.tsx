@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
@@ -8,10 +8,8 @@ import {
   GitBranch,
   Plus,
   ChevronRight,
-  ChevronLeft,
   X,
   Check,
-  ArrowRight,
   RotateCcw,
   MessageSquare,
   User,
@@ -19,6 +17,9 @@ import {
   Target,
   Sparkles,
   AlertCircle,
+  BrainCircuit,
+  Activity,
+  GripVertical
 } from "lucide-react";
 
 type PipelineStatus = "PIPELINE" | "ON_GOING" | "SUCCESS" | "CANCELLED";
@@ -42,13 +43,6 @@ const columns: { status: PipelineStatus; label: string; color: string }[] = [
   { status: "SUCCESS", label: "Success", color: "border-t-[#10b981]" },
   { status: "CANCELLED", label: "Cancelled", color: "border-t-[#ef4444]" },
 ];
-
-const statusFlow: Record<PipelineStatus, PipelineStatus[]> = {
-  PIPELINE: ["ON_GOING"],
-  ON_GOING: ["SUCCESS", "CANCELLED"],
-  SUCCESS: [],
-  CANCELLED: ["PIPELINE"],
-};
 
 const statusBorders: Record<PipelineStatus, string> = {
   PIPELINE: "border-l-4 border-l-[#ED1C24]",
@@ -86,9 +80,18 @@ const getScoreBadge = (score: number) => {
 export default function SynergyPage() {
   const [pipelines, setPipelines] = useState<Pipeline[]>([]);
   const [loading, setLoading] = useState(true);
+  
+  // Modals & Panels
   const [showNewForm, setShowNewForm] = useState(false);
-  const [editingNotes, setEditingNotes] = useState<string | null>(null);
+  const [activeCRMItem, setActiveCRMItem] = useState<Pipeline | null>(null);
+  
+  // Form States
   const [noteText, setNoteText] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isSimulatingAI, setIsSimulatingAI] = useState(false);
+  
+  // Drag and Drop States
+  const [draggedOverCol, setDraggedOverCol] = useState<PipelineStatus | null>(null);
 
   const fetchPipelines = async () => {
     try {
@@ -130,7 +133,7 @@ export default function SynergyPage() {
       const updated = await res.json();
       setPipelines((prev) => prev.map((p) => (p.id === id ? updated : p)));
     }
-    setEditingNotes(null);
+    setActiveCRMItem(null);
   };
 
   const createPipeline = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -143,7 +146,7 @@ export default function SynergyPage() {
       body: JSON.stringify({
         startupId: data.get("startupId"),
         telkomBuId: data.get("telkomBuId"),
-        matchScore: Number(data.get("matchScore")) || 0.5,
+        matchScore: (Number(data.get("matchScore")) || 50) / 100, // Normalized to 0-1
         reason: data.get("reason") || "Sinergi potensial",
       }),
     });
@@ -152,6 +155,24 @@ export default function SynergyPage() {
       setPipelines((prev) => [...prev, newPipeline]);
       setShowNewForm(false);
     }
+  };
+
+  const simulateAIMatchmaking = () => {
+    setIsSimulatingAI(true);
+    setTimeout(() => {
+      setIsSimulatingAI(false);
+      if (formRef.current) {
+        const startupInput = formRef.current.elements.namedItem("startupId") as HTMLSelectElement;
+        const buInput = formRef.current.elements.namedItem("telkomBuId") as HTMLSelectElement;
+        const scoreInput = formRef.current.elements.namedItem("matchScore") as HTMLInputElement;
+        const reasonInput = formRef.current.elements.namedItem("reason") as HTMLTextAreaElement;
+
+        if (startupInput) startupInput.value = "s5"; // FinAccess
+        if (buInput) buInput.value = "b2"; // Telkomsel
+        if (scoreInput) scoreInput.value = "92";
+        if (reasonInput) reasonInput.value = "AI Recommendation: Model bisnis B2B SaaS dari FinAccess memiliki tingkat kecocokan strategis yang sangat tinggi dengan ekosistem pelanggan enterprise Telkomsel. Direkomendasikan untuk bundling layanan enterprise.";
+      }
+    }, 1500);
   };
 
   const getStartupName = (id: string) => startupsData.find((s) => s.id === id)?.name || id;
@@ -171,18 +192,18 @@ export default function SynergyPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden">
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
         {/* Header */}
-        <div className="border-b bg-white px-8 py-5">
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
                 <GitBranch className="h-6 w-6 text-[#ED1C24]" />
                 <h1 className="text-2xl font-bold text-[#161616]">Synergy Pipeline</h1>
               </div>
-              <p className="mt-1 text-sm text-[#667085]">Kanban pipeline kolaborasi startup × Telkom Business Unit</p>
+              <p className="mt-1 text-sm text-[#667085]">Interactive Kanban pipeline untuk kolaborasi Startup × Telkom Business Unit</p>
             </div>
-            <button onClick={() => setShowNewForm(true)} className="btn-primary-solid gap-2 px-5 py-2.5">
+            <button onClick={() => setShowNewForm(true)} className="btn-primary-solid gap-2 px-5 py-2.5 shadow-md">
               <Plus className="h-4 w-4" /> New Pipeline
             </button>
           </div>
@@ -195,26 +216,54 @@ export default function SynergyPage() {
         </div>
 
         {/* Kanban Board */}
-        <div className="flex-1 overflow-x-auto">
-          <div className="flex h-full gap-5 p-8">
+        <div className="flex-1 overflow-x-auto p-8">
+          <div className="flex h-full gap-6 items-start">
             {loading ? (
-              <div className="flex w-full items-center justify-center">
-                <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
+              <div className="flex w-full h-full items-center justify-center">
+                <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
               </div>
             ) : (
               grouped.map((col) => (
-                <div key={col.status} className="flex w-72 shrink-0 flex-col">
-                  <div className={`mb-4 flex items-center justify-between rounded-t-lg border-t-4 bg-white px-4 py-3 shadow-sm ${col.color}`}>
-                    <h3 className="text-sm font-bold text-[#161616]">{col.label}</h3>
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f2f4f7] text-xs font-medium text-[#667085]">
+                <div 
+                  key={col.status} 
+                  className={`flex w-[320px] shrink-0 flex-col rounded-xl transition-all duration-300 min-h-[500px] ${
+                    draggedOverCol === col.status 
+                      ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
+                      : 'bg-transparent'
+                  }`}
+                  onDragOver={(e) => { 
+                    e.preventDefault(); 
+                    setDraggedOverCol(col.status); 
+                  }}
+                  onDragLeave={(e) => { 
+                    e.preventDefault(); 
+                    setDraggedOverCol(null); 
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setDraggedOverCol(null);
+                    const id = e.dataTransfer.getData("pipelineId");
+                    if (id && pipelines.find(p => p.id === id)?.status !== col.status) {
+                      moveStatus(id, col.status);
+                    }
+                  }}
+                >
+                  {/* Column Header */}
+                  <div className={`mb-4 flex items-center justify-between rounded-xl border-t-4 bg-white px-5 py-3.5 shadow-sm ${col.color}`}>
+                    <h3 className="text-[15px] font-bold text-[#161616] uppercase tracking-wide">{col.label}</h3>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 shadow-inner">
                       {col.items.length}
                     </span>
                   </div>
 
-                  <div className="flex flex-col gap-3 overflow-y-auto">
+                  {/* Cards Container */}
+                  <div className="flex flex-col gap-4 overflow-y-auto pb-8">
                     {col.items.length === 0 ? (
-                      <div className="rounded-xl border-2 border-dashed border-[#e0e0e0] p-6 text-center">
-                        <p className="text-xs text-[#8c8f93]">Belum ada item</p>
+                      <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center bg-white/40 backdrop-blur-sm">
+                         <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 mb-2">
+                           <Target className="h-5 w-5 text-slate-400" />
+                         </div>
+                        <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">Drop Here</p>
                       </div>
                     ) : (
                       col.items.map((item) => {
@@ -222,13 +271,22 @@ export default function SynergyPage() {
                         const bu = getBu(item.telkomBuId);
                         const scoreInfo = getScoreBadge(item.matchScore);
                         const ScoreIcon = scoreInfo.icon;
+                        
                         return (
-                          <div key={item.id} className={`card-legion overflow-hidden ${statusBorders[item.status] || "border-l-4 border-l-slate-200"}`}>
+                          <div 
+                            key={item.id}
+                            draggable
+                            onDragStart={(e) => {
+                              e.dataTransfer.setData("pipelineId", item.id);
+                            }}
+                            className={`card-legion overflow-hidden cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-[#ED1C24]/30 hover:-translate-y-1 transition-all duration-200 bg-white ${statusBorders[item.status]}`}
+                          >
                             <div className="p-4">
                               {/* Header & Match Score */}
                               <div className="flex items-start justify-between">
-                                <div className="flex-1 min-w-0">
-                                  <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-wide uppercase bg-slate-50 text-slate-600 border-slate-200/60 shadow-2xs mb-2">
+                                <div className="flex items-center gap-2">
+                                  <GripVertical className="h-4 w-4 text-slate-300 cursor-grab active:cursor-grabbing" />
+                                  <span className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[9px] font-bold tracking-wide uppercase bg-slate-50 text-slate-600 border-slate-200/60 shadow-xs">
                                     {item.status.replace("_", " ")}
                                   </span>
                                 </div>
@@ -239,148 +297,67 @@ export default function SynergyPage() {
                               </div>
 
                               {/* Synergy Connector Flow */}
-                              <div className="flex flex-col gap-2 mt-2">
+                              <div className="flex flex-col gap-3 mt-4">
                                 {/* Startup */}
                                 <div className="flex items-center justify-between gap-2">
-                                  <div className="flex items-center gap-1.5 min-w-0">
-                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#FEF2F2] text-[#ED1C24] text-[10px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
-                                      S
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 text-[11px] font-extrabold border border-blue-100 shadow-2xs">
+                                      {startup?.name.charAt(0) || "S"}
                                     </span>
-                                    <span className="text-sm font-bold text-[#161616] truncate">
+                                    <span className="text-[13px] font-bold text-[#161616] truncate">
                                       {startup?.name || getStartupName(item.startupId)}
                                     </span>
                                   </div>
-                                  {startup?.sector && (
-                                    <span className="shrink-0 rounded bg-slate-100/80 border border-slate-200/60 px-1.5 py-0.5 text-[9px] font-semibold text-slate-600 shadow-3xs">
-                                      {startup.sector}
-                                    </span>
-                                  )}
                                 </div>
 
                                 {/* Connecting Dotted Line */}
-                                <div className="flex items-center pl-2.5 my-0.5">
-                                  <div className="h-4 w-px border-l border-dashed border-slate-300"></div>
-                                  <span className="text-[8px] font-bold text-slate-400 px-2 uppercase tracking-widest">Synergy Fit</span>
-                                  <div className="flex-1 h-px border-t border-dashed border-slate-200"></div>
+                                <div className="flex items-center pl-3 my-0.5">
+                                  <div className="h-5 w-px border-l-2 border-dashed border-slate-200"></div>
+                                  <span className="text-[9px] font-bold text-slate-400 px-3 uppercase tracking-widest bg-white">Synergetic Fit</span>
+                                  <div className="flex-1 h-px border-t-2 border-dashed border-slate-200"></div>
                                 </div>
 
                                 {/* Telkom BU */}
                                 <div className="flex items-center justify-between gap-2">
-                                  <div className="flex items-center gap-1.5 min-w-0">
-                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-red-50 text-[#ED1C24] text-[10px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#ED1C24] text-[11px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
                                       BU
                                     </span>
-                                    <span className="text-xs font-bold text-[#344054] truncate">
+                                    <span className="text-[13px] font-bold text-[#344054] truncate">
                                       {bu?.name || getBuName(item.telkomBuId)}
                                     </span>
                                   </div>
-                                  {bu?.sector && (
-                                    <span className="shrink-0 rounded bg-red-50 px-1.5 py-0.5 text-[9px] font-semibold text-[#ED1C24] border border-[#ED1C24]/10 shadow-3xs">
-                                      {bu.sector}
-                                    </span>
-                                  )}
                                 </div>
                               </div>
 
-                              {/* Progress bar */}
-                              <div className="mt-3 space-y-1 bg-slate-50/50 rounded-lg p-2 border border-slate-100">
-                                <div className="flex items-center justify-between text-[10px]">
-                                  <span className="text-slate-500 font-semibold tracking-wide uppercase text-[8px]">Match Alignment</span>
-                                  <span className="font-extrabold text-[#161616]">{Math.round(item.matchScore * 100)}%</span>
-                                </div>
-                                <div className="h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
-                                  <div
-                                    className={`h-full rounded-full ${scoreInfo.bar} transition-all duration-500`}
-                                    style={{ width: `${item.matchScore * 100}%` }}
-                                  />
-                                </div>
-                              </div>
-
-                              <p className="mt-3 text-xs text-[#525252] leading-relaxed line-clamp-2 italic px-1 border-l border-slate-200">
+                              <p className="mt-4 text-xs text-[#525252] leading-relaxed line-clamp-2 italic px-2 border-l-2 border-slate-200">
                                 "{item.reason}"
                               </p>
 
-                              {/* Notes section */}
-                              {editingNotes === item.id ? (
-                                <div className="mt-3 space-y-2 rounded-lg bg-amber-50/30 border border-amber-200/50 p-2.5">
-                                  <textarea
-                                    className="w-full rounded-lg border border-amber-200 bg-white p-2 text-xs text-[#344054] resize-none focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                                    rows={3}
-                                    value={noteText}
-                                    onChange={(e) => setNoteText(e.target.value)}
-                                    placeholder="Tambah notes perkembangan..."
-                                  />
-                                  <div className="flex gap-2 justify-end">
-                                    <button onClick={() => saveNotes(item.id)} className="btn-primary-solid px-3 py-1 text-xs rounded-full shadow-xs">Save</button>
-                                    <button onClick={() => setEditingNotes(null)} className="btn-primary-outline px-3 py-1 text-xs rounded-full shadow-xs">Cancel</button>
-                                  </div>
+                              {/* Notes Indicator */}
+                              {item.notes && (
+                                <div className="mt-3 rounded-lg border-l-2 border-indigo-500 bg-indigo-50/50 p-2 shadow-xs border border-indigo-100/50 flex items-start gap-2">
+                                  <MessageSquare className="h-3 w-3 text-indigo-500 shrink-0 mt-0.5" />
+                                  <p className="text-[10px] text-slate-600 italic leading-relaxed line-clamp-1 flex-1">
+                                    {item.notes}
+                                  </p>
                                 </div>
-                              ) : (
-                                item.notes && (
-                                  <div className="mt-3 rounded-lg border-l-2 border-amber-500 bg-[#fffbeb] p-2.5 shadow-xs border border-amber-100/50">
-                                    <div className="flex items-center gap-1.5 mb-1">
-                                      <MessageSquare className="h-3 w-3 text-amber-600" />
-                                      <span className="text-[8px] font-bold text-amber-700 uppercase tracking-widest">Latest Progress Note</span>
-                                    </div>
-                                    <p className="text-xs text-slate-700 italic leading-relaxed">"{item.notes}"</p>
-                                  </div>
-                                )
                               )}
 
-                              {/* Meta */}
-                              <div className="mt-4 flex items-center justify-between text-[10px] text-[#667085] border-t border-slate-100 pt-3">
-                                <div className="flex items-center gap-1">
-                                  {item.assignedTo ? (
-                                    <span className="flex items-center gap-1 bg-slate-100/60 rounded px-1.5 py-0.5 text-slate-700 font-medium">
-                                      <User className="h-3 w-3 text-slate-500" />
-                                      <span className="truncate max-w-[100px]">{item.assignedTo}</span>
-                                    </span>
-                                  ) : (
-                                    <span className="text-[9px] text-[#8c8f93] italic bg-slate-50 rounded px-1.5 py-0.5 border border-slate-100">Unassigned</span>
-                                  )}
-                                </div>
-                                <span className="flex items-center gap-1 text-[#8c8f93] font-medium">
-                                  <Calendar className="h-3.5 w-3.5 text-slate-400" />
-                                  {new Date(item.createdAt).toLocaleDateString("id-ID", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                  })}
+                              {/* Action Footer */}
+                              <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+                                <button
+                                  onClick={() => { setActiveCRMItem(item); setNoteText(item.notes || ""); }}
+                                  className="flex items-center gap-1.5 rounded-md bg-slate-50 px-3 py-1.5 text-[11px] font-bold text-[#475467] border border-slate-200 shadow-xs hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-all cursor-pointer group"
+                                >
+                                  <Activity className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-500" />
+                                  Manage CRM
+                                </button>
+                                
+                                <span className="flex items-center gap-1.5 text-[#8c8f93] font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-100">
+                                  <Calendar className="h-3 w-3 text-slate-400" />
+                                  <span className="text-[10px]">{new Date(item.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })}</span>
                                 </span>
-                              </div>
-
-                              {/* Action buttons */}
-                              <div className="mt-3 flex items-center justify-between gap-1.5 border-t border-slate-100 pt-3">
-                                {editingNotes !== item.id && (
-                                  <button
-                                    onClick={() => { setEditingNotes(item.id); setNoteText(item.notes || ""); }}
-                                    className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-[#475467] shadow-sm hover:bg-slate-50 hover:text-[#161616] transition-all duration-200 cursor-pointer"
-                                  >
-                                    <MessageSquare className="h-3 w-3 text-slate-500" />
-                                    {item.notes ? "Edit Notes" : "Add Notes"}
-                                  </button>
-                                )}
-
-                                <div className="flex gap-1.5 ml-auto">
-                                  {statusFlow[item.status]?.map((nextStatus) => (
-                                    <button
-                                      key={nextStatus}
-                                      onClick={() => moveStatus(item.id, nextStatus)}
-                                      className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold shadow-xs transition-all duration-200 cursor-pointer ${
-                                        nextStatus === "SUCCESS"
-                                          ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/80 active:bg-emerald-200"
-                                          : nextStatus === "CANCELLED"
-                                          ? "border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100/80 active:bg-rose-200"
-                                          : "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100/80 active:bg-amber-200"
-                                      }`}
-                                    >
-                                      {nextStatus === "ON_GOING" && <><ChevronRight className="h-3 w-3 shrink-0" /> Start</>}
-                                      {nextStatus === "SUCCESS" && <><Check className="h-3 w-3 shrink-0" /> Success</>}
-                                      {nextStatus === "CANCELLED" && <><X className="h-3 w-3 shrink-0" /> Cancel</>}
-                                      {nextStatus === "PIPELINE" && <><RotateCcw className="h-3 w-3 shrink-0" /> Reopen</>}
-                                    </button>
-                                  ))}
-                                </div>
                               </div>
                             </div>
                           </div>
@@ -395,27 +372,133 @@ export default function SynergyPage() {
         </div>
       </div>
 
+      {/* CRM Pipeline Modal (Slide Over) */}
+      {activeCRMItem && (
+        <div className="fixed inset-0 z-[60] flex justify-end bg-black/50 backdrop-blur-sm transition-all">
+          <div className="w-full max-w-lg h-full bg-white shadow-2xl animate-in slide-in-from-right-full duration-300 flex flex-col border-l border-slate-200">
+            {/* Header */}
+            <div className="px-6 py-5 border-b bg-gradient-to-br from-slate-50 to-white flex justify-between items-start">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Activity className="h-5 w-5 text-indigo-600" />
+                  <h2 className="text-lg font-bold text-[#161616]">CRM & Activity Log</h2>
+                </div>
+                <p className="text-xs text-slate-500">Manage pipeline progression notes and tasks.</p>
+              </div>
+              <button onClick={() => setActiveCRMItem(null)} className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors">
+                <X className="w-5 h-5"/>
+              </button>
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50/30">
+              
+              {/* Synergy Overview Card */}
+              <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Synergy Overview</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg shadow-sm">
+                      {getStartupName(activeCRMItem.startupId).charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#161616]">{getStartupName(activeCRMItem.startupId)}</p>
+                      <p className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-3"></div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center text-[#ED1C24] font-bold text-lg shadow-sm">
+                      BU
+                    </div>
+                    <div>
+                      <p className="font-bold text-[#161616]">{getBuName(activeCRMItem.telkomBuId)}</p>
+                      <p className="text-[10px] text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* CRM Editor */}
+              <div className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                  <MessageSquare className="h-3.5 w-3.5" /> Pipeline Progress Notes
+                </h3>
+                <div className="rounded-xl border border-indigo-100 bg-white overflow-hidden shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
+                  <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 text-[10px] font-semibold text-slate-500">
+                    Catat riwayat diskusi, kendala, atau next step di sini.
+                  </div>
+                  <textarea
+                    className="w-full bg-transparent p-4 text-sm text-[#344054] resize-none outline-none placeholder:text-slate-300"
+                    rows={6}
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    placeholder="Contoh: Telah melakukan meeting pertama dengan CTO. Lanjut ke tahap technical due diligence minggu depan..."
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Footer */}
+            <div className="p-5 border-t bg-white flex gap-3">
+              <button onClick={() => saveNotes(activeCRMItem.id)} className="btn-primary-solid flex-1 py-2.5 rounded-lg font-bold shadow-md shadow-indigo-500/20">
+                Simpan CRM Log
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* New Pipeline Modal */}
       {showNewForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-            <div className="flex items-center justify-between mb-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="bg-slate-50 px-6 py-5 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#FEF2F2] text-[#ED1C24]">
-                  <Target className="h-4 w-4" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-slate-200 shadow-sm text-[#161616]">
+                  <Target className="h-5 w-5" />
                 </div>
-                <h2 className="text-lg font-bold text-[#161616]">New Pipeline</h2>
+                <div>
+                  <h2 className="text-lg font-bold text-[#161616]">Create Pipeline</h2>
+                  <p className="text-[11px] text-slate-500">Tambahkan inisiasi sinergi baru ke Kanban</p>
+                </div>
               </div>
-              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-[#161616]">
+              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-[#161616] p-2 hover:bg-slate-200 rounded-full transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <form onSubmit={createPipeline} className="space-y-4">
+            <form ref={formRef} onSubmit={createPipeline} className="p-6 space-y-5">
+              
+              {/* AI MATCHMAKING BUTTON */}
+              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-100/50 shadow-inner">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-indigo-800">
+                    <BrainCircuit className="h-4 w-4" />
+                    <span className="text-xs font-bold">Bingung mencari kecocokan?</span>
+                  </div>
+                  <button 
+                    type="button" 
+                    onClick={simulateAIMatchmaking}
+                    disabled={isSimulatingAI}
+                    className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 shadow-md shadow-indigo-600/20"
+                  >
+                    {isSimulatingAI ? (
+                      <><div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" /> Analyzing...</>
+                    ) : (
+                      <><Sparkles className="h-3 w-3" /> Ask AI for Recommendation</>
+                    )}
+                  </button>
+                </div>
+              </div>
+
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#344054]">Startup</label>
-                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]">
-                  <option value="">Pilih startup</option>
+                <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Startup Partner</label>
+                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                  <option value="">-- Pilih Startup --</option>
                   {startupsData.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} — {s.sector}</option>
                   ))}
@@ -423,9 +506,9 @@ export default function SynergyPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#344054]">Telkom Business Unit</label>
-                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]">
-                  <option value="">Pilih BU</option>
+                <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Telkom Business Unit</label>
+                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                  <option value="">-- Pilih Divisi Telkom --</option>
                   {telkomBusData.map((bu) => (
                     <option key={bu.id} value={bu.id}>{bu.name} — {bu.sector}</option>
                   ))}
@@ -433,25 +516,25 @@ export default function SynergyPage() {
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#344054]">Match Score (0-100)</label>
+                <div className="flex justify-between mb-1.5">
+                  <label className="block text-xs font-bold text-[#344054] uppercase tracking-wide">Synergy Match Score (0-100)</label>
+                  <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
+                </div>
                 <input type="number" name="matchScore" min="0" max="100" defaultValue={75}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#161616] font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"
                 />
               </div>
 
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-[#344054]">Alasan Sinergi</label>
-                <textarea name="reason" rows={3} placeholder="Deskripsi alasan kolaborasi..."
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-none"
+                <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Alasan Strategis</label>
+                <textarea name="reason" rows={3} placeholder="Deskripsi alasan mengapa kolaborasi ini menguntungkan..."
+                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all resize-none shadow-sm"
                 />
               </div>
 
-              <div className="flex gap-3 pt-2">
-                <button type="submit" className="btn-primary-solid flex-1 gap-2 py-2.5">
-                  <Plus className="h-4 w-4" /> Create Pipeline
-                </button>
-                <button type="button" onClick={() => setShowNewForm(false)} className="btn-primary-outline px-6 py-2.5">
-                  Cancel
+              <div className="flex gap-3 pt-4 border-t border-slate-100">
+                <button type="submit" className="btn-primary-solid flex-1 gap-2 py-3 rounded-lg font-bold shadow-lg shadow-[#ED1C24]/20">
+                  <Plus className="h-4 w-4" /> Tambahkan ke Pipeline
                 </button>
               </div>
             </form>
