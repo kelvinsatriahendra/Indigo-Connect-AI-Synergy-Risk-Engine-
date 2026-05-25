@@ -5,14 +5,17 @@ import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
-import { FileText, Send, RefreshCw, Download } from "lucide-react";
+import { FileText, Send, RefreshCw, Download, Upload } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
 export default function ReportsPage() {
   const reportRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedStartup, setSelectedStartup] = useState<string>("");
   const [narrativeText, setNarrativeText] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isParsingPdf, setIsParsingPdf] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const [result, setResult] = useState<{
     healthScore: number;
     riskLabel: string;
@@ -22,6 +25,71 @@ export default function ReportsPage() {
     synergy?: { matches: { buId: string; reason: string; matchScore: number }[] };
   } | null>(null);
   const [error, setError] = useState("");
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      if (file.type === "application/pdf") {
+        await parsePdf(file);
+      } else {
+        setError("Harap unggah file dengan format PDF.");
+      }
+    }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file.type === "application/pdf") {
+        await parsePdf(file);
+      } else {
+        setError("Harap unggah file dengan format PDF.");
+      }
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const parsePdf = async (file: File) => {
+    setIsParsingPdf(true);
+    setError("");
+    
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const res = await fetch("/api/parse-pdf", {
+        method: "POST",
+        body: formData,
+      });
+      
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || "Gagal membaca PDF");
+      }
+      
+      if (data.text) {
+        setNarrativeText(data.text);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Terjadi kesalahan saat membaca PDF");
+    } finally {
+      setIsParsingPdf(false);
+    }
+  };
 
   const handleEvaluate = async () => {
     if (!selectedStartup || !narrativeText.trim()) return;
@@ -115,10 +183,47 @@ export default function ReportsPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#344054]">Narrative Report</label>
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="block text-sm font-medium text-[#344054]">Narrative Report</label>
+                  <span className="text-xs text-[#667085]">Upload PDF atau ketik manual</span>
+                </div>
+                
+                {/* Drag and Drop Zone */}
+                <div 
+                  className={`mb-4 flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-colors ${
+                    isDragging ? 'border-[#ED1C24] bg-red-50' : 'border-[#e0e0e0] bg-gray-50 hover:bg-gray-100'
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  
+                  {isParsingPdf ? (
+                    <div className="flex flex-col items-center">
+                      <RefreshCw className="mb-2 h-6 w-6 animate-spin text-[#ED1C24]" />
+                      <p className="text-sm font-medium text-[#344054]">Membaca dokumen PDF...</p>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center text-center cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                      <div className="mb-2 rounded-full bg-red-100 p-2">
+                        <Upload className="h-5 w-5 text-[#ED1C24]" />
+                      </div>
+                      <p className="text-sm font-medium text-[#344054]">Klik untuk upload PDF</p>
+                      <p className="mt-1 text-xs text-[#667085]">Atau drag and drop file di sini</p>
+                    </div>
+                  )}
+                </div>
+
                 <textarea
                   className="w-full min-h-[200px] rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y"
-                  placeholder="Tulis laporan bulanan startup di sini. Contoh: Startup kami berhasil meningkatkan pendapatan 25% bulan ini dengan total 5.000 pengguna aktif..."
+                  placeholder="Tulis laporan bulanan startup di sini, atau teks hasil ekstraksi PDF akan muncul di sini untuk Anda review..."
                   value={narrativeText}
                   onChange={(e) => setNarrativeText(e.target.value)}
                 />
