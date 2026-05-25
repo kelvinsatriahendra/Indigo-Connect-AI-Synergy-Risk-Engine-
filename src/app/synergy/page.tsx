@@ -17,6 +17,8 @@ import {
   User,
   Calendar,
   Target,
+  Sparkles,
+  AlertCircle,
 } from "lucide-react";
 
 type PipelineStatus = "PIPELINE" | "ON_GOING" | "SUCCESS" | "CANCELLED";
@@ -46,6 +48,39 @@ const statusFlow: Record<PipelineStatus, PipelineStatus[]> = {
   ON_GOING: ["SUCCESS", "CANCELLED"],
   SUCCESS: [],
   CANCELLED: ["PIPELINE"],
+};
+
+const statusBorders: Record<PipelineStatus, string> = {
+  PIPELINE: "border-l-4 border-l-[#ED1C24]",
+  ON_GOING: "border-l-4 border-l-[#f59e0b]",
+  SUCCESS: "border-l-4 border-l-[#10b981]",
+  CANCELLED: "border-l-4 border-l-[#ef4444]",
+};
+
+const getScoreBadge = (score: number) => {
+  const pct = Math.round(score * 100);
+  if (pct >= 85) {
+    return {
+      bg: "bg-emerald-50 text-emerald-700 border-emerald-100",
+      bar: "bg-emerald-500",
+      text: "High Synergy",
+      icon: Sparkles
+    };
+  } else if (pct >= 70) {
+    return {
+      bg: "bg-amber-50 text-amber-700 border-amber-100",
+      bar: "bg-amber-500",
+      text: "Moderate Fit",
+      icon: Target
+    };
+  } else {
+    return {
+      bg: "bg-rose-50 text-rose-700 border-rose-100",
+      bar: "bg-rose-500",
+      text: "Low Fit",
+      icon: AlertCircle
+    };
+  }
 };
 
 export default function SynergyPage() {
@@ -185,86 +220,167 @@ export default function SynergyPage() {
                       col.items.map((item) => {
                         const startup = getStartup(item.startupId);
                         const bu = getBu(item.telkomBuId);
+                        const scoreInfo = getScoreBadge(item.matchScore);
+                        const ScoreIcon = scoreInfo.icon;
                         return (
-                          <div key={item.id} className="card-legion overflow-hidden">
+                          <div key={item.id} className={`card-legion overflow-hidden ${statusBorders[item.status] || "border-l-4 border-l-slate-200"}`}>
                             <div className="p-4">
+                              {/* Header & Match Score */}
                               <div className="flex items-start justify-between">
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-bold text-[#161616] truncate">{getStartupName(item.startupId)}</p>
-                                  <p className="text-xs text-[#667085] truncate">{getBuName(item.telkomBuId)}</p>
+                                  <span className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold tracking-wide uppercase bg-slate-50 text-slate-600 border-slate-200/60 shadow-2xs mb-2">
+                                    {item.status.replace("_", " ")}
+                                  </span>
                                 </div>
-                                <span className="ml-2 shrink-0 rounded-full bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-semibold text-[#ED1C24]">
+                                <span className={`inline-flex items-center gap-1 ml-2 shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-2xs ${scoreInfo.bg}`}>
+                                  <ScoreIcon className="h-3 w-3 shrink-0 animate-pulse" />
                                   {Math.round(item.matchScore * 100)}%
                                 </span>
                               </div>
 
-                              <p className="mt-2 text-xs text-[#525252] leading-relaxed line-clamp-2">{item.reason}</p>
+                              {/* Synergy Connector Flow */}
+                              <div className="flex flex-col gap-2 mt-2">
+                                {/* Startup */}
+                                <div className="flex items-center justify-between gap-2">
+                                  <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#FEF2F2] text-[#ED1C24] text-[10px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
+                                      S
+                                    </span>
+                                    <span className="text-sm font-bold text-[#161616] truncate">
+                                      {startup?.name || getStartupName(item.startupId)}
+                                    </span>
+                                  </div>
+                                  {startup?.sector && (
+                                    <span className="shrink-0 rounded bg-slate-100/80 border border-slate-200/60 px-1.5 py-0.5 text-[9px] font-semibold text-slate-600 shadow-3xs">
+                                      {startup.sector}
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* Connecting Dotted Line */}
+                                <div className="flex items-center pl-2.5 my-0.5">
+                                  <div className="h-4 w-px border-l border-dashed border-slate-300"></div>
+                                  <span className="text-[8px] font-bold text-slate-400 px-2 uppercase tracking-widest">Synergy Fit</span>
+                                  <div className="flex-1 h-px border-t border-dashed border-slate-200"></div>
+                                </div>
+
+                                {/* Telkom BU */}
+                                <div className="flex items-center justify-between gap-2">
+                                  <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-red-50 text-[#ED1C24] text-[10px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
+                                      BU
+                                    </span>
+                                    <span className="text-xs font-bold text-[#344054] truncate">
+                                      {bu?.name || getBuName(item.telkomBuId)}
+                                    </span>
+                                  </div>
+                                  {bu?.sector && (
+                                    <span className="shrink-0 rounded bg-red-50 px-1.5 py-0.5 text-[9px] font-semibold text-[#ED1C24] border border-[#ED1C24]/10 shadow-3xs">
+                                      {bu.sector}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Progress bar */}
+                              <div className="mt-3 space-y-1 bg-slate-50/50 rounded-lg p-2 border border-slate-100">
+                                <div className="flex items-center justify-between text-[10px]">
+                                  <span className="text-slate-500 font-semibold tracking-wide uppercase text-[8px]">Match Alignment</span>
+                                  <span className="font-extrabold text-[#161616]">{Math.round(item.matchScore * 100)}%</span>
+                                </div>
+                                <div className="h-1.5 w-full rounded-full bg-slate-200 overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full ${scoreInfo.bar} transition-all duration-500`}
+                                    style={{ width: `${item.matchScore * 100}%` }}
+                                  />
+                                </div>
+                              </div>
+
+                              <p className="mt-3 text-xs text-[#525252] leading-relaxed line-clamp-2 italic px-1 border-l border-slate-200">
+                                "{item.reason}"
+                              </p>
 
                               {/* Notes section */}
                               {editingNotes === item.id ? (
-                                <div className="mt-3 space-y-2">
+                                <div className="mt-3 space-y-2 rounded-lg bg-amber-50/30 border border-amber-200/50 p-2.5">
                                   <textarea
-                                    className="w-full rounded-lg border border-[#e0e0e0] bg-white p-2 text-xs text-[#344054] resize-none focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                                    className="w-full rounded-lg border border-amber-200 bg-white p-2 text-xs text-[#344054] resize-none focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
                                     rows={3}
                                     value={noteText}
                                     onChange={(e) => setNoteText(e.target.value)}
-                                    placeholder="Tambah notes..."
+                                    placeholder="Tambah notes perkembangan..."
                                   />
-                                  <div className="flex gap-2">
-                                    <button onClick={() => saveNotes(item.id)} className="btn-primary-solid px-3 py-1 text-xs">Save</button>
-                                    <button onClick={() => setEditingNotes(null)} className="btn-primary-outline px-3 py-1 text-xs">Cancel</button>
+                                  <div className="flex gap-2 justify-end">
+                                    <button onClick={() => saveNotes(item.id)} className="btn-primary-solid px-3 py-1 text-xs rounded-full shadow-xs">Save</button>
+                                    <button onClick={() => setEditingNotes(null)} className="btn-primary-outline px-3 py-1 text-xs rounded-full shadow-xs">Cancel</button>
                                   </div>
                                 </div>
                               ) : (
                                 item.notes && (
-                                  <div className="mt-3 rounded-lg bg-[#f2f4f7] p-2.5">
-                                    <p className="text-xs text-[#525252]">{item.notes}</p>
+                                  <div className="mt-3 rounded-lg border-l-2 border-amber-500 bg-[#fffbeb] p-2.5 shadow-xs border border-amber-100/50">
+                                    <div className="flex items-center gap-1.5 mb-1">
+                                      <MessageSquare className="h-3 w-3 text-amber-600" />
+                                      <span className="text-[8px] font-bold text-amber-700 uppercase tracking-widest">Latest Progress Note</span>
+                                    </div>
+                                    <p className="text-xs text-slate-700 italic leading-relaxed">"{item.notes}"</p>
                                   </div>
                                 )
                               )}
 
                               {/* Meta */}
-                              <div className="mt-3 flex items-center gap-3 text-[10px] text-[#8c8f93]">
-                                {item.assignedTo && (
-                                  <span className="flex items-center gap-1">
-                                    <User className="h-3 w-3" /> {item.assignedTo}
-                                  </span>
-                                )}
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {new Date(item.createdAt).toLocaleDateString("id-ID")}
+                              <div className="mt-4 flex items-center justify-between text-[10px] text-[#667085] border-t border-slate-100 pt-3">
+                                <div className="flex items-center gap-1">
+                                  {item.assignedTo ? (
+                                    <span className="flex items-center gap-1 bg-slate-100/60 rounded px-1.5 py-0.5 text-slate-700 font-medium">
+                                      <User className="h-3 w-3 text-slate-500" />
+                                      <span className="truncate max-w-[100px]">{item.assignedTo}</span>
+                                    </span>
+                                  ) : (
+                                    <span className="text-[9px] text-[#8c8f93] italic bg-slate-50 rounded px-1.5 py-0.5 border border-slate-100">Unassigned</span>
+                                  )}
+                                </div>
+                                <span className="flex items-center gap-1 text-[#8c8f93] font-medium">
+                                  <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                                  {new Date(item.createdAt).toLocaleDateString("id-ID", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                  })}
                                 </span>
                               </div>
 
                               {/* Action buttons */}
-                              <div className="mt-3 flex items-center gap-1.5 border-t border-[#f2f4f7] pt-3">
-                                {!item.notes && !editingNotes && (
+                              <div className="mt-3 flex items-center justify-between gap-1.5 border-t border-slate-100 pt-3">
+                                {editingNotes !== item.id && (
                                   <button
-                                    onClick={() => { setEditingNotes(item.id); setNoteText(""); }}
-                                    className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-[#667085] hover:bg-[#f2f4f7] transition-colors"
+                                    onClick={() => { setEditingNotes(item.id); setNoteText(item.notes || ""); }}
+                                    className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-[#475467] shadow-sm hover:bg-slate-50 hover:text-[#161616] transition-all duration-200 cursor-pointer"
                                   >
-                                    <MessageSquare className="h-3 w-3" /> Notes
+                                    <MessageSquare className="h-3 w-3 text-slate-500" />
+                                    {item.notes ? "Edit Notes" : "Add Notes"}
                                   </button>
                                 )}
 
-                                {statusFlow[item.status]?.map((nextStatus) => (
-                                  <button
-                                    key={nextStatus}
-                                    onClick={() => moveStatus(item.id, nextStatus)}
-                                    className={`flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium transition-colors ${
-                                      nextStatus === "SUCCESS"
-                                        ? "text-emerald-600 hover:bg-emerald-50"
-                                        : nextStatus === "CANCELLED"
-                                        ? "text-red-600 hover:bg-red-50"
-                                        : "text-[#ED1C24] hover:bg-[#FEF2F2]"
-                                    }`}
-                                  >
-                                    {nextStatus === "ON_GOING" && <><ChevronRight className="h-3 w-3" /> Start</>}
-                                    {nextStatus === "SUCCESS" && <><Check className="h-3 w-3" /> Success</>}
-                                    {nextStatus === "CANCELLED" && <><X className="h-3 w-3" /> Cancel</>}
-                                    {nextStatus === "PIPELINE" && <><RotateCcw className="h-3 w-3" /> Reopen</>}
-                                  </button>
-                                ))}
+                                <div className="flex gap-1.5 ml-auto">
+                                  {statusFlow[item.status]?.map((nextStatus) => (
+                                    <button
+                                      key={nextStatus}
+                                      onClick={() => moveStatus(item.id, nextStatus)}
+                                      className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold shadow-xs transition-all duration-200 cursor-pointer ${
+                                        nextStatus === "SUCCESS"
+                                          ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100/80 active:bg-emerald-200"
+                                          : nextStatus === "CANCELLED"
+                                          ? "border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100/80 active:bg-rose-200"
+                                          : "border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100/80 active:bg-amber-200"
+                                      }`}
+                                    >
+                                      {nextStatus === "ON_GOING" && <><ChevronRight className="h-3 w-3 shrink-0" /> Start</>}
+                                      {nextStatus === "SUCCESS" && <><Check className="h-3 w-3 shrink-0" /> Success</>}
+                                      {nextStatus === "CANCELLED" && <><X className="h-3 w-3 shrink-0" /> Cancel</>}
+                                      {nextStatus === "PIPELINE" && <><RotateCcw className="h-3 w-3 shrink-0" /> Reopen</>}
+                                    </button>
+                                  ))}
+                                </div>
                               </div>
                             </div>
                           </div>
