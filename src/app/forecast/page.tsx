@@ -90,9 +90,13 @@ export default function ForecastPage() {
           <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
         </div>
 
-        <div className="mx-auto max-w-5xl">
-          {/* Controls */}
-          <div className="card-legion mb-6 p-6">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="flex flex-col lg:flex-row gap-6">
+            
+            {/* Left Main Content */}
+            <div className="flex-1 min-w-0">
+              {/* Controls */}
+              <div className="card-legion mb-6 p-6">
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
@@ -262,58 +266,73 @@ export default function ForecastPage() {
                   </div>
                 </div>
               </div>
-
-              {/* Detailed Projection Table */}
-              <div className="card-legion mt-6 overflow-hidden">
-                <div className="p-6 pb-0">
-                  <h3 className="text-base font-bold text-[#161616]">Proyeksi Detail</h3>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="border-b border-[#f2f4f7]">
-                        <th className="px-6 py-3 text-left text-xs font-medium text-[#667085] uppercase">Period</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-[#667085] uppercase">Revenue</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-[#667085] uppercase">Users</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-[#667085] uppercase">Growth</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-[#667085] uppercase">Burn Rate</th>
-                        <th className="px-6 py-3 text-center text-xs font-medium text-[#667085] uppercase">Type</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[...data.historicalData, ...data.projectedData].map((p, i) => {
-                        const isProj = i >= data.historicalData.length;
-                        return (
-                          <tr key={i} className={`border-b border-[#f2f4f7] last:border-0 ${isProj ? "bg-[#fbfaff]" : ""}`}>
-                            <td className="px-6 py-3 text-[#161616] font-medium">{p.period}</td>
-                            <td className="px-6 py-3 text-right text-[#525252]">Rp{p.revenue}jt</td>
-                            <td className="px-6 py-3 text-right text-[#525252]">{p.users.toLocaleString()}</td>
-                            <td className="px-6 py-3 text-right text-[#525252]">{p.growth}%</td>
-                            <td className="px-6 py-3 text-right text-[#525252]">Rp{p.burnRate}jt</td>
-                            <td className="px-6 py-3 text-center">
-                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                                isProj ? "bg-[#FEF2F2] text-[#ED1C24]" : "bg-[#f2f4f7] text-[#667085]"
-                              }`}>
-                                {isProj ? "Projected" : "Historical"}
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
             </>
           )}
 
           {!data && !loading && (
-            <div className="card-legion flex flex-col items-center justify-center py-20">
+            <div className="card-legion flex flex-col items-center justify-center py-20 w-full">
               <BarChart3 className="mb-3 h-12 w-12 text-[#d0d5dd]" />
               <p className="text-sm font-medium text-[#667085]">Pilih startup dan klik &quot;Generate Forecast&quot;</p>
               <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
             </div>
           )}
+          </div> {/* End Left Main Content */}
+
+          {/* Right Sidebar */}
+          {data && (
+            <div className="w-full lg:w-[380px] shrink-0">
+              <div className="card-legion sticky top-6 p-6">
+                <div className="mb-6 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-[#161616]">Detailed Projections</h3>
+                    <p className="text-xs text-[#667085] mt-1">Estimasi periodik AI</p>
+                  </div>
+                  <span className="text-[10px] font-bold text-[#ED1C24] bg-[#FEF2F2] px-2.5 py-1 rounded-md border border-[#ED1C24]/20">
+                    {data.projectedData.length} mo forecast
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  {[...data.historicalData, ...data.projectedData].map((p, i) => {
+                    const isProj = i >= data.historicalData.length;
+                    return (
+                      <div key={i} className={`rounded-xl border p-4 transition-all hover:shadow-sm ${isProj ? 'border-[#fca5a5] bg-[#fef2f2]/30' : 'border-[#e0e0e0] bg-white'}`}>
+                        <div className="mb-3 flex items-center justify-between">
+                          <span className="text-sm font-bold text-[#161616]">{p.period}</span>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isProj ? "bg-[#ED1C24] text-white shadow-sm shadow-red-200" : "bg-[#f2f4f7] text-[#667085]"}`}>
+                            {isProj ? "Projected" : "Historical"}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-y-4 gap-x-3 text-sm">
+                          <div>
+                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Revenue</p>
+                            <p className="text-[#161616] font-bold">Rp{p.revenue}jt</p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Users</p>
+                            <p className="text-[#161616] font-bold">{p.users.toLocaleString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Growth</p>
+                            <p className={`font-bold flex items-center gap-1 ${p.growth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                              {p.growth > 0 ? '+' : ''}{p.growth}%
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Burn Rate</p>
+                            <p className="text-[#161616] font-bold">Rp{p.burnRate}jt</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          </div> {/* End flex row */}
         </div>
       </div>
     </AppShell>
