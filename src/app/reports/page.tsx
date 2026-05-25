@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
-import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight } from "lucide-react";
+import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight, Bot, User, Sparkles } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
 type Startup = (typeof startupsData)[number];
@@ -149,6 +149,39 @@ export default function ReportsPage() {
     synergy?: { matches: { buId: string; reason: string; matchScore: number }[] };
   } | null>(null);
   const [error, setError] = useState("");
+  
+  // Chat Mentor States
+  const [chatMessages, setChatMessages] = useState<{role: "user"|"ai", content: string}[]>([
+    { role: "ai", content: "Halo! Saya adalah AI Mentor Anda. Berdasarkan laporan operasional terbaru ini, adakah strategi atau insight yang ingin Anda diskusikan?" }
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const [isChatLoading, setIsChatLoading] = useState(false);
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const userMessage = chatInput.trim();
+    setChatMessages(prev => [...prev, { role: "user", content: userMessage }]);
+    setChatInput("");
+    setIsChatLoading(true);
+
+    // Mock AI Response
+    setTimeout(() => {
+      let aiResponse = "Berdasarkan data laporan Anda, saya menyarankan untuk fokus pada efisiensi operasional dan mengeksplorasi potensi sinergi dengan Telkom untuk memperpanjang runway Anda.";
+      
+      if (userMessage.toLowerCase().includes("runway") || userMessage.toLowerCase().includes("kas")) {
+        aiResponse = "Runway Anda saat ini menjadi perhatian. Saya merekomendasikan untuk membekukan rekrutmen non-esensial dan memanfaatkan fasilitas cloud gratis dari Telkom (AWS/GCP credits di Resource Hub) untuk menekan biaya infrastruktur hingga 20%.";
+      } else if (userMessage.toLowerCase().includes("revenue") || userMessage.toLowerCase().includes("pendapatan")) {
+        aiResponse = "Pertumbuhan revenue Anda solid. Untuk meningkatkannya lebih lanjut, pertimbangkan untuk melakukan bundling layanan dengan unit bisnis Telkom yang memiliki basis pelanggan enterprise luas, seperti Telkomsel atau PADI UMKM.";
+      } else if (userMessage.toLowerCase().includes("sinergi") || userMessage.toLowerCase().includes("kolaborasi")) {
+        aiResponse = "Sinergi dengan ekosistem Telkom dapat mengakselerasi traksi Anda. Fokuslah pada integrasi API dengan layanan yang direkomendasikan di atas, dan jadwalkan sesi mentoring dengan Synergy Manager Anda minggu ini.";
+      }
+
+      setChatMessages(prev => [...prev, { role: "ai", content: aiResponse }]);
+      setIsChatLoading(false);
+    }, 1500);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -633,6 +666,66 @@ export default function ReportsPage() {
                       }
                     />
                   </div>
+                  
+                  {/* Interactive AI Mentor Chat (Only visible for founder when result is present) */}
+                  {user?.role === "founder" && (
+                    <div className="mt-6 shadow-lg shadow-black/5 rounded-2xl border border-[#e0e0e0] bg-white overflow-hidden flex flex-col h-[350px]">
+                      <div className="bg-gradient-to-r from-indigo-50 to-white px-5 py-3 border-b border-[#e0e0e0] flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-indigo-500" />
+                        <h3 className="text-sm font-extrabold text-[#161616]">Interactive AI Mentor</h3>
+                      </div>
+                      
+                      {/* Chat Messages */}
+                      <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/50">
+                        {chatMessages.map((msg, i) => (
+                          <div key={i} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                            <div className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center ${msg.role === "user" ? "bg-slate-200" : "bg-indigo-100 text-indigo-600"}`}>
+                              {msg.role === "user" ? <User className="h-4 w-4 text-slate-500" /> : <Bot className="h-4 w-4" />}
+                            </div>
+                            <div className={`rounded-2xl px-4 py-2.5 text-[13px] leading-relaxed max-w-[85%] ${
+                              msg.role === "user" 
+                                ? "bg-[#161616] text-white rounded-tr-sm" 
+                                : "bg-white border border-slate-200 text-slate-700 rounded-tl-sm shadow-sm"
+                            }`}>
+                              {msg.content}
+                            </div>
+                          </div>
+                        ))}
+                        {isChatLoading && (
+                          <div className="flex gap-3">
+                            <div className="h-8 w-8 shrink-0 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                              <Bot className="h-4 w-4" />
+                            </div>
+                            <div className="rounded-2xl px-4 py-3 bg-white border border-slate-200 rounded-tl-sm shadow-sm flex gap-1">
+                              <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></span>
+                              <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+                              <span className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Chat Input */}
+                      <div className="p-3 bg-white border-t border-slate-100">
+                        <form onSubmit={handleSendMessage} className="flex items-center gap-2 relative">
+                          <input
+                            type="text"
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            placeholder="Tanya saran optimasi ke AI..."
+                            className="flex-1 rounded-full border border-slate-200 bg-slate-50 py-2.5 pl-4 pr-10 text-[13px] text-[#161616] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all"
+                          />
+                          <button 
+                            type="submit"
+                            disabled={!chatInput.trim() || isChatLoading}
+                            className="absolute right-1 top-1 bottom-1 aspect-square flex items-center justify-center rounded-full bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 transition-colors"
+                          >
+                            <Send className="h-3.5 w-3.5 ml-0.5" />
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
