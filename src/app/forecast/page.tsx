@@ -132,10 +132,10 @@ export default function ForecastPage() {
         </div>
 
         <div className="mx-auto max-w-[1400px]">
-          <div className="flex flex-col lg:flex-row gap-6">
+          <div className="flex flex-col gap-6">
             
-            {/* Left Main Content */}
-            <div className="flex-1 min-w-0">
+            {/* Top Main Content */}
+            <div className="w-full min-w-0">
               {/* Controls */}
               <div className="card-legion mb-6 p-6">
             <div className="flex items-center gap-4">
@@ -217,11 +217,14 @@ export default function ForecastPage() {
                 </div>
               </div>
 
-              {/* Chart */}
-              <div className="card-legion mb-6 p-6">
-                <h3 className="text-base font-bold text-[#161616] mb-1">Revenue & Users — Historical + Projected</h3>
-                <p className="text-xs text-[#667085] mb-6">6 bulan historis + 3 bulan prediksi AI</p>
-                <ResponsiveContainer width="100%" height={350}>
+              {/* Charts Container */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+                
+                {/* Revenue & Users Chart */}
+                <div className="card-legion p-6 flex flex-col">
+                  <h3 className="text-base font-bold text-[#161616] mb-1">Revenue & Users — Historical + Projected</h3>
+                  <p className="text-xs text-[#667085] mb-6">6 bulan historis + 3 bulan prediksi AI</p>
+                  <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
@@ -251,7 +254,7 @@ export default function ForecastPage() {
                     />
                   </LineChart>
                 </ResponsiveContainer>
-                <div className="mt-3 flex items-center gap-4 text-xs text-[#8c8f93]">
+                <div className="mt-auto pt-3 flex items-center gap-4 text-xs text-[#8c8f93]">
                   <span className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#ED1C24]" /> Revenue (juta)
                   </span>
@@ -262,13 +265,13 @@ export default function ForecastPage() {
                     <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-[#ED1C24]" /> Projected
                   </span>
                 </div>
-              </div>
+                </div>
 
-              {/* Growth Rate Chart */}
-              <div className="card-legion mb-6 p-6">
-                <h3 className="text-base font-bold text-[#161616] mb-1">Growth Rate Trend</h3>
-                <p className="text-xs text-[#667085] mb-6">Persentase pertumbuhan bulanan</p>
-                <ResponsiveContainer width="100%" height={250}>
+                {/* Growth Rate Chart */}
+                <div className="card-legion p-6 flex flex-col">
+                  <h3 className="text-base font-bold text-[#161616] mb-1">Growth Rate Trend</h3>
+                  <p className="text-xs text-[#667085] mb-6">Persentase pertumbuhan bulanan</p>
+                  <ResponsiveContainer width="100%" height={350}>
                   <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
@@ -292,6 +295,7 @@ export default function ForecastPage() {
                     </defs>
                   </AreaChart>
                 </ResponsiveContainer>
+                </div>
               </div>
 
               {/* AI Notes */}
@@ -317,12 +321,12 @@ export default function ForecastPage() {
               <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
             </div>
           )}
-          </div> {/* End Left Main Content */}
+          </div> {/* End Top Main Content */}
 
-          {/* Right Sidebar */}
+          {/* Bottom Section: Detailed Projections */}
           {data && (
-            <div className="w-full lg:w-[380px] shrink-0">
-              <div className="card-legion sticky top-6 p-6">
+            <div className="w-full mt-2">
+              <div className="card-legion p-6">
                 <div className="mb-6 flex items-center justify-between">
                   <div>
                     <h3 className="text-base font-bold text-[#161616]">Detailed Projections</h3>
@@ -333,7 +337,7 @@ export default function ForecastPage() {
                   </span>
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {[...data.historicalData, ...data.projectedData].map((p, i) => {
                     const isProj = i >= data.historicalData.length;
                     return (
