@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2 } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis } from "recharts";
+import { exportToPdf } from "@/lib/pdf-export";
 
 type Startup = (typeof startupsData)[number];
 
@@ -125,16 +126,22 @@ export default function DashboardPage() {
     setFilteredStartups(startups);
   };
 
+  const dashboardRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
 
-  const handleExportReport = () => {
+  const handleExportReport = async () => {
+    if (!dashboardRef.current) return;
     setIsExporting(true);
-    setTimeout(() => {
-      setIsExporting(false);
+    try {
+      await exportToPdf(dashboardRef.current, "Executive_Report_Indigo.pdf");
       setExportSuccess(true);
       setTimeout(() => setExportSuccess(false), 3000);
-    }, 2000);
+    } catch (error) {
+      console.error("Failed to generate PDF", error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
@@ -186,7 +193,7 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="p-8">
+      <div className="p-8 bg-[#f8fafc]" ref={dashboardRef}>
         <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
