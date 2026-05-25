@@ -7,7 +7,7 @@
     "batch": "Batch 6",
     "description": "Platform manajemen rantai pasok dan logistik terdigitalisasi",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/logee.id"
+    "logo": "/startups/logee.jpg"
   },
   {
     "id": "s2",
@@ -17,7 +17,7 @@
     "batch": "Batch 6",
     "description": "Platform e-commerce perikanan yang menghubungkan nelayan dengan pasar global",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/aruna.id"
+    "logo": "/startups/aruna.png"
   },
   {
     "id": "s3",
@@ -27,7 +27,7 @@
     "batch": "Batch 5",
     "description": "Layanan tanda tangan digital dan identitas terpercaya",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/privy.id"
+    "logo": "/startups/privy.png"
   },
   {
     "id": "s4",
@@ -37,7 +37,7 @@
     "batch": "Batch 7",
     "description": "Aplikasi belajar interaktif dan sertifikasi digital terpadu",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/pijarbelajar.id"
+    "logo": "/startups/pijar.webp"
   },
   {
     "id": "s5",
@@ -47,7 +47,7 @@
     "batch": "Batch 5",
     "description": "Platform pencatatan rekam medis digital dan manajemen klinik",
     "status": "AT_RISK",
-    "logo": "https://logo.clearbit.com/klinikpintar.id"
+    "logo": "/startups/klinik pintar.png"
   },
   {
     "id": "s6",
@@ -57,7 +57,7 @@
     "batch": "Batch 7",
     "description": "Solusi penyewaan panel surya tanpa investasi awal",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/xurya.com"
+    "logo": "/startups/xurya.png"
   },
   {
     "id": "s7",
@@ -67,7 +67,7 @@
     "batch": "Batch 6",
     "description": "Platform manajemen tiket tur lokal dan pengalaman wisata",
     "status": "ACTIVE",
-    "logo": "https://logo.clearbit.com/goersapp.com"
+    "logo": "/startups/goers.png"
   },
   {
     "id": "s8",
@@ -77,6 +77,6 @@
     "batch": "Batch 8",
     "description": "Sistem pembayaran digital nasional untuk segala kebutuhan",
     "status": "AT_RISK",
-    "logo": "https://logo.clearbit.com/linkaja.id"
+    "logo": "/startups/linkaja.svg"
   }
 ]
