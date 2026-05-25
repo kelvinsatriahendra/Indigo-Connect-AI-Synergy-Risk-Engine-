@@ -301,9 +301,15 @@ export default function SynergyPage() {
                                 {/* Startup */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 text-[11px] font-extrabold border border-blue-100 shadow-2xs">
-                                      {startup?.name.charAt(0) || "S"}
-                                    </span>
+                                    {startup && (startup as any).logo ? (
+                                      <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
+                                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-0.5" />
+                                      </div>
+                                    ) : (
+                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 text-[11px] font-extrabold border border-blue-100 shadow-2xs">
+                                        {startup?.name.charAt(0) || "S"}
+                                      </span>
+                                    )}
                                     <span className="text-[13px] font-bold text-[#161616] truncate">
                                       {startup?.name || getStartupName(item.startupId)}
                                     </span>

@@ -2,73 +2,81 @@
   {
     "id": "s1",
     "name": "Logee",
-    "founderName": "Andi Pratama",
+    "founderName": "Telkom Group",
     "sector": "Logistik",
     "batch": "Batch 6",
-    "description": "Platform manajemen rantai pasok dan logistik untuk UKM",
-    "status": "ACTIVE"
+    "description": "Platform manajemen rantai pasok dan logistik terdigitalisasi",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/logee.id"
   },
   {
     "id": "s2",
-    "name": "AgroLink",
-    "founderName": "Siti Rahma",
+    "name": "Aruna",
+    "founderName": "Farid Naufal",
     "sector": "Agritech",
     "batch": "Batch 6",
-    "description": "Marketplace hasil pertanian langsung dari petani ke konsumen",
-    "status": "ACTIVE"
+    "description": "Platform e-commerce perikanan yang menghubungkan nelayan dengan pasar global",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/aruna.id"
   },
   {
     "id": "s3",
-    "name": "FinAccess",
-    "founderName": "Budi Santoso",
+    "name": "Privy",
+    "founderName": "Marshall Pribadi",
     "sector": "Fintech",
     "batch": "Batch 5",
-    "description": "Platform pembiayaan mikro untuk pelaku UMKM",
-    "status": "ACTIVE"
+    "description": "Layanan tanda tangan digital dan identitas terpercaya",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/privy.id"
   },
   {
     "id": "s4",
-    "name": "EduKita",
-    "founderName": "Dewi Lestari",
+    "name": "Pijar Belajar",
+    "founderName": "Telkom Group",
     "sector": "Edtech",
     "batch": "Batch 7",
-    "description": "Aplikasi belajar interaktif untuk siswa SD dan SMP",
-    "status": "ACTIVE"
+    "description": "Aplikasi belajar interaktif dan sertifikasi digital terpadu",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/pijarbelajar.id"
   },
   {
     "id": "s5",
-    "name": "HealthSync",
-    "founderName": "Rudi Hermawan",
+    "name": "Klinik Pintar",
+    "founderName": "Haryo Suryo",
     "sector": "Healthtech",
     "batch": "Batch 5",
-    "description": "Platform pencatatan rekam medis digital untuk klinik",
-    "status": "AT_RISK"
+    "description": "Platform pencatatan rekam medis digital dan manajemen klinik",
+    "status": "AT_RISK",
+    "logo": "https://logo.clearbit.com/klinikpintar.id"
   },
   {
     "id": "s6",
-    "name": "GreenEnergy",
-    "founderName": "Maya Indah",
+    "name": "Xurya",
+    "founderName": "Eka Himawan",
     "sector": "Energy",
     "batch": "Batch 7",
-    "description": "Solusi panel surya hemat untuk rumah tangga",
-    "status": "ACTIVE"
+    "description": "Solusi penyewaan panel surya tanpa investasi awal",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/xurya.com"
   },
   {
     "id": "s7",
-    "name": "TourLocal",
-    "founderName": "Agus Wijaya",
+    "name": "Goers",
+    "founderName": "Sammy Ramadhan",
     "sector": "Travel",
     "batch": "Batch 6",
-    "description": "Platform pemesanan tur lokal dan pengalaman wisata",
-    "status": "ACTIVE"
+    "description": "Platform manajemen tiket tur lokal dan pengalaman wisata",
+    "status": "ACTIVE",
+    "logo": "https://logo.clearbit.com/goersapp.com"
   },
   {
     "id": "s8",
-    "name": "PayDesa",
-    "founderName": "Putri Ayu",
+    "name": "LinkAja",
+    "founderName": "Telkom Group",
     "sector": "Fintech",
     "batch": "Batch 8",
-    "description": "Sistem pembayaran digital untuk desa dan pasar tradisional",
-    "status": "AT_RISK"
+    "description": "Sistem pembayaran digital nasional untuk segala kebutuhan",
+    "status": "AT_RISK",
+    "logo": "https://logo.clearbit.com/linkaja.id"
   }
 ]

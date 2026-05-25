@@ -260,7 +260,12 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-[#161616]">{startup.name}</span>
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-md bg-white border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
+                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                      </div>
+                      <span className="font-semibold text-[#161616]">{startup.name}</span>
+                    </div>
                     <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
                       {startup.status === "ACTIVE" ? "Aktif" : "At Risk"}
                     </span>
@@ -277,7 +282,10 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                 <div className="p-6">
                   <div className="flex items-start justify-between">
                     <div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
+                        <div className="h-14 w-14 rounded-xl bg-white border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center shrink-0">
+                          <img src={(selectedStartup as any).logo} alt={selectedStartup.name} className="h-full w-full object-contain p-2" />
+                        </div>
                         <h2 className="text-2xl font-bold text-[#161616]">{selectedStartup.name}</h2>
                         <span className={selectedStartup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
                           {selectedStartup.status === "ACTIVE" ? "High Growth" : "At Risk"}
