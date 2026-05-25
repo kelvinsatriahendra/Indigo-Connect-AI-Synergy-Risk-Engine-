@@ -28,7 +28,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="gradient-hero relative overflow-hidden pt-36 pb-40 px-6 text-white">
+      <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-[85vh] pt-24 pb-28 px-6 text-white">
         {/* Glow ambient spots */}
         <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.08)' }} />
         <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.08)' }} />
