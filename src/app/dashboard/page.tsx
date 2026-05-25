@@ -656,9 +656,16 @@ export default function DashboardPage() {
                   
                   <div className="p-6 pl-7 flex-1">
                     <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="text-base font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
-                        <p className="mt-1 text-xs font-semibold text-[#8c8f93] tracking-wide uppercase">{startup.sector} · {startup.batch}</p>
+                      <div className="flex items-center gap-3">
+                        {startup && (startup as any).logo && (
+                          <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm">
+                            <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="text-base font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
+                          <p className="mt-1 text-xs font-semibold text-[#8c8f93] tracking-wide uppercase">{startup.sector} · {startup.batch}</p>
+                        </div>
                       </div>
                       <span className={isHigh ? "badge-high-growth shadow-sm" : "badge-at-risk shadow-sm"}>
                         {isHigh ? "High Growth" : "At Risk"}

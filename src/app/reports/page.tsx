@@ -514,6 +514,14 @@ export default function ReportsPage() {
                         >
                           <div className="space-y-1.5">
                             <div className="flex items-center gap-2.5 flex-wrap">
+                              {(() => {
+                                const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
+                                return logo ? (
+                                  <div className="h-6 w-6 shrink-0 rounded bg-white border border-slate-200 overflow-hidden shadow-2xs">
+                                    <img src={logo} alt={report.startupName} className="h-full w-full object-contain p-0.5" />
+                                  </div>
+                                ) : null;
+                              })()}
                               <h3 className={`text-base font-extrabold transition-colors ${
                                 isActive ? "text-[#ED1C24]" : "text-[#161616] group-hover:text-[#ED1C24]"
                               }`}>
