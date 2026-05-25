@@ -183,21 +183,21 @@ export default function DashboardPage() {
         {/* Role-specific welcome banner for Founder */}
         {user?.role === "founder" && (
           <div 
-            className="mb-8 rounded-xl p-6 text-white border border-white/5 relative overflow-hidden shadow-xl"
-            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+            className="mb-8 rounded-xl p-6 text-white border border-white/10 relative overflow-hidden shadow-xl shadow-[#ED1C24]/10 animate-fade-in"
+            style={{ background: 'linear-gradient(135deg, #ED1C24 0%, #a30f14 100%)' }}
           >
             {/* Glowing accent blobs inside */}
-            <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-purple-600/10 rounded-full blur-[50px] pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-red-600/5 rounded-full blur-[50px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-white/10 rounded-full blur-[40px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-orange-500/20 rounded-full blur-[50px] pointer-events-none" />
 
             <div className="relative z-10">
-              <p className="text-xs font-semibold text-[#ED1C24] uppercase tracking-wider">Mitra Startup</p>
-              <p className="text-sm font-medium opacity-80 mt-1">Selamat datang,</p>
+              <p className="text-xs font-bold text-red-100 uppercase tracking-wider">Mitra Startup</p>
+              <p className="text-sm font-medium opacity-90 mt-1">Selamat datang,</p>
               <p className="mt-1 text-2xl font-extrabold text-white tracking-wide">{user.name}</p>
-              <p className="mt-2 text-sm text-slate-300">
+              <p className="mt-2 text-sm text-red-100">
                 Anda memiliki <span className="font-bold text-white">{totalStartups} startup</span> terdaftar di program Indigo.
                 {atRisk > 0 && (
-                  <span className="ml-2 inline-flex items-center gap-1 bg-red-500/10 text-red-400 px-2 py-0.5 rounded text-xs border border-red-500/10">
+                  <span className="ml-2 inline-flex items-center gap-1 bg-white/20 text-white px-2 py-0.5 rounded text-xs border border-white/20 font-medium animate-pulse">
                     ⚠️ {atRisk} startup membutuhkan perhatian
                   </span>
                 )}
@@ -208,13 +208,23 @@ export default function DashboardPage() {
 
         {/* Role-specific welcome banner for Synergy */}
         {user?.role === "synergy" && (
-          <div className="mb-8 rounded-xl bg-gradient-to-r from-[#d97706] to-[#b45309] p-6 text-white">
-            <p className="text-sm font-medium opacity-80">Synergy Manager,</p>
-            <p className="mt-1 text-xl font-bold">{user.name}</p>
-            <p className="mt-2 text-sm opacity-80">
-              Anda mengelola sinergi untuk {totalStartups} startup di sektor{" "}
-              {synergySectorMap["demo-synergy-id"]?.join(", ")}.
-            </p>
+          <div 
+            className="mb-8 rounded-xl p-6 text-white border border-white/10 relative overflow-hidden shadow-xl shadow-[#ED1C24]/10 animate-fade-in"
+            style={{ background: 'linear-gradient(135deg, #ED1C24 0%, #a30f14 100%)' }}
+          >
+            {/* Glowing accent blobs inside */}
+            <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-white/10 rounded-full blur-[40px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[150px] h-[150px] bg-orange-500/20 rounded-full blur-[50px] pointer-events-none" />
+
+            <div className="relative z-10">
+              <p className="text-xs font-bold text-red-100 uppercase tracking-wider">Synergy Matcher</p>
+              <p className="text-sm font-medium opacity-90 mt-1">Selamat datang,</p>
+              <p className="mt-1 text-2xl font-extrabold text-white tracking-wide">{user.name}</p>
+              <p className="mt-2 text-sm text-red-100">
+                Anda mengelola sinergi untuk <span className="font-bold text-white">{totalStartups} startup</span> di sektor{" "}
+                <span className="font-bold text-white">{synergySectorMap["demo-synergy-id"]?.join(", ")}</span>.
+              </p>
+            </div>
           </div>
         )}
 
