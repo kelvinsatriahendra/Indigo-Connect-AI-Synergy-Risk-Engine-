@@ -119,6 +119,20 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Trusted By Section */}
+      <section className="border-b border-slate-200 bg-white py-10">
+        <div className="mx-auto max-w-5xl px-6 text-center">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Telah Terintegrasi Dengan Ekosistem Telkom Group</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Shield className="h-6 w-6 text-[#ED1C24]" /> Telkomsel</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Activity className="h-6 w-6 text-[#ED1C24]" /> Mitratel</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Lightbulb className="h-6 w-6 text-[#ED1C24]" /> Nuon</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><GitBranch className="h-6 w-6 text-[#ED1C24]" /> Logee</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><BarChart3 className="h-6 w-6 text-[#ED1C24]" /> Finnet</span>
+          </div>
+        </div>
+      </section>
+
       <section className="py-24 px-6 bg-[#f9fafb]">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16">
@@ -181,6 +195,54 @@ export default async function Home() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-24 px-6 bg-white">
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center mb-16">
+            <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Alur Kerja</span>
+            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">Bagaimana Indigo Connect Bekerja?</h2>
+            <p className="mt-3 text-slate-500 max-w-lg mx-auto">Tiga langkah sederhana menuju sinergi startup dan korporasi yang digerakkan oleh AI.</p>
+          </div>
+
+          <div className="grid gap-12 md:grid-cols-3 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gradient-to-r from-[#ED1C24]/10 via-[#ED1C24]/40 to-[#ED1C24]/10" />
+            
+            {[
+              {
+                step: "01",
+                title: "Founder Submit Laporan",
+                desc: "Founder mengunggah laporan bulanan (PDF) secara berkala ke dalam platform.",
+                icon: <FileText className="h-6 w-6 text-[#ED1C24]" />
+              },
+              {
+                step: "02",
+                title: "AI Menganalisis Risiko",
+                desc: "Engine AI mengekstraksi data, menilai kesehatan finansial, dan mendeteksi risiko dini.",
+                icon: <Activity className="h-6 w-6 text-[#ED1C24]" />
+              },
+              {
+                step: "03",
+                title: "Rekomendasi Sinergi",
+                desc: "Eksekutif menerima Executive Summary dan rekomendasi unit bisnis Telkom yang pas.",
+                icon: <GitBranch className="h-6 w-6 text-[#ED1C24]" />
+              }
+            ].map((s) => (
+              <div key={s.step} className="relative z-10 flex flex-col items-center text-center group">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white border-4 border-slate-50 shadow-xl shadow-slate-200/50 mb-6 group-hover:-translate-y-2 transition-transform duration-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+                    {s.icon}
+                  </div>
+                </div>
+                <div className="text-[10px] font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
+                <h3 className="text-lg font-bold text-[#161616] mb-2">{s.title}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-[250px]">{s.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
