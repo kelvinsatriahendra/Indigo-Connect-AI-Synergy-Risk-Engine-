@@ -215,9 +215,9 @@ export default function SynergyPage() {
           </div>
         </div>
 
-        {/* Kanban Board */}
+        {/* Kanban Board (List View) */}
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
-          <div className="grid h-full grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-6 items-start">
+          <div className="flex flex-col gap-8">
             {loading ? (
               <div className="flex w-full h-full items-center justify-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
@@ -226,7 +226,7 @@ export default function SynergyPage() {
               grouped.map((col) => (
                 <div 
                   key={col.status} 
-                  className={`flex w-full flex-col rounded-xl transition-all duration-300 min-h-[500px] h-full ${
+                  className={`flex w-full flex-col rounded-xl transition-all duration-300 p-4 ${
                     draggedOverCol === col.status 
                       ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
                       : 'bg-transparent'
@@ -257,7 +257,7 @@ export default function SynergyPage() {
                   </div>
 
                   {/* Cards Container */}
-                  <div className="flex flex-col gap-4 overflow-y-auto pb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                     {col.items.length === 0 ? (
                       <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center bg-white/40 backdrop-blur-sm">
                          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 mb-2">
