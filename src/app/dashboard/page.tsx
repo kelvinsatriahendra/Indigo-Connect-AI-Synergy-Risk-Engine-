@@ -131,17 +131,9 @@ export default function DashboardPage() {
   const [exportSuccess, setExportSuccess] = useState(false);
 
   const handleExportReport = async () => {
-    if (!dashboardRef.current) return;
-    setIsExporting(true);
-    try {
-      await exportToPdf(dashboardRef.current, "Executive_Report_Indigo.pdf");
-      setExportSuccess(true);
-      setTimeout(() => setExportSuccess(false), 3000);
-    } catch (error) {
-      console.error("Failed to generate PDF", error);
-    } finally {
-      setIsExporting(false);
-    }
+    window.print();
+    setExportSuccess(true);
+    setTimeout(() => setExportSuccess(false), 3000);
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
@@ -203,7 +195,7 @@ export default function DashboardPage() {
             <button 
               onClick={handleExportReport}
               disabled={isExporting}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
+              className={`print:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
             >
               {isExporting ? (
                 <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
