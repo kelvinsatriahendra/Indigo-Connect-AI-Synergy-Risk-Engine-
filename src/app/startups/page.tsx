@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
-import { Building2, Sparkles, Coins, TrendingUp, Handshake, Activity } from "lucide-react";
+import { Building2, Sparkles, Coins, TrendingUp, Handshake, Activity, Scale, X } from "lucide-react";
 
 type Startup = (typeof startupsData)[number];
 
@@ -185,6 +185,9 @@ export default function StartupsPage() {
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
   const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [compareStartupA, setCompareStartupA] = useState<string>(startupsData[0].id);
+  const [compareStartupB, setCompareStartupB] = useState<string>(startupsData[1].id);
 
   const handleAIAnalysis = async (startup: Startup) => {
     setSelectedStartup(startup);
@@ -226,12 +229,20 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
   return (
     <AppShell>
       <div className="p-8">
-        <div className="mb-8">
-          <div className="flex items-center gap-3">
-            <Building2 className="h-6 w-6 text-[#ED1C24]" />
-            <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
+        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <Building2 className="h-6 w-6 text-[#ED1C24]" />
+              <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
+            </div>
+            <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
           </div>
-          <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
+          <button 
+            onClick={() => setIsCompareModalOpen(true)}
+            className="btn-primary-outline flex items-center gap-2 px-4 py-2 text-sm font-bold bg-white"
+          >
+            <Scale className="h-4 w-4" /> Compare Startups
+          </button>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
@@ -436,6 +447,136 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
           </div>
         </div>
       </div>
+      {isCompareModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in backdrop-blur-sm">
+          <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between border-b border-[#e0e0e0] bg-[#f8fafc] px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+                  <Scale className="h-5 w-5" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-[#161616]">Side-by-Side Comparison</h2>
+                  <p className="text-xs text-[#667085]">Bandingkan metrik dua startup secara berdampingan</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsCompareModalOpen(false)}
+                className="rounded-full p-2 text-[#8c8f93] hover:bg-[#f2f4f7] hover:text-[#161616] transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                
+                {/* VS Badge in the middle */}
+                <div className="hidden md:flex absolute left-1/2 top-4 -translate-x-1/2 z-10 h-10 w-10 bg-white rounded-full border border-[#e0e0e0] items-center justify-center shadow-sm">
+                  <span className="text-xs font-extrabold text-[#ED1C24]">VS</span>
+                </div>
+
+                {/* Startup A Selection */}
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-xs font-bold text-[#344054] mb-2 block uppercase tracking-wider">Startup A</label>
+                    <select 
+                      className="w-full rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-sm font-bold text-[#161616] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
+                      value={compareStartupA}
+                      onChange={(e) => setCompareStartupA(e.target.value)}
+                    >
+                      {startupsData.map(s => <option key={s.id} value={s.id}>{s.name} ({s.sector})</option>)}
+                    </select>
+                  </div>
+                  
+                  {(() => {
+                    const data = startupsData.find(s => s.id === compareStartupA);
+                    const metrics = startupMetrics[compareStartupA];
+                    if (!data || !metrics) return null;
+                    return (
+                      <div className="card-legion p-5 space-y-4 bg-white">
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Sektor & Batch</span>
+                          <span className="text-xs font-bold text-[#161616]">{data.sector} · {data.batch}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Monthly Revenue</span>
+                          <span className="text-sm font-extrabold text-emerald-600">{metrics.monthlyRevenue}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Growth (MoM)</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Burn Rate</span>
+                          <span className="text-sm font-bold text-[#525252]">{metrics.burnRate}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Cash Runway</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-1">
+                          <span className="text-xs font-medium text-[#667085]">Risk Level</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </div>
+
+                {/* Startup B Selection */}
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-xs font-bold text-[#344054] mb-2 block uppercase tracking-wider">Startup B</label>
+                    <select 
+                      className="w-full rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-sm font-bold text-[#161616] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
+                      value={compareStartupB}
+                      onChange={(e) => setCompareStartupB(e.target.value)}
+                    >
+                      {startupsData.map(s => <option key={s.id} value={s.id}>{s.name} ({s.sector})</option>)}
+                    </select>
+                  </div>
+                  
+                  {(() => {
+                    const data = startupsData.find(s => s.id === compareStartupB);
+                    const metrics = startupMetrics[compareStartupB];
+                    if (!data || !metrics) return null;
+                    return (
+                      <div className="card-legion p-5 space-y-4 bg-white">
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Sektor & Batch</span>
+                          <span className="text-xs font-bold text-[#161616]">{data.sector} · {data.batch}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Monthly Revenue</span>
+                          <span className="text-sm font-extrabold text-emerald-600">{metrics.monthlyRevenue}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Growth (MoM)</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Burn Rate</span>
+                          <span className="text-sm font-bold text-[#525252]">{metrics.burnRate}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
+                          <span className="text-xs font-medium text-[#667085]">Cash Runway</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
+                        </div>
+                        <div className="flex justify-between items-center pt-1">
+                          <span className="text-xs font-medium text-[#667085]">Risk Level</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
+                        </div>
+                      </div>
+                    )
+                  })()}
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }

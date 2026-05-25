@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
-import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2 } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis } from "recharts";
 
 type Startup = (typeof startupsData)[number];
 
@@ -125,6 +125,18 @@ export default function DashboardPage() {
     setFilteredStartups(startups);
   };
 
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
+
+  const handleExportReport = () => {
+    setIsExporting(true);
+    setTimeout(() => {
+      setIsExporting(false);
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 3000);
+    }, 2000);
+  };
+
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && aiSearch) {
       handleAiSearch();
@@ -175,9 +187,26 @@ export default function DashboardPage() {
   return (
     <AppShell>
       <div className="p-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
-          <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
+        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
+            <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
+          </div>
+          {user?.role === "admin" && (
+            <button 
+              onClick={handleExportReport}
+              disabled={isExporting}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
+            >
+              {isExporting ? (
+                <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
+              ) : exportSuccess ? (
+                <><CheckCircle2 className="h-4 w-4" /> Downloaded</>
+              ) : (
+                <><Download className="h-4 w-4" /> Export Executive Report</>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Role-specific welcome banner for Founder */}
@@ -342,6 +371,46 @@ export default function DashboardPage() {
                 </ResponsiveContainer>
               </div>
             </div>
+
+            {/* Risk Matrix & Synergy Potential Heatmap (Admin Only) */}
+            {user?.role === "admin" && (
+              <div className="lg:col-span-2 card-legion p-6 flex flex-col justify-between mt-2">
+                <div className="mb-4">
+                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Executive Risk Matrix</h3>
+                  <p className="text-xs text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+                </div>
+                <div className="mt-2 h-[350px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                      <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -10, fontSize: 12, fill: '#94a3b8', fontWeight: 'bold' }} />
+                      <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', fontSize: 12, fill: '#94a3b8', fontWeight: 'bold' }} />
+                      <ZAxis type="number" dataKey="z" range={[100, 500]} name="Valuasi" />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                      <Scatter name="Startups" data={[
+                        { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                        { name: 'FinAccess', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                        { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                        { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                        { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                      ]} fill="#8884d8">
+                        {
+                          [
+                            { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                            { name: 'FinAccess', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                            { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                            { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                            { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                          ].map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                          ))
+                        }
+                      </Scatter>
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
