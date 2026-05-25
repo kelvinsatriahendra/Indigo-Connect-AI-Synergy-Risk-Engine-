@@ -122,13 +122,13 @@ export default async function Home() {
       {/* Trusted By Section */}
       <section className="border-b border-slate-200 bg-white py-10">
         <div className="mx-auto max-w-5xl px-6 text-center">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Telah Terintegrasi Dengan Ekosistem Telkom Group</p>
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Partner Pendukung Program Indigo</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Shield className="h-6 w-6 text-[#ED1C24]" /> Telkomsel</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Activity className="h-6 w-6 text-[#ED1C24]" /> Mitratel</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Lightbulb className="h-6 w-6 text-[#ED1C24]" /> Nuon</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><GitBranch className="h-6 w-6 text-[#ED1C24]" /> Logee</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><BarChart3 className="h-6 w-6 text-[#ED1C24]" /> Finnet</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Shield className="h-6 w-6 text-[#ED1C24]" /> MDI Ventures</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Activity className="h-6 w-6 text-[#ED1C24]" /> AGATE</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Lightbulb className="h-6 w-6 text-[#ED1C24]" /> ANGIN</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><GitBranch className="h-6 w-6 text-[#ED1C24]" /> DKK Consulting</span>
+            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><BarChart3 className="h-6 w-6 text-[#ED1C24]" /> ZOHO</span>
           </div>
         </div>
       </section>
