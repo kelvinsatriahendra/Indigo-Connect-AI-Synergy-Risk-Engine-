@@ -489,41 +489,89 @@ export default function DashboardPage() {
 
                     {/* AI Engine Metrics Integration (Premium Dashboard Aesthetic) */}
                     <div className="mt-5 pt-4 border-t border-[#f2f4f7] space-y-4">
-                      {/* Health Index Bar */}
-                      <div>
-                        <div className="flex items-center justify-between text-xs mb-1.5">
-                          <span className="font-semibold text-[#667085]">Health Index</span>
-                          <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${healthColor}`}>
-                            {healthScore}% · {healthLabel}
-                          </span>
-                        </div>
-                        <div className="h-2 rounded-full bg-[#f2f4f7] overflow-hidden">
-                          <div 
-                            className={`h-full rounded-full ${healthProgressColor} transition-all duration-500`}
-                            style={{ width: `${healthScore}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* AI Synergy Potential Card */}
-                      <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
+                      
+                      {/* ROLE: FOUNDER or ADMIN (Shows Health Index prominently) */}
+                      {(user?.role === "founder" || user?.role === "admin" || !user) && (
                         <div>
-                          <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</p>
-                          <p className="text-xs font-bold text-[#344054] mt-0.5">{synergy.target}</p>
+                          <div className="flex items-center justify-between text-xs mb-1.5">
+                            <span className="font-semibold text-[#667085]">Health Index</span>
+                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${healthColor}`}>
+                              {healthScore}% · {healthLabel}
+                            </span>
+                          </div>
+                          <div className="h-2 rounded-full bg-[#f2f4f7] overflow-hidden">
+                            <div 
+                              className={`h-full rounded-full ${healthProgressColor} transition-all duration-500`}
+                              style={{ width: `${healthScore}%` }}
+                            />
+                          </div>
                         </div>
-                        <div className="text-right">
-                          <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
-                          <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
+                      )}
+
+                      {/* ROLE: SYNERGY (Shows Synergy Potential prominently) */}
+                      {user?.role === "synergy" && (
+                        <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-3 shadow-sm shadow-[#f2f4f7]">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
+                            <span className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-bold text-[#344054] truncate pr-2">{synergy.target}</span>
+                            <span className="text-lg font-extrabold text-emerald-600">{synergy.match}%</span>
+                          </div>
                         </div>
-                      </div>
+                      )}
+
+                      {/* ROLE: ADMIN (Shows secondary Synergy Info) */}
+                      {(user?.role === "admin" || !user) && (
+                        <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
+                          <div className="truncate pr-2">
+                            <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</p>
+                            <p className="text-xs font-bold text-[#344054] mt-0.5 truncate">{synergy.target}</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
+                            <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ROLE: FOUNDER (Shows Last Update Reminder instead of internal Synergy targets) */}
+                      {user?.role === "founder" && (
+                        <div className="flex items-center justify-between bg-[#f8fafc] border border-[#e2e8f0] rounded-lg p-2.5">
+                          <div className="flex items-center gap-2">
+                            <FileText className="h-4 w-4 text-[#64748b]" />
+                            <span className="text-xs font-medium text-[#475569]">Laporan Terakhir:</span>
+                          </div>
+                          <span className="text-xs font-bold text-[#0f172a]">12 Mei 2026</span>
+                        </div>
+                      )}
+
                     </div>
                   </div>
 
+                  {/* Card Footer Actions based on Role */}
                   <div className="border-t border-[#f2f4f7] bg-[#fafbfc] px-6 py-3 pl-7 flex items-center justify-between text-xs text-[#8c8f93]">
-                    <span className="font-medium">Founder: <strong className="text-[#344054]">{startup.founderName}</strong></span>
-                    <button className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1">
-                      <span>Analisis</span>
-                      <span className="text-sm">›</span>
+                    
+                    {/* Left Info */}
+                    {user?.role === "synergy" ? (
+                      <span className="font-medium">Sektor: <strong className="text-[#344054]">{startup.sector}</strong></span>
+                    ) : user?.role === "founder" ? (
+                      <span className="font-medium">Batch: <strong className="text-[#344054]">{startup.batch}</strong></span>
+                    ) : (
+                      <span className="font-medium">Founder: <strong className="text-[#344054]">{startup.founderName}</strong></span>
+                    )}
+
+                    {/* Right Action Button */}
+                    <button className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1 group/btn transition-colors">
+                      {user?.role === "synergy" ? (
+                        <span>Potensi Sinergi</span>
+                      ) : user?.role === "founder" ? (
+                        <span>Update Laporan</span>
+                      ) : (
+                        <span>AI Risk Analysis</span>
+                      )}
+                      <span className="text-sm group-hover/btn:translate-x-0.5 transition-transform">›</span>
                     </button>
                   </div>
                 </div>
