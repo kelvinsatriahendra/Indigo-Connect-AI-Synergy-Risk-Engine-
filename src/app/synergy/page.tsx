@@ -216,8 +216,8 @@ export default function SynergyPage() {
         </div>
 
         {/* Kanban Board */}
-        <div className="flex-1 overflow-x-auto p-8">
-          <div className="flex h-full gap-6 items-start">
+        <div className="flex-1 overflow-x-auto overflow-y-auto p-8 lg:overflow-x-hidden">
+          <div className="grid h-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-start min-w-[800px] xl:min-w-0">
             {loading ? (
               <div className="flex w-full h-full items-center justify-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
@@ -226,7 +226,7 @@ export default function SynergyPage() {
               grouped.map((col) => (
                 <div 
                   key={col.status} 
-                  className={`flex w-[320px] shrink-0 flex-col rounded-xl transition-all duration-300 min-h-[500px] ${
+                  className={`flex w-full flex-col rounded-xl transition-all duration-300 min-h-[500px] h-full ${
                     draggedOverCol === col.status 
                       ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
                       : 'bg-transparent'
