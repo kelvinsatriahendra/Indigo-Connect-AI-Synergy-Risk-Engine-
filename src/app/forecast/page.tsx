@@ -341,9 +341,13 @@ export default function ForecastPage() {
                   {[...data.historicalData, ...data.projectedData].map((p, i) => {
                     const isProj = i >= data.historicalData.length;
                     return (
-                      <div key={i} className={`rounded-xl border p-4 transition-all hover:shadow-sm ${isProj ? 'border-[#fca5a5] bg-[#fef2f2]/30' : 'border-[#e0e0e0] bg-white'}`}>
+                      <div 
+                        key={i} 
+                        className={`rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${isProj ? 'border-white/10 text-white hover:border-[#ED1C24]/30 hover:shadow-purple-500/5' : 'border-[#e0e0e0] bg-white text-[#161616]'}`}
+                        style={isProj ? { background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' } : undefined}
+                      >
                         <div className="mb-3 flex items-center justify-between">
-                          <span className="text-sm font-bold text-[#161616]">{p.period}</span>
+                          <span className={`text-sm font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.period}</span>
                           <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isProj ? "bg-[#ED1C24] text-white shadow-sm shadow-red-200" : "bg-[#f2f4f7] text-[#667085]"}`}>
                             {isProj ? "Projected" : "Historical"}
                           </span>
@@ -351,22 +355,22 @@ export default function ForecastPage() {
 
                         <div className="grid grid-cols-2 gap-y-4 gap-x-3 text-sm">
                           <div>
-                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Revenue</p>
-                            <p className="text-[#161616] font-bold">Rp{p.revenue}jt</p>
+                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Revenue</p>
+                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.revenue}jt</p>
                           </div>
                           <div>
-                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Users</p>
-                            <p className="text-[#161616] font-bold">{p.users.toLocaleString()}</p>
+                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Users</p>
+                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.users.toLocaleString()}</p>
                           </div>
                           <div>
-                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Growth</p>
-                            <p className={`font-bold flex items-center gap-1 ${p.growth >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Growth</p>
+                            <p className={`font-bold flex items-center gap-1 ${p.growth >= 0 ? (isProj ? 'text-emerald-400' : 'text-emerald-600') : (isProj ? 'text-rose-400' : 'text-red-600')}`}>
                               {p.growth > 0 ? '+' : ''}{p.growth}%
                             </p>
                           </div>
                           <div>
-                            <p className="text-[11px] text-[#8c8f93] font-medium uppercase tracking-wider mb-0.5">Burn Rate</p>
-                            <p className="text-[#161616] font-bold">Rp{p.burnRate}jt</p>
+                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Burn Rate</p>
+                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.burnRate}jt</p>
                           </div>
                         </div>
                       </div>
