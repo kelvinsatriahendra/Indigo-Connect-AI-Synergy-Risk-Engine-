@@ -14,7 +14,7 @@ type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 // Mock Maps
 const founderStartupMap: Record<string, string[]> = {
-  "demo-founder-id": ["s3", "s8"],
+  "demo-founder-id": ["s3"], // Founder mengelola FinAccess (strictly 1 startup under Indigo rules)
 };
 const synergySectorMap: Record<string, string[]> = {
   "demo-synergy-id": ["Fintech", "Logistik", "Agritech"],
@@ -144,17 +144,33 @@ export default function ForecastPage() {
               <div className="card-legion mb-6 p-6">
             <div className="flex items-center gap-4">
               <div className="flex-1">
-                <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
-                <select
-                  value={selectedStartup}
-                  onChange={(e) => setSelectedStartup(e.target.value)}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                >
-                  <option value="">-- Pilih Startup --</option>
-                  {availableStartups.map((s) => (
-                    <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
-                  ))}
-                </select>
+                {availableStartups.length > 1 ? (
+                  <>
+                    <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
+                    <select
+                      value={selectedStartup}
+                      onChange={(e) => setSelectedStartup(e.target.value)}
+                      className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                    >
+                      <option value="">-- Pilih Startup --</option>
+                      {availableStartups.map((s) => (
+                        <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
+                      ))}
+                    </select>
+                  </>
+                ) : (
+                  availableStartups.length === 1 && (
+                    <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] p-4 flex items-center justify-between">
+                      <div>
+                        <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider mb-1">Startup Terpilih</p>
+                        <p className="text-base font-bold text-[#0f172a]">{availableStartups[0].name} — {availableStartups[0].sector} ({availableStartups[0].batch})</p>
+                      </div>
+                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                        ✓ Terverifikasi
+                      </span>
+                    </div>
+                  )
+                )}
               </div>
               <button
                 onClick={handleForecast}

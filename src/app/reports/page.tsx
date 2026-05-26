@@ -13,7 +13,7 @@ type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 // Mock Maps
 const founderStartupMap: Record<string, string[]> = {
-  "demo-founder-id": ["s3", "s8"], // Founder mengelola FinAccess & PayDesa
+  "demo-founder-id": ["s3"], // Founder mengelola FinAccess (strictly 1 startup under Indigo rules)
 };
 const synergySectorMap: Record<string, string[]> = {
   "demo-synergy-id": ["Fintech", "Logistik", "Agritech"],

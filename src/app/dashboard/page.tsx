@@ -21,7 +21,7 @@ const sectorColors: Record<string, string> = {
 
 // Mapping: founder user ID → startup IDs they own
 const founderStartupMap: Record<string, string[]> = {
-  "demo-founder-id": ["s3", "s8"], // Yusuf Pratama owns FinAccess & PayDesa
+  "demo-founder-id": ["s3"], // Yusuf Pratama owns FinAccess (strictly 1 startup under Indigo rules)
 };
 
 // Mapping: synergy user ID → sectors they manage
