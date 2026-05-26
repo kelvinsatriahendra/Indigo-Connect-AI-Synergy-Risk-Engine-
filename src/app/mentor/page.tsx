@@ -126,7 +126,7 @@ export default function MentorPage() {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <Bot className="h-6 w-6 text-indigo-600" />
+                <Bot className="h-6 w-6 text-[#ED1C24]" />
                 <h1 className="text-2xl font-bold text-[#161616]">AI Mentor</h1>
               </div>
               <p className="mt-1 text-sm text-[#667085]">
@@ -153,7 +153,7 @@ export default function MentorPage() {
                       className={`h-9 w-9 shrink-0 rounded-full flex items-center justify-center shadow-sm ${
                         msg.role === "user"
                           ? "bg-[#ED1C24] text-white"
-                          : "bg-indigo-600 text-white"
+                          : "bg-[#161616] text-white"
                       }`}
                     >
                       {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
@@ -180,13 +180,13 @@ export default function MentorPage() {
 
                 {isChatLoading && (
                   <div className="flex gap-3">
-                    <div className="h-9 w-9 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                    <div className="h-9 w-9 shrink-0 rounded-full bg-[#161616] text-white flex items-center justify-center shadow-sm">
                       <Bot className="h-4 w-4" />
                     </div>
                     <div className="rounded-2xl px-5 py-4 bg-white border border-[#e0e0e0] rounded-tl-sm shadow-sm flex items-center gap-1.5">
-                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" />
-                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                      <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" />
+                      <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "300ms" }} />
                     </div>
                   </div>
                 )}
@@ -206,12 +206,12 @@ export default function MentorPage() {
                         <button
                           key={i}
                           onClick={() => handleSendMessage(qp.prompt)}
-                          className="flex items-center gap-3 rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-left transition-all hover:border-indigo-300 hover:shadow-sm hover:bg-indigo-50/30 group cursor-pointer"
+                          className="flex items-center gap-3 rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-left transition-all hover:border-red-300 hover:shadow-sm hover:bg-red-50/30 group cursor-pointer"
                         >
-                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-50 text-[#ED1C24] group-hover:bg-red-100 transition-colors">
                             <Icon className="h-4 w-4" />
                           </div>
-                          <span className="text-sm font-medium text-[#344054] group-hover:text-indigo-700 transition-colors">{qp.label}</span>
+                          <span className="text-sm font-medium text-[#344054] group-hover:text-red-700 transition-colors">{qp.label}</span>
                         </button>
                       );
                     })}
@@ -223,8 +223,8 @@ export default function MentorPage() {
             {/* Input Bar */}
             <div className="border-t border-[#e0e0e0] bg-white px-6 py-4">
               <form onSubmit={handleSubmit} className="mx-auto max-w-3xl flex items-center gap-3">
-                <div className="flex-1 flex items-center gap-2 rounded-xl border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2.5 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
-                  <Sparkles className="h-4 w-4 text-indigo-400 shrink-0" />
+                <div className="flex-1 flex items-center gap-2 rounded-xl border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2.5 focus-within:border-[#ED1C24] focus-within:ring-2 focus-within:ring-red-100 transition-all">
+                  <Sparkles className="h-4 w-4 text-red-400 shrink-0" />
                   <input
                     type="text"
                     value={chatInput}
@@ -236,7 +236,7 @@ export default function MentorPage() {
                 <button
                   type="submit"
                   disabled={!chatInput.trim() || isChatLoading}
-                  className="h-11 w-11 shrink-0 rounded-xl bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm shadow-indigo-500/20 cursor-pointer"
+                  className="h-11 w-11 shrink-0 rounded-xl bg-[#ED1C24] text-white flex items-center justify-center hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm shadow-red-500/20 cursor-pointer"
                 >
                   <Send className="h-4 w-4 ml-0.5" />
                 </button>
