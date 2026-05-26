@@ -21,6 +21,16 @@
   },
   {
     "id": "s3",
+    "name": "FinAccess",
+    "founderName": "Yusuf Pratama",
+    "sector": "Fintech",
+    "batch": "Batch 8",
+    "description": "Platform pembiayaan mikro B2B dan credit scoring instan",
+    "status": "ACTIVE",
+    "logo": "/startups/finaccess.png"
+  },
+  {
+    "id": "s9",
     "name": "Privy",
     "founderName": "Marshall Pribadi",
     "sector": "Fintech",
