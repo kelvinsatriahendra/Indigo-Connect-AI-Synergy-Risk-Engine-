@@ -207,12 +207,23 @@ export default function ReportsPage() {
       });
   }, []);
 
-  // For Executive / Synergy roles, auto-select the first report to populate the UI
+  // For Executive / Synergy roles, auto-select the first report.
+  // For Founder role, auto-select their own startup report (e.g. s3 / FinAccess) to instantly show data.
   useEffect(() => {
-    if (user && user.role !== "founder" && mockSubmittedReports.length > 0) {
-      const firstReport = mockSubmittedReports[0];
-      setSelectedReportId(firstReport.id);
-      setResult(firstReport.evaluation);
+    if (user) {
+      if (user.role !== "founder" && mockSubmittedReports.length > 0) {
+        const firstReport = mockSubmittedReports[0];
+        setSelectedReportId(firstReport.id);
+        setResult(firstReport.evaluation);
+      } else if (user.role === "founder") {
+        const myIds = founderStartupMap[user.userId || "demo-founder-id"] || ["s3"];
+        const myReport = mockSubmittedReports.find(r => myIds.includes(r.startupId));
+        if (myReport) {
+          setSelectedReportId(myReport.id);
+          setResult(myReport.evaluation);
+          setNarrativeText(myReport.narrativeText);
+        }
+      }
     }
   }, [user]);
 
@@ -381,8 +392,8 @@ export default function ReportsPage() {
 
                   <div className="mt-8 space-y-6">
                     
-                    {/* Dropdown - conditionally hidden for Founders with 1 startup */}
-                    {(!user || user.role !== "founder" || availableStartups.length > 1) ? (
+                    {/* Dropdown - only shown for non-founders or founders with multiple startups */}
+                    {(!user || user.role !== "founder" || availableStartups.length > 1) && (
                       <div>
                         <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
                         <select
@@ -398,20 +409,8 @@ export default function ReportsPage() {
                           ))}
                         </select>
                       </div>
-                    ) : (
-                      /* Show static selected startup info to let them know who they are submitting for */
-                      selectedStartupData && (
-                        <div className="mb-2 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] p-4 flex items-center justify-between">
-                           <div>
-                              <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider mb-1">Startup Terpilih</p>
-                              <p className="text-base font-bold text-[#0f172a]">{selectedStartupData.name}</p>
-                           </div>
-                           <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                             ✓ Terverifikasi
-                           </span>
-                        </div>
-                      )
                     )}
+
 
                     <div className="pt-2 border-t border-[#f2f4f7]">
                       <div className="mb-3 flex items-center justify-between">

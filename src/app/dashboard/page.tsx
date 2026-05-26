@@ -214,119 +214,121 @@ export default function DashboardPage() {
         {/* Scrollable Body */}
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8 print:p-0 print:overflow-visible">
 
-        <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Card 1: Total Startup */}
-          <div 
-            className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-            style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
-          >
-            {/* SVG Vectors to match user image */}
-            <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
-            </svg>
-            <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
-            </svg>
+        {user?.role !== "founder" && (
+          <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Card 1: Total Startup */}
+            <div 
+              className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
+            >
+              {/* SVG Vectors to match user image */}
+              <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
+              </svg>
+              <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
+              </svg>
 
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-300">
-                  {user?.role === "founder" ? "Startup Saya" : "Total Startup"}
+              <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-300">
+                    {user?.role === "founder" ? "Startup Saya" : "Total Startup"}
+                  </p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-[#ED1C24] shadow-sm">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-3 text-3xl font-extrabold text-white tracking-wide">{totalStartups}</p>
+              </div>
+            </div>
+
+            {/* Card 2: High Growth */}
+            <div 
+              className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
+            >
+              {/* SVG Vectors to match user image */}
+              <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
+              </svg>
+              <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
+              </svg>
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-300">High Growth</p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-sm">
+                    <TrendingUp className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-3 text-3xl font-extrabold text-emerald-400 tracking-wide">{highGrowth}</p>
+              </div>
+            </div>
+
+            {/* Card 3: At Risk */}
+            <div 
+              className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
+            >
+              {/* SVG Vectors to match user image */}
+              <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
+              </svg>
+              <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
+              </svg>
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-300">At Risk</p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 shadow-sm animate-pulse">
+                    <AlertTriangle className="h-4 w-4" />
+                  </div>
+                </div>
+                <p className="mt-3 text-3xl font-extrabold text-rose-400 tracking-wide">{atRisk}</p>
+              </div>
+            </div>
+
+            {/* Card 4: Sektor Dikelola / Batch Aktif */}
+            <div 
+              className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
+            >
+              {/* SVG Vectors to match user image */}
+              <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
+              </svg>
+              <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+                <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
+                <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
+              </svg>
+
+              <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-slate-300">
+                    {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
+                  </p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 shadow-sm">
+                    {user?.role === "synergy" ? <GitBranch className="h-4 w-4" /> : <Layers className="h-4 w-4" />}
+                  </div>
+                </div>
+                <p className="mt-3 text-3xl font-extrabold text-white tracking-wide">
+                  {user?.role === "synergy"
+                    ? synergySectorMap["demo-synergy-id"]?.length || 0
+                    : uniqueBatches.length}
                 </p>
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 border border-white/10 text-[#ED1C24] shadow-sm">
-                  <Building2 className="h-4 w-4" />
-                </div>
               </div>
-              <p className="mt-3 text-3xl font-extrabold text-white tracking-wide">{totalStartups}</p>
             </div>
           </div>
-
-          {/* Card 2: High Growth */}
-          <div 
-            className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-            style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
-          >
-            {/* SVG Vectors to match user image */}
-            <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
-            </svg>
-            <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
-            </svg>
-
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-300">High Growth</p>
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 shadow-sm">
-                  <TrendingUp className="h-4 w-4" />
-                </div>
-              </div>
-              <p className="mt-3 text-3xl font-extrabold text-emerald-400 tracking-wide">{highGrowth}</p>
-            </div>
-          </div>
-
-          {/* Card 3: At Risk */}
-          <div 
-            className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-            style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
-          >
-            {/* SVG Vectors to match user image */}
-            <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
-            </svg>
-            <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
-            </svg>
-
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-300">At Risk</p>
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 shadow-sm animate-pulse">
-                  <AlertTriangle className="h-4 w-4" />
-                </div>
-              </div>
-              <p className="mt-3 text-3xl font-extrabold text-rose-400 tracking-wide">{atRisk}</p>
-            </div>
-          </div>
-
-          {/* Card 4: Sektor Dikelola / Batch Aktif */}
-          <div 
-            className="rounded-xl border border-white/5 p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-            style={{ background: 'linear-gradient(135deg, #2a0b18 0%, #0a0712 50%, #22081d 100%)' }}
-          >
-            {/* SVG Vectors to match user image */}
-            <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-red-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M-10,130 C50,110 70,40 30,-10" strokeWidth="0.8" />
-            </svg>
-            <svg className="absolute right-0 top-0 h-full w-auto pointer-events-none opacity-20 text-purple-300/40" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-              <path d="M120,-20 C60,0 40,70 80,120" strokeWidth="1.2" strokeDasharray="3 3" />
-              <path d="M110,-30 C50,-10 30,60 70,110" strokeWidth="0.8" />
-            </svg>
-
-            <div className="relative z-10">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-300">
-                  {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
-                </p>
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 shadow-sm">
-                  {user?.role === "synergy" ? <GitBranch className="h-4 w-4" /> : <Layers className="h-4 w-4" />}
-                </div>
-              </div>
-              <p className="mt-3 text-3xl font-extrabold text-white tracking-wide">
-                {user?.role === "synergy"
-                  ? synergySectorMap["demo-synergy-id"]?.length || 0
-                  : uniqueBatches.length}
-              </p>
-            </div>
-          </div>
-        </div>
+        )}
 
         {/* Charts section - only for admin and synergy */}
         {user?.role !== "founder" && mounted && (

@@ -49,6 +49,33 @@ export default function ForecastPage() {
   } | null>(null);
   const [error, setError] = useState("");
 
+  const fetchForecastForStartup = async (startupId: string) => {
+    if (!startupId) return;
+    setLoading(true);
+    setError("");
+    setData(null);
+
+    try {
+      const res = await fetch("/api/ai/forecast", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ startupId }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Forecast gagal");
+      }
+
+      const result = await res.json();
+      setData(result);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Terjadi kesalahan");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
     fetch("/api/auth/me")
@@ -67,7 +94,9 @@ export default function ForecastPage() {
           setAvailableStartups(roleStartups);
           
           if (data.user.role === "founder" && roleStartups.length === 1) {
-            setSelectedStartup(roleStartups[0].id);
+            const targetId = roleStartups[0].id;
+            setSelectedStartup(targetId);
+            fetchForecastForStartup(targetId);
           }
         }
       })
@@ -77,30 +106,7 @@ export default function ForecastPage() {
   }, []);
 
   const handleForecast = async () => {
-    if (!selectedStartup) return;
-    setLoading(true);
-    setError("");
-    setData(null);
-
-    try {
-      const res = await fetch("/api/ai/forecast", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ startupId: selectedStartup }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Forecast gagal");
-      }
-
-      const result = await res.json();
-      setData(result);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Terjadi kesalahan");
-    } finally {
-      setLoading(false);
-    }
+    await fetchForecastForStartup(selectedStartup);
   };
 
   const chartData = data
@@ -141,46 +147,48 @@ export default function ForecastPage() {
             {/* Top Main Content */}
             <div className="w-full min-w-0">
               {/* Controls */}
-              <div className="card-legion mb-6 p-6">
-            <div className="flex items-center gap-4">
-              <div className="flex-1">
-                {availableStartups.length > 1 ? (
-                  <>
-                    <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
-                    <select
-                      value={selectedStartup}
-                      onChange={(e) => setSelectedStartup(e.target.value)}
-                      className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                    >
-                      <option value="">-- Pilih Startup --</option>
-                      {availableStartups.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
-                      ))}
-                    </select>
-                  </>
-                ) : (
-                  availableStartups.length === 1 && (
-                    <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] p-4 flex items-center justify-between">
-                      <div>
-                        <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider mb-1">Startup Terpilih</p>
-                        <p className="text-base font-bold text-[#0f172a]">{availableStartups[0].name} — {availableStartups[0].sector} ({availableStartups[0].batch})</p>
-                      </div>
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                        ✓ Terverifikasi
-                      </span>
+              {(user?.role !== "founder" || availableStartups.length > 1) && (
+                <div className="card-legion mb-6 p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      {availableStartups.length > 1 ? (
+                        <>
+                          <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
+                          <select
+                            value={selectedStartup}
+                            onChange={(e) => setSelectedStartup(e.target.value)}
+                            className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                          >
+                            <option value="">-- Pilih Startup --</option>
+                            {availableStartups.map((s) => (
+                              <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
+                            ))}
+                          </select>
+                        </>
+                      ) : (
+                        availableStartups.length === 1 && (
+                          <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] p-4 flex items-center justify-between">
+                            <div>
+                              <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider mb-1">Startup Terpilih</p>
+                              <p className="text-base font-bold text-[#0f172a]">{availableStartups[0].name} — {availableStartups[0].sector} ({availableStartups[0].batch})</p>
+                            </div>
+                            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                              ✓ Terverifikasi
+                            </span>
+                          </div>
+                        )
+                      )}
                     </div>
-                  )
-                )}
-              </div>
-              <button
-                onClick={handleForecast}
-                disabled={!selectedStartup || loading}
-                className="btn-primary-solid gap-2 px-6 py-2.5 mt-5 disabled:opacity-50"
-              >
-                {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
-              </button>
-            </div>
-          </div>
+                    <button
+                      onClick={handleForecast}
+                      disabled={!selectedStartup || loading}
+                      className="btn-primary-solid gap-2 px-6 py-2.5 mt-5 disabled:opacity-50"
+                    >
+                      {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
+                    </button>
+                  </div>
+                </div>
+              )}
 
           {error && (
             <div className="card-legion mb-6 border-red-200 bg-red-50 p-6">
