@@ -122,14 +122,18 @@ export default function ForecastPage() {
 
   return (
     <AppShell>
-      <div className="p-8">
-        <div className="mb-8">
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+        {/* Fixed Header Bar */}
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center gap-3">
             <BarChart3 className="h-6 w-6 text-[#ED1C24]" />
             <h1 className="text-2xl font-bold text-[#161616]">Forecasting</h1>
           </div>
           <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
         </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
         <div className="mx-auto max-w-[1400px]">
           <div className="flex flex-col gap-6">
@@ -381,9 +385,10 @@ export default function ForecastPage() {
             </div>
           )}
 
-          </div> {/* End flex row */}
         </div>
       </div>
-    </AppShell>
+    </div>
+  </div>
+</AppShell>
   );
 }

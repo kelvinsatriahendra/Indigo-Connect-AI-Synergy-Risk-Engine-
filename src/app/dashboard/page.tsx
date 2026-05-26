@@ -185,28 +185,34 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="p-8 bg-[#f8fafc]" ref={dashboardRef}>
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
-            <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50 print:h-auto print:overflow-visible" ref={dashboardRef}>
+        {/* Fixed Header Bar */}
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10 print:hidden">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
+              <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
+            </div>
+            {user?.role === "admin" && (
+              <button 
+                onClick={handleExportReport}
+                disabled={isExporting}
+                className={`print:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
+              >
+                {isExporting ? (
+                  <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
+                ) : exportSuccess ? (
+                  <><CheckCircle2 className="h-4 w-4" /> Downloaded</>
+                ) : (
+                  <><Download className="h-4 w-4" /> Export Executive Report</>
+                )}
+              </button>
+            )}
           </div>
-          {user?.role === "admin" && (
-            <button 
-              onClick={handleExportReport}
-              disabled={isExporting}
-              className={`print:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
-            >
-              {isExporting ? (
-                <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
-              ) : exportSuccess ? (
-                <><CheckCircle2 className="h-4 w-4" /> Downloaded</>
-              ) : (
-                <><Download className="h-4 w-4" /> Export Executive Report</>
-              )}
-            </button>
-          )}
         </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8 print:p-0 print:overflow-visible">
 
         {/* Role-specific welcome banner for Founder */}
         {user?.role === "founder" && (
@@ -766,6 +772,7 @@ export default function DashboardPage() {
             })}
           </div>
         )}
+        </div>
       </div>
     </AppShell>
   );

@@ -93,38 +93,44 @@ export default function AlertsPage() {
 
   return (
     <AppShell>
-      <div className="p-8">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+        {/* Fixed Header Bar */}
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <Bell className="h-6 w-6 text-[#ED1C24]" />
+                <h1 className="text-2xl font-bold text-[#161616]">Alerts</h1>
+                {unreadCount > 0 && (
+                  <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600">
+                    {unreadCount} unread
+                  </span>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-[#667085]">Notifikasi dan peringatan portofolio startup</p>
+            </div>
             <div className="flex items-center gap-3">
-              <Bell className="h-6 w-6 text-[#ED1C24]" />
-              <h1 className="text-2xl font-bold text-[#161616]">Alerts</h1>
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              >
+                <option value="all">Semua Tipe</option>
+                <option value="RISK">Risk</option>
+                <option value="MILESTONE">Milestone</option>
+                <option value="REMINDER">Reminder</option>
+              </select>
               {unreadCount > 0 && (
-                <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600">
-                  {unreadCount} unread
-                </span>
+                <button onClick={markAllRead} className="btn-primary-outline gap-2 px-4 py-2 text-sm">
+                  <CheckCheck className="h-4 w-4" /> Mark All Read
+                </button>
               )}
             </div>
-            <p className="mt-1 text-sm text-[#667085]">Notifikasi dan peringatan portofolio startup</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-            >
-              <option value="all">Semua Tipe</option>
-              <option value="RISK">Risk</option>
-              <option value="MILESTONE">Milestone</option>
-              <option value="REMINDER">Reminder</option>
-            </select>
-            {unreadCount > 0 && (
-              <button onClick={markAllRead} className="btn-primary-outline gap-2 px-4 py-2 text-sm">
-                <CheckCheck className="h-4 w-4" /> Mark All Read
-              </button>
-            )}
           </div>
         </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
         {loading ? (
           <div className="card-legion flex items-center justify-center py-20">
@@ -184,6 +190,7 @@ export default function AlertsPage() {
             })}
           </div>
         )}
+        </div>
       </div>
     </AppShell>
   );

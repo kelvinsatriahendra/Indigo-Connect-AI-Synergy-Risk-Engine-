@@ -228,22 +228,28 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
   return (
     <AppShell>
-      <div className="p-8">
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <Building2 className="h-6 w-6 text-[#ED1C24]" />
-              <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+        {/* Fixed Header Bar */}
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <div className="flex items-center gap-3">
+                <Building2 className="h-6 w-6 text-[#ED1C24]" />
+                <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
+              </div>
+              <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
             </div>
-            <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
+            <button 
+              onClick={() => setIsCompareModalOpen(true)}
+              className="btn-primary-outline flex items-center gap-2 px-4 py-2 text-sm font-bold bg-white"
+            >
+              <Scale className="h-4 w-4" /> Compare Startups
+            </button>
           </div>
-          <button 
-            onClick={() => setIsCompareModalOpen(true)}
-            className="btn-primary-outline flex items-center gap-2 px-4 py-2 text-sm font-bold bg-white"
-          >
-            <Scale className="h-4 w-4" /> Compare Startups
-          </button>
         </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1 space-y-4">
@@ -454,6 +460,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
             )}
           </div>
         </div>
+      </div>
       </div>
       {isCompareModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in backdrop-blur-sm">
