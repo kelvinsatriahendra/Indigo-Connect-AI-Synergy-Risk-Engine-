@@ -137,7 +137,7 @@ export default async function Home() {
             {PARTNERS.map((partner) => (
               <div 
                 key={partner.name} 
-                className="group relative flex items-center justify-center h-10 w-28 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300"
+                className="group relative flex items-center justify-center h-12 w-32 md:h-16 md:w-44 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300"
               >
                 <img
                   src={partner.logo}
