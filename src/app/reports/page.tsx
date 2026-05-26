@@ -647,7 +647,7 @@ export default function ReportsPage() {
                 <div className="sticky top-6">
                   <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
                     <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
-                    <button onClick={handleDownloadPdf} className="btn-primary-outline gap-2 px-4 py-2 text-xs">
+                    <button onClick={handleDownloadPdf} className="btn-primary-solid gap-2 px-4 py-2 text-xs">
                       <Download className="h-4 w-4" /> Download PDF
                     </button>
                   </div>

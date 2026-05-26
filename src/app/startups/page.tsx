@@ -241,7 +241,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
             </div>
             <button 
               onClick={() => setIsCompareModalOpen(true)}
-              className="btn-primary-outline flex items-center gap-2 px-4 py-2 text-sm font-bold bg-white"
+              className="btn-primary-solid flex items-center gap-2 px-4 py-2 text-sm font-bold"
             >
               <Scale className="h-4 w-4" /> Compare Startups
             </button>
