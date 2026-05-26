@@ -1,0 +1,253 @@
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { AppShell } from "@/components/layout/app-shell";
+import startupsData from "@/data/startups.json";
+import { Bot, User, Send, Sparkles, BookOpen, TrendingUp, Shield, Lightbulb } from "lucide-react";
+
+type UserInfo = { name: string; email: string; role: string; userId?: string };
+
+// Mock Maps
+const founderStartupMap: Record<string, string[]> = {
+  "demo-founder-id": ["s3"],
+};
+
+// Mock evaluation context for the mentor to reference
+const mockEvaluationContext = {
+  startupId: "s3",
+  startupName: "FinAccess",
+  healthScore: 94,
+  riskLabel: "LOW_RISK",
+  month: "Mei 2026",
+  summaryPoints: [
+    "Penyaluran pembiayaan tumbuh stabil dengan peluncuran credit scoring instan 5 menit.",
+    "NPL terjaga sangat baik di angka 1.8%, jauh di bawah batas rata-rata industri.",
+    "Rencana integrasi dengan LinkAja berpotensi melipatgandakan akuisisi merchant mikro.",
+  ],
+};
+
+// Pre-defined quick prompt suggestions
+const quickPrompts = [
+  { icon: TrendingUp, label: "Strategi pertumbuhan", prompt: "Apa strategi pertumbuhan yang direkomendasikan berdasarkan evaluasi terakhir saya?" },
+  { icon: Shield, label: "Mitigasi risiko", prompt: "Apa potensi risiko utama yang perlu saya waspadai dan bagaimana mitigasinya?" },
+  { icon: Lightbulb, label: "Peluang sinergi", prompt: "Bagaimana cara memaksimalkan peluang sinergi dengan Telkom Group?" },
+  { icon: BookOpen, label: "Tips fundraising", prompt: "Apa yang harus saya siapkan untuk presentasi di hadapan investor Telkom?" },
+];
+
+// Mock AI responses based on keywords
+const mockResponses: Record<string, string> = {
+  "pertumbuhan": "Berdasarkan evaluasi terakhir FinAccess, pertumbuhan penyaluran pembiayaan Anda sudah stabil. Saya merekomendasikan tiga langkah strategis:\n\n1. **Ekspansi Vertikal** — Tambahkan produk tabungan mikro atau asuransi mikro untuk meningkatkan ARPU (Average Revenue Per User) dari merchant yang sudah ada.\n2. **Kemitraan Distribusi** — Percepat integrasi dengan LinkAja untuk mengakses basis 40 juta pengguna aktifnya sebagai kanal distribusi baru.\n3. **Optimasi Funnel** — Dengan credit scoring 5 menit, fokuslah pada campaign referral merchant-to-merchant untuk menurunkan CAC (Customer Acquisition Cost).",
+  "risiko": "Berdasarkan profil risiko FinAccess saat ini (Health Score 94, Low Risk), area yang perlu diwaspadai:\n\n1. **Risiko Regulasi** — OJK sedang menyiapkan regulasi baru terkait P2P lending. Pastikan tim compliance Anda aktif memonitor perkembangan ini.\n2. **Risiko Kredit** — NPL Anda di 1.8% sangat baik, namun jika Anda melakukan ekspansi agresif, pastikan model credit scoring divalidasi ulang untuk segmen merchant baru.\n3. **Konsentrasi Pendapatan** — Diversifikasi sumber pendapatan agar tidak terlalu bergantung pada satu produk pembiayaan saja.",
+  "sinergi": "Peluang sinergi FinAccess dengan ekosistem Telkom Group sangat menjanjikan:\n\n1. **LinkAja (Match Score: 95%)** — Integrasi pembayaran dan penyaluran modal produktif langsung dari e-wallet. Ini bisa menjadi game-changer untuk distribusi.\n2. **PADI UMKM** — Akses ke database merchant UMKM yang terkurasi untuk cross-selling produk pembiayaan.\n3. **Telkomsel** — Leverage data mobilitas pelanggan untuk enrichment credit scoring model Anda.\n\nRekomendasi: Mulai dengan PoC (Proof of Concept) bersama LinkAja di Q3 2026.",
+  "fundraising": "Untuk presentasi di hadapan investor Telkom, persiapkan hal berikut:\n\n1. **Metrik Kunci** — Highlight NPL 1.8% (di bawah rata-rata industri 3.5%), pertumbuhan penyaluran yang konsisten, dan unit economics yang sehat.\n2. **Traksi Sinergi** — Tunjukkan pipeline integrasi dengan LinkAja dan potensi TAM (Total Addressable Market) dari kolaborasi tersebut.\n3. **Roadmap Teknologi** — Presentasikan keunggulan credit scoring instan 5 menit sebagai competitive moat.\n4. **Ask yang Jelas** — Tentukan jumlah dana yang dibutuhkan, penggunaan dana (hiring, expansion, tech), dan milestone yang akan dicapai dalam 6-12 bulan ke depan.",
+  "default": "Terima kasih atas pertanyaan Anda. Berdasarkan evaluasi AI terakhir FinAccess (Health Score: 94, Low Risk), performa startup Anda sangat baik. NPL terjaga di angka 1.8% dan fitur credit scoring instan menjadi keunggulan kompetitif yang signifikan.\n\nSaya merekomendasikan untuk fokus pada tiga hal: (1) percepatan integrasi LinkAja untuk ekspansi distribusi, (2) diversifikasi produk fintech untuk meningkatkan ARPU, dan (3) penguatan tim compliance untuk mengantisipasi regulasi baru OJK.\n\nApakah ada topik spesifik yang ingin Anda dalami lebih lanjut?",
+};
+
+function getAIResponse(userMessage: string): string {
+  const lower = userMessage.toLowerCase();
+  if (lower.includes("pertumbuhan") || lower.includes("growth") || lower.includes("tumbuh") || lower.includes("strategi pertumbuhan")) {
+    return mockResponses["pertumbuhan"];
+  }
+  if (lower.includes("risiko") || lower.includes("risk") || lower.includes("mitigasi") || lower.includes("waspadai")) {
+    return mockResponses["risiko"];
+  }
+  if (lower.includes("sinergi") || lower.includes("synergy") || lower.includes("telkom") || lower.includes("kolaborasi") || lower.includes("peluang sinergi")) {
+    return mockResponses["sinergi"];
+  }
+  if (lower.includes("fundrais") || lower.includes("investor") || lower.includes("presentasi") || lower.includes("dana") || lower.includes("pitch")) {
+    return mockResponses["fundraising"];
+  }
+  return mockResponses["default"];
+}
+
+export default function MentorPage() {
+  const [mounted, setMounted] = useState(false);
+  const [user, setUser] = useState<UserInfo | null>(null);
+  const [startupName, setStartupName] = useState("FinAccess");
+
+  const [chatMessages, setChatMessages] = useState<{ role: "user" | "ai"; content: string }[]>([
+    {
+      role: "ai",
+      content: `Halo! Saya AI Mentor Anda di program Indigo by Telkom. 👋\n\nSaya telah menganalisis evaluasi terakhir **${mockEvaluationContext.startupName}** (Health Score: ${mockEvaluationContext.healthScore}%, ${mockEvaluationContext.riskLabel === "LOW_RISK" ? "Low Risk" : "At Risk"}).\n\nBerikut ringkasan:\n• ${mockEvaluationContext.summaryPoints[0]}\n• ${mockEvaluationContext.summaryPoints[1]}\n• ${mockEvaluationContext.summaryPoints[2]}\n\nSilakan tanyakan apa saja — mulai dari strategi pertumbuhan, mitigasi risiko, peluang sinergi Telkom, hingga persiapan fundraising.`,
+    },
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const [isChatLoading, setIsChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+    fetch("/api/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          setUser(data.user);
+          if (data.user.role === "founder" && data.user.userId) {
+            const myIds = founderStartupMap[data.user.userId] || ["s3"];
+            const startup = startupsData.find((s) => myIds.includes(s.id));
+            if (startup) setStartupName(startup.name);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
+
+  const handleSendMessage = (messageText?: string) => {
+    const text = messageText || chatInput.trim();
+    if (!text || isChatLoading) return;
+
+    setChatMessages((prev) => [...prev, { role: "user", content: text }]);
+    setChatInput("");
+    setIsChatLoading(true);
+
+    setTimeout(() => {
+      const response = getAIResponse(text);
+      setChatMessages((prev) => [...prev, { role: "ai", content: response }]);
+      setIsChatLoading(false);
+    }, 1200 + Math.random() * 800);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage();
+  };
+
+  if (!mounted) return null;
+
+  return (
+    <AppShell>
+      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+        {/* Fixed Header Bar */}
+        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <Bot className="h-6 w-6 text-indigo-600" />
+                <h1 className="text-2xl font-bold text-[#161616]">AI Mentor</h1>
+              </div>
+              <p className="mt-1 text-sm text-[#667085]">
+                Konsultasi strategi bisnis dengan AI berdasarkan evaluasi dan data startup Anda
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-semibold text-emerald-600">Online</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Body */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Main Chat Area */}
+          <div className="flex flex-1 flex-col min-w-0">
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto px-6 py-6">
+              <div className="mx-auto max-w-3xl space-y-6">
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                    <div
+                      className={`h-9 w-9 shrink-0 rounded-full flex items-center justify-center shadow-sm ${
+                        msg.role === "user"
+                          ? "bg-[#ED1C24] text-white"
+                          : "bg-indigo-600 text-white"
+                      }`}
+                    >
+                      {msg.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                    </div>
+                    <div
+                      className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed max-w-[85%] whitespace-pre-line ${
+                        msg.role === "user"
+                          ? "bg-[#ED1C24] text-white rounded-tr-sm shadow-md shadow-red-500/15"
+                          : "bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-sm shadow-sm"
+                      }`}
+                    >
+                      {msg.content.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
+                        part.startsWith("**") && part.endsWith("**") ? (
+                          <strong key={j} className={msg.role === "user" ? "text-white" : "text-[#161616]"}>
+                            {part.slice(2, -2)}
+                          </strong>
+                        ) : (
+                          <span key={j}>{part}</span>
+                        )
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {isChatLoading && (
+                  <div className="flex gap-3">
+                    <div className="h-9 w-9 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                      <Bot className="h-4 w-4" />
+                    </div>
+                    <div className="rounded-2xl px-5 py-4 bg-white border border-[#e0e0e0] rounded-tl-sm shadow-sm flex items-center gap-1.5">
+                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" />
+                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="h-2 w-2 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+            </div>
+
+            {/* Quick Prompts (shown only when few messages) */}
+            {chatMessages.length <= 1 && (
+              <div className="border-t border-[#f2f4f7] bg-[#fafbfc] px-6 py-4">
+                <div className="mx-auto max-w-3xl">
+                  <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider mb-3">Mulai dengan topik populer</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {quickPrompts.map((qp, i) => {
+                      const Icon = qp.icon;
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => handleSendMessage(qp.prompt)}
+                          className="flex items-center gap-3 rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-left transition-all hover:border-indigo-300 hover:shadow-sm hover:bg-indigo-50/30 group cursor-pointer"
+                        >
+                          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+                            <Icon className="h-4 w-4" />
+                          </div>
+                          <span className="text-sm font-medium text-[#344054] group-hover:text-indigo-700 transition-colors">{qp.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Input Bar */}
+            <div className="border-t border-[#e0e0e0] bg-white px-6 py-4">
+              <form onSubmit={handleSubmit} className="mx-auto max-w-3xl flex items-center gap-3">
+                <div className="flex-1 flex items-center gap-2 rounded-xl border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2.5 focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+                  <Sparkles className="h-4 w-4 text-indigo-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    placeholder="Tanyakan strategi, risiko, peluang sinergi, atau tips fundraising..."
+                    className="flex-1 bg-transparent text-sm text-[#344054] placeholder:text-[#a1a1aa] focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={!chatInput.trim() || isChatLoading}
+                  className="h-11 w-11 shrink-0 rounded-xl bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm shadow-indigo-500/20 cursor-pointer"
+                >
+                  <Send className="h-4 w-4 ml-0.5" />
+                </button>
+              </form>
+              <p className="mx-auto max-w-3xl mt-2 text-[10px] text-[#a1a1aa] text-center">
+                AI Mentor menghasilkan rekomendasi berdasarkan data evaluasi {startupName}. Selalu verifikasi dengan tim Anda sebelum mengambil keputusan.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AppShell>
+  );
+}

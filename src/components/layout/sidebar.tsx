@@ -48,14 +48,14 @@ export function Sidebar() {
       .then((data) => {
         if (data) setUnreadCount(data.alerts.length);
       })
-      .catch(() => {});
+      .catch(() => { });
 
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.user) setUser(data.user);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, [pathname]);
 
   const handleLogout = async () => {
@@ -69,7 +69,7 @@ export function Sidebar() {
     : allNavItems;
 
   return (
-    <aside 
+    <aside
       className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 text-white"
       style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
     >

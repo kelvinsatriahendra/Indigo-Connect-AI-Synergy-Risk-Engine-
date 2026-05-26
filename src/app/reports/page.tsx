@@ -130,7 +130,7 @@ const mockSubmittedReports = [
 export default function ReportsPage() {
   const reportRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [availableStartups, setAvailableStartups] = useState<Startup[]>([]);
@@ -151,7 +151,7 @@ export default function ReportsPage() {
   const [error, setError] = useState("");
 
   // AI Chat States
-  const [chatMessages, setChatMessages] = useState<{role: 'user'|'ai', content: string}[]>([
+  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'ai', content: string }[]>([
     { role: 'ai', content: 'Halo! Laporan bulan ini sudah saya evaluasi. Ada hal spesifik yang ingin didiskusikan terkait strategi atau rekomendasi sinergi?' }
   ]);
   const [chatInput, setChatInput] = useState("");
@@ -165,15 +165,15 @@ export default function ReportsPage() {
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (!chatInput.trim() || isChatLoading) return;
-    
+
     setChatMessages(prev => [...prev, { role: 'user', content: chatInput }]);
     setChatInput("");
     setIsChatLoading(true);
 
     setTimeout(() => {
-      setChatMessages(prev => [...prev, { 
-        role: 'ai', 
-        content: 'Berdasarkan analisis evaluasi terbaru, saya merekomendasikan untuk menunda ekspansi fitur dan lebih berfokus pada retensi pengguna aktif bulan ini guna menekan burn rate.' 
+      setChatMessages(prev => [...prev, {
+        role: 'ai',
+        content: 'Berdasarkan analisis evaluasi terbaru, saya merekomendasikan untuk menunda ekspansi fitur dan lebih berfokus pada retensi pengguna aktif bulan ini guna menekan burn rate.'
       }]);
       setIsChatLoading(false);
     }, 1500);
@@ -188,14 +188,14 @@ export default function ReportsPage() {
           setUser(data.user);
           let roleStartups = startupsData;
           if (data.user.role === "founder" && data.user.userId) {
-            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"]; 
+            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"];
             roleStartups = startupsData.filter((s) => myIds.includes(s.id));
           } else if (data.user.role === "synergy" && data.user.userId) {
             const mySectors = synergySectorMap[data.user.userId] || [];
             roleStartups = startupsData.filter((s) => mySectors.includes(s.sector));
           }
           setAvailableStartups(roleStartups);
-          
+
           // Auto-select if founder and only 1 startup managed
           if (data.user.role === "founder" && roleStartups.length === 1) {
             setSelectedStartup(roleStartups[0].id);
@@ -240,7 +240,7 @@ export default function ReportsPage() {
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
       if (file.type === "application/pdf") {
@@ -266,22 +266,22 @@ export default function ReportsPage() {
   const parsePdf = async (file: File) => {
     setIsParsingPdf(true);
     setError("");
-    
+
     try {
       const formData = new FormData();
       formData.append("file", file);
-      
+
       const res = await fetch("/api/parse-pdf", {
         method: "POST",
         body: formData,
       });
-      
+
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.error || "Gagal membaca PDF");
       }
-      
+
       if (data.text) {
         setNarrativeText(data.text);
       }
@@ -370,8 +370,8 @@ export default function ReportsPage() {
             <h1 className="text-2xl font-bold text-[#161616]">AI Health Evaluation</h1>
           </div>
           <p className="mt-1 text-sm text-[#667085]">
-            {user?.role === "founder" 
-              ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI" 
+            {user?.role === "founder"
+              ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI"
               : "Review hasil evaluasi laporan bulanan dan usulan sinergi dari mitra startup"}
           </p>
         </div>
@@ -379,365 +379,361 @@ export default function ReportsPage() {
         {/* Scrollable Body */}
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
-        <div className="mx-auto max-w-[1400px]">
-          <div className="flex flex-col lg:flex-row gap-6">
-            
-            {/* Left Column: Form Input & History */}
-            <div className="flex-1 min-w-0 space-y-6">
-              {user?.role === "founder" ? (
-                // FOUNDER VIEW: Form Input
-                <div className="card-legion p-6 lg:p-8">
-                  <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
-                  <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
+          <div className="mx-auto max-w-[1400px]">
+            <div className="flex flex-col lg:flex-row gap-6">
 
-                  <div className="mt-8 space-y-6">
-                    
-                    {/* Dropdown - only shown for non-founders or founders with multiple startups */}
-                    {(!user || user.role !== "founder" || availableStartups.length > 1) && (
-                      <div>
-                        <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
-                        <select
-                          className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                          value={selectedStartup}
-                          onChange={(e) => setSelectedStartup(e.target.value)}
+              {/* Left Column: Form Input & History */}
+              <div className="flex-1 min-w-0 space-y-6">
+                {user?.role === "founder" ? (
+                  // FOUNDER VIEW: Form Input
+                  <div className="card-legion p-6 lg:p-8">
+                    <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
+                    <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
+
+                    <div className="mt-8 space-y-6">
+
+                      {/* Dropdown - only shown for non-founders or founders with multiple startups */}
+                      {(!user || user.role !== "founder" || availableStartups.length > 1) && (
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
+                          <select
+                            className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                            value={selectedStartup}
+                            onChange={(e) => setSelectedStartup(e.target.value)}
+                          >
+                            <option value="">-- Pilih Startup --</option>
+                            {availableStartups.map((s) => (
+                              <option key={s.id} value={s.id}>
+                                {s.name} — {s.sector} ({s.batch})
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+
+                      <div className="pt-2 border-t border-[#f2f4f7]">
+                        <div className="mb-3 flex items-center justify-between">
+                          <label className="block text-sm font-bold text-[#344054]">Narrative Report</label>
+                          <span className="text-xs font-medium text-[#667085]">Upload PDF / Ketik Manual</span>
+                        </div>
+
+                        {/* Drag and Drop Zone */}
+                        <div
+                          className={`mb-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-colors cursor-pointer ${isDragging ? 'border-[#ED1C24] bg-[#FEF2F2]' : 'border-[#e0e0e0] bg-[#f8fafc] hover:bg-[#f1f5f9]'
+                            }`}
+                          onDragOver={handleDragOver}
+                          onDragLeave={handleDragLeave}
+                          onDrop={handleDrop}
+                          onClick={() => fileInputRef.current?.click()}
                         >
-                          <option value="">-- Pilih Startup --</option>
-                          {availableStartups.map((s) => (
-                            <option key={s.id} value={s.id}>
-                              {s.name} — {s.sector} ({s.batch})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
+                          <input
+                            type="file"
+                            accept="application/pdf"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                          />
 
-
-                    <div className="pt-2 border-t border-[#f2f4f7]">
-                      <div className="mb-3 flex items-center justify-between">
-                        <label className="block text-sm font-bold text-[#344054]">Narrative Report</label>
-                        <span className="text-xs font-medium text-[#667085]">Upload PDF / Ketik Manual</span>
-                      </div>
-                      
-                      {/* Drag and Drop Zone */}
-                      <div 
-                        className={`mb-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-colors cursor-pointer ${
-                          isDragging ? 'border-[#ED1C24] bg-[#FEF2F2]' : 'border-[#e0e0e0] bg-[#f8fafc] hover:bg-[#f1f5f9]'
-                        }`}
-                        onDragOver={handleDragOver}
-                        onDragLeave={handleDragLeave}
-                        onDrop={handleDrop}
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        <input
-                          type="file"
-                          accept="application/pdf"
-                          className="hidden"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                        />
-                        
-                        {isParsingPdf ? (
-                          <div className="flex flex-col items-center">
-                            <RefreshCw className="mb-3 h-8 w-8 animate-spin text-[#ED1C24]" />
-                            <p className="text-sm font-bold text-[#344054]">Mengekstrak teks PDF...</p>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col items-center text-center">
-                            <div className="mb-3 rounded-full bg-white shadow-sm ring-1 ring-black/5 p-3">
-                              <Upload className="h-6 w-6 text-[#ED1C24]" />
+                          {isParsingPdf ? (
+                            <div className="flex flex-col items-center">
+                              <RefreshCw className="mb-3 h-8 w-8 animate-spin text-[#ED1C24]" />
+                              <p className="text-sm font-bold text-[#344054]">Mengekstrak teks PDF...</p>
                             </div>
-                            <p className="text-sm font-bold text-[#344054]">Klik atau Drop PDF di sini</p>
-                            <p className="mt-1.5 text-xs font-medium text-[#8c8f93]">Maksimal 10MB (Sistem akan mengekstrak teks otomatis)</p>
-                          </div>
+                          ) : (
+                            <div className="flex flex-col items-center text-center">
+                              <div className="mb-3 rounded-full bg-white shadow-sm ring-1 ring-black/5 p-3">
+                                <Upload className="h-6 w-6 text-[#ED1C24]" />
+                              </div>
+                              <p className="text-sm font-bold text-[#344054]">Klik atau Drop PDF di sini</p>
+                              <p className="mt-1.5 text-xs font-medium text-[#8c8f93]">Maksimal 10MB (Sistem akan mengekstrak teks otomatis)</p>
+                            </div>
+                          )}
+                        </div>
+
+                        <textarea
+                          className="w-full min-h-[220px] rounded-xl border border-[#e0e0e0] bg-white px-5 py-4 text-sm text-[#344054] placeholder:text-[#a1a1aa] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y leading-relaxed"
+                          placeholder="Atau ketik/paste narasi laporan bulanan di sini secara langsung..."
+                          value={narrativeText}
+                          onChange={(e) => setNarrativeText(e.target.value)}
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-4">
+                        <button
+                          onClick={handleEvaluate}
+                          disabled={!selectedStartup || !narrativeText.trim() || loading}
+                          className="btn-primary-solid gap-2 px-8 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-500/20"
+                        >
+                          {loading ? (
+                            <><RefreshCw className="h-4 w-4 animate-spin" /> Sedang Menganalisis...</>
+                          ) : (
+                            <><Send className="h-4 w-4" /> Evaluate with AI</>
+                          )}
+                        </button>
+                        {selectedStartupData && (
+                          <span className="text-xs font-medium text-[#8c8f93]">
+                            Mengevaluasi <strong className="text-[#344054]">{selectedStartupData.name}</strong>
+                          </span>
                         )}
                       </div>
+                    </div>
+                  </div>
+                ) : (
+                  // EXECUTIVE & SYNERGY VIEW: AI Evaluation Explorer List
+                  <div className="card-legion p-6 lg:p-8 animate-fade-in">
+                    <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
+                      <div>
+                        <h2 className="text-lg font-bold text-[#161616]">Daftar Laporan Masuk</h2>
+                        <p className="mt-1 text-sm text-[#667085]">Pilih laporan startup untuk melihat analisis AI mendalam di panel kanan</p>
+                      </div>
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FEF2F2] px-3.5 py-1.5 text-xs font-bold text-[#ED1C24] border border-red-100/50">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#ED1C24] animate-pulse" />
+                        Executive Viewer Mode
+                      </span>
+                    </div>
 
-                      <textarea
-                        className="w-full min-h-[220px] rounded-xl border border-[#e0e0e0] bg-white px-5 py-4 text-sm text-[#344054] placeholder:text-[#a1a1aa] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y leading-relaxed"
-                        placeholder="Atau ketik/paste narasi laporan bulanan di sini secara langsung..."
-                        value={narrativeText}
-                        onChange={(e) => setNarrativeText(e.target.value)}
+                    <div className="space-y-4">
+                      {mockSubmittedReports.map((report) => {
+                        const isActive = selectedReportId === report.id;
+                        const isHigh = report.evaluation.operationalStatus === "ACTIVE";
+                        const statusColor = isHigh
+                          ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                          : "bg-rose-50 text-rose-700 border-rose-100";
+
+                        return (
+                          <div
+                            key={report.id}
+                            onClick={() => {
+                              setSelectedReportId(report.id);
+                              setResult(report.evaluation);
+                            }}
+                            className={`group cursor-pointer rounded-xl border p-5 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${isActive
+                                ? "border-[#ED1C24] bg-red-50/10 shadow-md"
+                                : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
+                              }`}
+                          >
+                            <div className="space-y-1.5">
+                              <div className="flex items-center gap-2.5 flex-wrap">
+                                {(() => {
+                                  const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
+                                  return logo ? (
+                                    <div className="h-6 w-6 shrink-0 rounded bg-white border border-slate-200 overflow-hidden shadow-2xs">
+                                      <img src={logo} alt={report.startupName} className="h-full w-full object-contain p-0.5" />
+                                    </div>
+                                  ) : null;
+                                })()}
+                                <h3 className={`text-base font-extrabold transition-colors ${isActive ? "text-[#ED1C24]" : "text-[#161616] group-hover:text-[#ED1C24]"
+                                  }`}>
+                                  {report.startupName}
+                                </h3>
+                                <span className="text-[10px] font-bold text-[#8c8f93] uppercase bg-[#f2f4f7] px-2 py-0.5 rounded">
+                                  {report.sector} · {report.batch}
+                                </span>
+                              </div>
+                              <p className="text-xs font-bold text-[#344054]">
+                                Periode Laporan: <span className="font-medium text-[#667085]">{report.month}</span>
+                              </p>
+                              <p className="text-xs font-bold text-[#344054] line-clamp-1 leading-relaxed">
+                                Excerpt: <span className="font-medium text-[#8c8f93]">"{report.narrativeText}"</span>
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+                              <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold border ${statusColor}`}>
+                                Health: {report.evaluation.healthScore}%
+                              </span>
+                              <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
+                                <ChevronRight className={`h-4 w-4 text-[#d0d5dd] transition-transform ${isActive ? "text-[#ED1C24] translate-x-0.5" : "group-hover:text-[#ED1C24] group-hover:translate-x-0.5"
+                                  }`} />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Show original narrative box below list when a report is selected (for Executive) */}
+                {user?.role !== "founder" && activeReport && (
+                  <div className="card-legion p-6 lg:p-8 animate-fade-in">
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <FileText className="h-5 w-5 text-[#ED1C24]" />
+                      <h3 className="text-base font-extrabold text-[#161616]">
+                        Detail Laporan Asli: <span className="text-[#ED1C24]">{activeReport.startupName}</span>
+                      </h3>
+                    </div>
+                    <div className="rounded-xl border border-[#e0e0e0] bg-[#f8fafc] p-5 shadow-inner">
+                      <div className="flex items-center justify-between text-xs text-[#8c8f93] mb-3 pb-3 border-b border-[#e0e0e0]/60">
+                        <span>Periode: <strong>{activeReport.month}</strong></span>
+                        <span>Diterima: <strong>{activeReport.submittedDate}</strong></span>
+                      </div>
+                      <p className="text-sm text-[#525252] leading-relaxed whitespace-pre-line font-medium">
+                        "{activeReport.narrativeText}"
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Founder-only block errors and loading */}
+                {user?.role === "founder" && error && (
+                  <div className="card-legion border-red-200 bg-red-50 p-6 flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
+                      <span className="text-red-600 font-bold">!</span>
+                    </div>
+                    <p className="text-sm font-medium text-red-700">{error}</p>
+                  </div>
+                )}
+
+                {user?.role === "founder" && loading && (
+                  <div className="card-legion flex flex-col items-center justify-center py-16">
+                    <div className="mb-5 h-12 w-12 animate-spin rounded-full border-[3px] border-[#ED1C24] border-t-transparent" />
+                    <p className="text-base font-bold text-[#161616]">AI sedang memproses laporan...</p>
+                    <p className="mt-2 text-sm text-[#667085] text-center max-w-sm">Mengekstrak konteks finansial, menganalisis profil risiko, dan mencari potensi sinergi dengan Telkom Group.</p>
+                  </div>
+                )}
+
+                {/* History Container - Sitting beneath the Form (Only for Founders) */}
+                {user?.role === "founder" && (
+                  <div className="card-legion p-6 lg:p-8">
+                    <div className="mb-6 flex items-center gap-3">
+                      <div className="bg-[#fef2f2] p-2.5 rounded-xl">
+                        <History className="h-5 w-5 text-[#ED1C24]" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
+                        <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                      {reportHistory.map((hist, i) => (
+                        <div key={i} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
+                              <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
+                            </div>
+                            <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
+                              <ChevronRight className="h-4 w-4 text-[#d0d5dd] group-hover:text-[#ED1C24] transition-transform group-hover:translate-x-0.5" />
+                            </div>
+                          </div>
+                          <div className="flex items-center justify-between border-t border-[#f2f4f7] pt-3 mt-3">
+                            <span className="text-xs font-bold text-[#667085] uppercase tracking-wider">AI Health Score</span>
+                            <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold shadow-sm ${hist.healthScore >= 80 ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' : 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'}`}>
+                              {hist.healthScore}% · {hist.status}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
+                      Lihat Semua Riwayat
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column: AI Result */}
+              {result && (
+                <div className="w-full lg:w-[480px] shrink-0">
+                  <div className="sticky top-6">
+                    <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
+                      <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
+                      <button onClick={handleDownloadPdf} className="btn-primary-solid gap-2 px-4 py-2 text-xs">
+                        <Download className="h-4 w-4" /> Download PDF
+                      </button>
+                    </div>
+                    <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
+                      <HealthScoreCard
+                        healthScore={result.healthScore}
+                        riskLabel={result.riskLabel}
+                        sentimentScore={result.sentimentScore}
+                        operationalStatus={result.operationalStatus}
+                        summaryPoints={
+                          result.summary
+                            ? [result.summary.point1, result.summary.point2, result.summary.point3]
+                            : undefined
+                        }
+                        synergyMatches={
+                          result.synergy?.matches?.map((m) => {
+                            const bu = telkomBusData.find((b) => b.id === m.buId);
+                            return {
+                              name: bu?.name || m.buId,
+                              reason: m.reason,
+                              score: m.matchScore,
+                            };
+                          }) || undefined
+                        }
                       />
                     </div>
 
-                    <div className="flex items-center gap-3 pt-4">
-                      <button
-                        onClick={handleEvaluate}
-                        disabled={!selectedStartup || !narrativeText.trim() || loading}
-                        className="btn-primary-solid gap-2 px-8 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-500/20"
-                      >
-                        {loading ? (
-                          <><RefreshCw className="h-4 w-4 animate-spin" /> Sedang Menganalisis...</>
-                        ) : (
-                          <><Send className="h-4 w-4" /> Evaluate with AI</>
-                        )}
-                      </button>
-                      {selectedStartupData && (
-                        <span className="text-xs font-medium text-[#8c8f93]">
-                          Mengevaluasi <strong className="text-[#344054]">{selectedStartupData.name}</strong>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                // EXECUTIVE & SYNERGY VIEW: AI Evaluation Explorer List
-                <div className="card-legion p-6 lg:p-8 animate-fade-in">
-                  <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
-                    <div>
-                      <h2 className="text-lg font-bold text-[#161616]">Daftar Laporan Masuk</h2>
-                      <p className="mt-1 text-sm text-[#667085]">Pilih laporan startup untuk melihat analisis AI mendalam di panel kanan</p>
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FEF2F2] px-3.5 py-1.5 text-xs font-bold text-[#ED1C24] border border-red-100/50">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#ED1C24] animate-pulse" />
-                      Executive Viewer Mode
-                    </span>
-                  </div>
-
-                  <div className="space-y-4">
-                    {mockSubmittedReports.map((report) => {
-                      const isActive = selectedReportId === report.id;
-                      const isHigh = report.evaluation.operationalStatus === "ACTIVE";
-                      const statusColor = isHigh 
-                        ? "bg-emerald-50 text-emerald-700 border-emerald-100" 
-                        : "bg-rose-50 text-rose-700 border-rose-100";
-
-                      return (
-                        <div
-                          key={report.id}
-                          onClick={() => {
-                            setSelectedReportId(report.id);
-                            setResult(report.evaluation);
-                          }}
-                          className={`group cursor-pointer rounded-xl border p-5 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
-                            isActive
-                              ? "border-[#ED1C24] bg-red-50/10 shadow-md"
-                              : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
-                          }`}
-                        >
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-2.5 flex-wrap">
-                              {(() => {
-                                const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
-                                return logo ? (
-                                  <div className="h-6 w-6 shrink-0 rounded bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                    <img src={logo} alt={report.startupName} className="h-full w-full object-contain p-0.5" />
-                                  </div>
-                                ) : null;
-                              })()}
-                              <h3 className={`text-base font-extrabold transition-colors ${
-                                isActive ? "text-[#ED1C24]" : "text-[#161616] group-hover:text-[#ED1C24]"
-                              }`}>
-                                {report.startupName}
-                              </h3>
-                              <span className="text-[10px] font-bold text-[#8c8f93] uppercase bg-[#f2f4f7] px-2 py-0.5 rounded">
-                                {report.sector} · {report.batch}
-                              </span>
+                    {/* Interactive AI Mentor Chat (Visible only for founder after evaluation) */}
+                    {user?.role === "founder" && (
+                      <div className="mt-6 shadow-lg shadow-black/5 rounded-2xl border border-[#e0e0e0] bg-white overflow-hidden flex flex-col h-[400px]">
+                        <div className="bg-[#f8fafc] px-5 py-3 border-b border-[#e0e0e0] flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                              <Bot className="h-4 w-4 text-indigo-600" />
                             </div>
-                            <p className="text-xs font-bold text-[#344054]">
-                              Periode Laporan: <span className="font-medium text-[#667085]">{report.month}</span>
-                            </p>
-                            <p className="text-xs font-bold text-[#344054] line-clamp-1 leading-relaxed">
-                              Excerpt: <span className="font-medium text-[#8c8f93]">"{report.narrativeText}"</span>
-                            </p>
-                          </div>
-
-                          <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
-                            <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold border ${statusColor}`}>
-                              Health: {report.evaluation.healthScore}%
-                            </span>
-                            <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
-                              <ChevronRight className={`h-4 w-4 text-[#d0d5dd] transition-transform ${
-                                isActive ? "text-[#ED1C24] translate-x-0.5" : "group-hover:text-[#ED1C24] group-hover:translate-x-0.5"
-                              }`} />
+                            <div>
+                              <h3 className="text-sm font-bold text-[#161616]">Interactive AI Mentor</h3>
+                              <p className="text-[10px] text-[#667085]">Tanyakan strategi berdasarkan evaluasi Anda</p>
                             </div>
                           </div>
+                          <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
 
-              {/* Show original narrative box below list when a report is selected (for Executive) */}
-              {user?.role !== "founder" && activeReport && (
-                <div className="card-legion p-6 lg:p-8 animate-fade-in">
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <FileText className="h-5 w-5 text-[#ED1C24]" />
-                    <h3 className="text-base font-extrabold text-[#161616]">
-                      Detail Laporan Asli: <span className="text-[#ED1C24]">{activeReport.startupName}</span>
-                    </h3>
-                  </div>
-                  <div className="rounded-xl border border-[#e0e0e0] bg-[#f8fafc] p-5 shadow-inner">
-                    <div className="flex items-center justify-between text-xs text-[#8c8f93] mb-3 pb-3 border-b border-[#e0e0e0]/60">
-                      <span>Periode: <strong>{activeReport.month}</strong></span>
-                      <span>Diterima: <strong>{activeReport.submittedDate}</strong></span>
-                    </div>
-                    <p className="text-sm text-[#525252] leading-relaxed whitespace-pre-line font-medium">
-                      "{activeReport.narrativeText}"
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Founder-only block errors and loading */}
-              {user?.role === "founder" && error && (
-                <div className="card-legion border-red-200 bg-red-50 p-6 flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
-                    <span className="text-red-600 font-bold">!</span>
-                  </div>
-                  <p className="text-sm font-medium text-red-700">{error}</p>
-                </div>
-              )}
-
-              {user?.role === "founder" && loading && (
-                <div className="card-legion flex flex-col items-center justify-center py-16">
-                  <div className="mb-5 h-12 w-12 animate-spin rounded-full border-[3px] border-[#ED1C24] border-t-transparent" />
-                  <p className="text-base font-bold text-[#161616]">AI sedang memproses laporan...</p>
-                  <p className="mt-2 text-sm text-[#667085] text-center max-w-sm">Mengekstrak konteks finansial, menganalisis profil risiko, dan mencari potensi sinergi dengan Telkom Group.</p>
-                </div>
-              )}
-
-              {/* History Container - Sitting beneath the Form (Only for Founders) */}
-              {user?.role === "founder" && (
-                <div className="card-legion p-6 lg:p-8">
-                  <div className="mb-6 flex items-center gap-3">
-                    <div className="bg-[#fef2f2] p-2.5 rounded-xl">
-                      <History className="h-5 w-5 text-[#ED1C24]" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
-                      <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
-                    </div>
-                  </div>
-                  
-                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {reportHistory.map((hist, i) => (
-                      <div key={i} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
-                            <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
-                          </div>
-                          <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
-                            <ChevronRight className="h-4 w-4 text-[#d0d5dd] group-hover:text-[#ED1C24] transition-transform group-hover:translate-x-0.5" />
-                          </div>
+                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+                          {chatMessages.map((msg, i) => (
+                            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                              <div className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center ${msg.role === 'user' ? 'bg-[#ED1C24] text-white' : 'bg-indigo-600 text-white'}`}>
+                                {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                              </div>
+                              <div className={`rounded-2xl px-4 py-2.5 text-sm max-w-[80%] ${msg.role === 'user' ? 'bg-[#ED1C24] text-white rounded-tr-none' : 'bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-none shadow-sm'}`}>
+                                {msg.content}
+                              </div>
+                            </div>
+                          ))}
+                          {isChatLoading && (
+                            <div className="flex gap-3">
+                              <div className="h-8 w-8 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center">
+                                <Bot className="h-4 w-4" />
+                              </div>
+                              <div className="rounded-2xl px-4 py-3 bg-white border border-[#e0e0e0] rounded-tl-none shadow-sm flex items-center gap-1.5">
+                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce"></span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                              </div>
+                            </div>
+                          )}
+                          <div ref={chatEndRef} />
                         </div>
-                        <div className="flex items-center justify-between border-t border-[#f2f4f7] pt-3 mt-3">
-                          <span className="text-xs font-bold text-[#667085] uppercase tracking-wider">AI Health Score</span>
-                          <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold shadow-sm ${hist.healthScore >= 80 ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/20' : 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20'}`}>
-                            {hist.healthScore}% · {hist.status}
-                          </span>
-                        </div>
+
+                        <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-[#e0e0e0] flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            placeholder="Tanya rekomendasi spesifik..."
+                            className="flex-1 rounded-full border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2 text-sm text-[#344054] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
+                          />
+                          <button type="submit" disabled={!chatInput.trim() || isChatLoading} className="h-9 w-9 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-50 transition-colors cursor-pointer">
+                            <Send className="h-4 w-4 ml-0.5" />
+                          </button>
+                        </form>
                       </div>
-                    ))}
+                    )}
                   </div>
-                  
-                  <button className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
-                    Lihat Semua Riwayat
-                  </button>
                 </div>
               )}
+
             </div>
-
-            {/* Right Column: AI Result */}
-            {result && (
-              <div className="w-full lg:w-[480px] shrink-0">
-                <div className="sticky top-6">
-                  <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
-                    <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
-                    <button onClick={handleDownloadPdf} className="btn-primary-solid gap-2 px-4 py-2 text-xs">
-                      <Download className="h-4 w-4" /> Download PDF
-                    </button>
-                  </div>
-                  <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
-                    <HealthScoreCard
-                      healthScore={result.healthScore}
-                      riskLabel={result.riskLabel}
-                      sentimentScore={result.sentimentScore}
-                      operationalStatus={result.operationalStatus}
-                      summaryPoints={
-                        result.summary
-                          ? [result.summary.point1, result.summary.point2, result.summary.point3]
-                          : undefined
-                      }
-                      synergyMatches={
-                        result.synergy?.matches?.map((m) => {
-                          const bu = telkomBusData.find((b) => b.id === m.buId);
-                          return {
-                            name: bu?.name || m.buId,
-                            reason: m.reason,
-                            score: m.matchScore,
-                          };
-                        }) || undefined
-                      }
-                    />
-                  </div>
-
-                  {/* Interactive AI Mentor Chat (Visible only for founder after evaluation) */}
-                  {user?.role === "founder" && (
-                    <div className="mt-6 shadow-lg shadow-black/5 rounded-2xl border border-[#e0e0e0] bg-white overflow-hidden flex flex-col h-[400px]">
-                      <div className="bg-[#f8fafc] px-5 py-3 border-b border-[#e0e0e0] flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                            <Bot className="h-4 w-4 text-indigo-600" />
-                          </div>
-                          <div>
-                            <h3 className="text-sm font-bold text-[#161616]">Interactive AI Mentor</h3>
-                            <p className="text-[10px] text-[#667085]">Tanyakan strategi berdasarkan evaluasi Anda</p>
-                          </div>
-                        </div>
-                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      </div>
-                      
-                      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
-                        {chatMessages.map((msg, i) => (
-                          <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                            <div className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center ${msg.role === 'user' ? 'bg-[#ED1C24] text-white' : 'bg-indigo-600 text-white'}`}>
-                              {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                            </div>
-                            <div className={`rounded-2xl px-4 py-2.5 text-sm max-w-[80%] ${msg.role === 'user' ? 'bg-[#ED1C24] text-white rounded-tr-none' : 'bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-none shadow-sm'}`}>
-                              {msg.content}
-                            </div>
-                          </div>
-                        ))}
-                        {isChatLoading && (
-                          <div className="flex gap-3">
-                            <div className="h-8 w-8 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center">
-                              <Bot className="h-4 w-4" />
-                            </div>
-                            <div className="rounded-2xl px-4 py-3 bg-white border border-[#e0e0e0] rounded-tl-none shadow-sm flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce"></span>
-                              <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                              <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                            </div>
-                          </div>
-                        )}
-                        <div ref={chatEndRef} />
-                      </div>
-
-                      <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-[#e0e0e0] flex items-center gap-2">
-                        <input
-                          type="text"
-                          value={chatInput}
-                          onChange={(e) => setChatInput(e.target.value)}
-                          placeholder="Tanya rekomendasi spesifik..."
-                          className="flex-1 rounded-full border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2 text-sm text-[#344054] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
-                        />
-                        <button type="submit" disabled={!chatInput.trim() || isChatLoading} className="h-9 w-9 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-50 transition-colors cursor-pointer">
-                          <Send className="h-4 w-4 ml-0.5" />
-                        </button>
-                      </form>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</AppShell>
+    </AppShell>
   );
 }
