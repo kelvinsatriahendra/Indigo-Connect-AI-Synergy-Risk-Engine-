@@ -1,6 +1,22 @@
 import Link from "next/link";
 import { getSession } from "@/lib/dal";
-import { BarChart3, Shield, GitBranch, FileText, Lightbulb, Activity } from "lucide-react";
+import { GitBranch, FileText, Activity } from "lucide-react";
+
+const PARTNERS = [
+  { name: "MDI Ventures", logo: "/partners/mdi-ventures.jpeg" },
+  { name: "Agate", logo: "/partners/agate.jpeg" },
+  { name: "Angin", logo: "/partners/angin.jpeg" },
+  { name: "DKK Consulting", logo: "/partners/dkk-consulting.jpeg" },
+  { name: "Zoho", logo: "/partners/zoho.jpeg" },
+  { name: "Aruna", logo: "/partners/aruna.png" },
+  { name: "Goers", logo: "/partners/goers.png" },
+  { name: "Klinik Pintar", logo: "/partners/klinik-pintar.png" },
+  { name: "LinkAja", logo: "/partners/linkaja.svg" },
+  { name: "Logee", logo: "/partners/logee.jpg" },
+  { name: "Pijar", logo: "/partners/pijar.webp" },
+  { name: "Privy", logo: "/partners/privy.png" },
+  { name: "Xurya", logo: "/partners/xurya.png" }
+];
 
 export default async function Home() {
   const session = await getSession();
@@ -120,15 +136,25 @@ export default async function Home() {
       </section>
 
       {/* Trusted By Section */}
-      <section className="border-b border-slate-200 bg-white py-10">
-        <div className="mx-auto max-w-5xl px-6 text-center">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Partner Pendukung Program Indigo</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Shield className="h-6 w-6 text-[#ED1C24]" /> MDI Ventures</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Activity className="h-6 w-6 text-[#ED1C24]" /> AGATE</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><Lightbulb className="h-6 w-6 text-[#ED1C24]" /> ANGIN</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><GitBranch className="h-6 w-6 text-[#ED1C24]" /> DKK Consulting</span>
-            <span className="text-xl font-black text-slate-800 flex items-center gap-1.5"><BarChart3 className="h-6 w-6 text-[#ED1C24]" /> ZOHO</span>
+      <section className="border-b border-slate-200 bg-white py-12">
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">
+            Partner Pendukung Program Indigo
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 md:gap-x-16">
+            {PARTNERS.map((partner) => (
+              <div 
+                key={partner.name} 
+                className="group relative flex items-center justify-center h-10 w-28 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300"
+              >
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  title={partner.name}
+                  className="max-h-full max-w-full object-contain filter transition-all duration-300"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
