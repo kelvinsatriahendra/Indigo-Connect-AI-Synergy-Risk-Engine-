@@ -133,7 +133,7 @@ export default async function Home() {
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8">
             Partner Pendukung Program Indigo
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 md:gap-x-16">
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 md:gap-x-8">
             {PARTNERS.map((partner) => (
               <div 
                 key={partner.name} 
