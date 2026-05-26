@@ -7,15 +7,7 @@ const PARTNERS = [
   { name: "Agate", logo: "/partners/agate.jpeg" },
   { name: "Angin", logo: "/partners/angin.jpeg" },
   { name: "DKK Consulting", logo: "/partners/dkk-consulting.jpeg" },
-  { name: "Zoho", logo: "/partners/zoho.jpeg" },
-  { name: "Aruna", logo: "/partners/aruna.png" },
-  { name: "Goers", logo: "/partners/goers.png" },
-  { name: "Klinik Pintar", logo: "/partners/klinik-pintar.png" },
-  { name: "LinkAja", logo: "/partners/linkaja.svg" },
-  { name: "Logee", logo: "/partners/logee.jpg" },
-  { name: "Pijar", logo: "/partners/pijar.webp" },
-  { name: "Privy", logo: "/partners/privy.png" },
-  { name: "Xurya", logo: "/partners/xurya.png" }
+  { name: "Zoho", logo: "/partners/zoho.jpeg" }
 ];
 
 export default async function Home() {
