@@ -34,14 +34,16 @@
     "name": "Antares",
     "description": "Platform IoT untuk industri dan smart city",
     "sector": "IoT",
-    "keywords": ["iot", "smart city", "sensor", "otomatisasi", "industri"]
+    "keywords": ["iot", "smart city", "sensor", "otomatisasi", "industri"],
+    "logo": "/startups/antares.png"
   },
   {
     "id": "bu6",
     "name": "Big Box",
     "description": "Platform penyimpanan cloud untuk enterprise",
     "sector": "Cloud",
-    "keywords": ["cloud", "storage", "enterprise", "dokumen", "kolaborasi"]
+    "keywords": ["cloud", "storage", "enterprise", "dokumen", "kolaborasi"],
+    "logo": "/startups/big box.png"
   },
   {
     "id": "bu7",
