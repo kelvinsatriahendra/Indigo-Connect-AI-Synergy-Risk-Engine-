@@ -473,9 +473,18 @@ export default function ReportsPage() {
                             className={`group relative cursor-pointer overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 transition-all hover:border-[#ED1C24]/50 hover:shadow-xl ${isActive ? "ring-2 ring-[#ED1C24]" : ""}`}
                           >
                             <div className="flex items-center justify-between mb-4">
-                              <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400">
-                                {report.startupName.substring(0, 2).toUpperCase()}
-                              </div>
+                              {(() => {
+                                const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
+                                return logo ? (
+                                  <div className="h-12 w-12 shrink-0 rounded-2xl bg-white border border-slate-100 p-2 shadow-sm">
+                                    <img src={logo} alt={report.startupName} className="h-full w-full object-contain" />
+                                  </div>
+                                ) : (
+                                  <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400">
+                                    {report.startupName.substring(0, 2).toUpperCase()}
+                                  </div>
+                                );
+                              })()}
                               <span className="text-[10px] font-bold text-[#64748b] bg-slate-100 px-2 py-1 rounded-lg">
                                 {report.batch}
                               </span>
