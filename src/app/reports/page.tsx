@@ -335,18 +335,26 @@ export default function ReportsPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
+        {/* Subtle AI Mesh/Pattern Background */}
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
-          <div className="flex items-center gap-3">
-            <FileText className="h-6 w-6 text-[#ED1C24]" />
-            <h1 className="text-2xl font-bold text-[#161616]">AI Health Evaluation</h1>
-          </div>
-          <p className="mt-1 text-sm text-[#667085]">
+        <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <FileText className="h-6 w-6 text-[#ED1C24]" />
+              <div>
+                <h1 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">AI Evaluation Reports</h1>
+                <p className="mt-1 text-sm font-medium text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
+              </div>
+            </div>
+            <p className="mt-1 text-sm text-[#667085]">
             {user?.role === "founder"
               ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI"
               : "Review hasil evaluasi laporan bulanan dan usulan sinergi dari mitra startup"}
           </p>
+          </div>
         </div>
 
         {/* Scrollable Body */}
@@ -392,44 +400,49 @@ export default function ReportsPage() {
                         </div>
 
                         {/* Drag and Drop Zone */}
-                        <div
-                          className={`mb-4 flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 transition-colors cursor-pointer ${isDragging ? 'border-[#ED1C24] bg-[#FEF2F2]' : 'border-[#e0e0e0] bg-[#f8fafc] hover:bg-[#f1f5f9]'
+                        <div className="space-y-5">
+                          <div
+                            className={`group relative flex cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed transition-all duration-300 p-10 ${
+                              isParsingPdf
+                                ? "border-[#ED1C24] bg-red-50/30"
+                                : "border-[#cbd5e1] bg-gradient-to-b from-white to-slate-50 hover:border-[#ff2d55] hover:bg-red-50/10 hover:shadow-lg hover:-translate-y-0.5"
                             }`}
-                          onDragOver={handleDragOver}
-                          onDragLeave={handleDragLeave}
-                          onDrop={handleDrop}
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          <input
-                            type="file"
-                            accept="application/pdf"
-                            className="hidden"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                          />
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}
+                            onClick={() => fileInputRef.current?.click()}
+                          >
+                            <input
+                              type="file"
+                              accept="application/pdf"
+                              className="hidden"
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
+                            />
 
-                          {isParsingPdf ? (
-                            <div className="flex flex-col items-center">
-                              <RefreshCw className="mb-3 h-8 w-8 animate-spin text-[#ED1C24]" />
-                              <p className="text-sm font-bold text-[#344054]">Mengekstrak teks PDF...</p>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center text-center">
-                              <div className="mb-3 rounded-full bg-white shadow-sm ring-1 ring-black/5 p-3">
-                                <Upload className="h-6 w-6 text-[#ED1C24]" />
+                            {isParsingPdf ? (
+                              <div className="flex flex-col items-center z-10">
+                                <RefreshCw className="mb-4 h-10 w-10 animate-spin text-[#ff2d55]" />
+                                <p className="text-base font-extrabold text-[#0f172a]">Mengekstrak teks PDF dengan AI...</p>
                               </div>
-                              <p className="text-sm font-bold text-[#344054]">Klik atau Drop PDF di sini</p>
-                              <p className="mt-1.5 text-xs font-medium text-[#8c8f93]">Maksimal 10MB (Sistem akan mengekstrak teks otomatis)</p>
-                            </div>
-                          )}
-                        </div>
+                            ) : (
+                              <div className="flex flex-col items-center text-center z-10">
+                                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] ring-1 ring-black/5 group-hover:-translate-y-1 transition-transform duration-300">
+                                  <Upload className="h-7 w-7 text-[#ff2d55]" />
+                                </div>
+                                <p className="text-base font-extrabold text-[#0f172a]">Klik atau Drop Laporan PDF di sini</p>
+                                <p className="mt-2 text-xs font-medium text-[#64748b]">Sistem AI akan mengekstrak otomatis. Maksimal 10MB.</p>
+                              </div>
+                            )}
+                          </div>
 
-                        <textarea
-                          className="w-full min-h-[220px] rounded-xl border border-[#e0e0e0] bg-white px-5 py-4 text-sm text-[#344054] placeholder:text-[#a1a1aa] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y leading-relaxed"
-                          placeholder="Atau ketik/paste narasi laporan bulanan di sini secara langsung..."
-                          value={narrativeText}
-                          onChange={(e) => setNarrativeText(e.target.value)}
-                        />
+                          <textarea
+                            className="w-full min-h-[220px] rounded-[20px] border border-slate-200 bg-white px-6 py-5 text-sm text-[#334155] shadow-sm placeholder:text-[#94a3b8] focus:border-[#ff2d55] focus:ring-1 focus:ring-[#ff2d55] resize-y leading-relaxed hover:border-slate-300 transition-colors"
+                            placeholder="Atau ketik/paste narasi laporan bulanan di sini secara langsung..."
+                            value={narrativeText}
+                            onChange={(e) => setNarrativeText(e.target.value)}
+                          />
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-3 pt-4">
@@ -615,8 +628,12 @@ export default function ReportsPage() {
                   <div className="sticky top-6">
                     <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
                       <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
-                      <button onClick={handleDownloadPdf} className="btn-primary-solid gap-2 px-4 py-2 text-xs">
-                        <Download className="h-4 w-4" /> Download PDF
+                      <button 
+                        onClick={handleDownloadPdf}
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,45,85,0.3)] active:translate-y-0"
+                        style={{ background: 'linear-gradient(135deg, #ff2d55 0%, #ff4d6d 100%)', boxShadow: '0 4px 14px rgba(255,45,85,0.2)' }}
+                      >
+                        <Download className="h-4 w-4" /> Export Report PDF
                       </button>
                     </div>
                     <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
