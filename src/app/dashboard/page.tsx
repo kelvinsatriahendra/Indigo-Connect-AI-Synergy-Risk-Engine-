@@ -296,23 +296,34 @@ export default function DashboardPage() {
         {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
             {/* Health Score Distribution - Sleek Progress Cards */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
-              <div>
-                <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Health Score Distribution</h3>
-                <p className="text-xs text-[#8c8f93]">Perbandingan status performa portofolio startup</p>
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+              <div className="flex items-center gap-3 mb-1 relative z-10">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 flex items-center justify-center text-[#ED1C24] shadow-sm">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Health Score Distribution</h3>
+                  <p className="text-xs font-medium text-[#8c8f93]">Perbandingan status performa portofolio</p>
+                </div>
               </div>
-              <div className="mt-6 space-y-6">
+              <div className="mt-8 space-y-7 relative z-10">
                 {healthDistribution.map((item) => (
                   <div key={item.label}>
-                    <div className="mb-2 flex items-center justify-between text-sm">
-                      <span className="font-semibold text-[#344054]">{item.label}</span>
-                      <span className="font-bold text-[#161616]">{item.count} <span className="text-xs text-[#8c8f93] font-normal">({totalStartups > 0 ? Math.round((item.count / totalStartups) * 100) : 0}%)</span></span>
+                    <div className="mb-2.5 flex items-center justify-between text-sm">
+                      <span className="font-bold text-[#344054] flex items-center gap-2">
+                        <span className={`h-2 w-2 rounded-full ${item.color}`} />
+                        {item.label}
+                      </span>
+                      <span className="font-extrabold text-[#161616] bg-slate-50 px-2.5 py-0.5 rounded-md border border-slate-100">{item.count} <span className="text-xs text-[#8c8f93] font-medium ml-1">({totalStartups > 0 ? Math.round((item.count / totalStartups) * 100) : 0}%)</span></span>
                     </div>
-                    <div className="h-3 rounded-full bg-[#f2f4f7] overflow-hidden">
+                    <div className="h-3.5 rounded-full bg-[#f8fafc] overflow-hidden shadow-inner border border-slate-100/50">
                       <div
-                        className={`h-full rounded-full ${item.color} transition-all duration-500`}
+                        className={`h-full rounded-full ${item.color} transition-all duration-1000 ease-out relative overflow-hidden`}
                         style={{ width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%` }}
-                      />
+                      >
+                        <div className="absolute inset-0 bg-white/20 w-full h-full transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -320,10 +331,16 @@ export default function DashboardPage() {
             </div>
 
             {/* Sektor Distribution - Recharts Premium Donut Chart */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
-              <div>
-                <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Sector Distribution</h3>
-                <p className="text-xs text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+              <div className="flex items-center gap-3 mb-1 relative z-10">
+                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                  <Layers className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Sector Distribution</h3>
+                  <p className="text-xs font-medium text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
+                </div>
               </div>
               <div className="mt-4 h-[240px] w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
@@ -366,10 +383,16 @@ export default function DashboardPage() {
 
             {/* Risk Matrix & Synergy Potential Heatmap (Admin Only) */}
             {user?.role === "admin" && (
-              <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2">
-                <div className="mb-4">
-                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Executive Risk Matrix</h3>
-                  <p className="text-xs text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+              <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-bl-[200px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                <div className="flex items-center gap-3 mb-4 relative z-10">
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Executive Risk Matrix</h3>
+                    <p className="text-xs font-medium text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+                  </div>
                 </div>
                 <div className="mt-2 h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
