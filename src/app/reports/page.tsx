@@ -349,17 +349,37 @@ export default function ReportsPage() {
       <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
-        <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-4 shadow-sm relative z-10">
+        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <FileText className="h-6 w-6 text-[#ED1C24]" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <FileText className="h-5 w-5" />
+              </div>
               <div>
-                <h1 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">AI Evaluation Reports</h1>
-                <p className="mt-1 text-sm font-medium text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">AI Evaluation Reports</h1>
+                  {/* AI Analysis Live Badge */}
+                  <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-700">AI Live Evaluation</span>
+                  </div>
+                </div>
+                <p className="mt-0.5 text-sm text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dianalisis</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
+
               {user?.role === "founder" && (
                 <div className="flex items-center gap-3">
                   {availableStartups.length > 1 ? (

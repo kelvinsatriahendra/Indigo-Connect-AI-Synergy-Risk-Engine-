@@ -6,7 +6,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   Area, AreaChart, ReferenceArea
 } from "recharts";
-import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap, Sparkles } from "lucide-react";
+import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap, Sparkles, Activity, LayoutDashboard, CheckCircle2 } from "lucide-react";
 
 type Startup = {
   id: string;
@@ -41,6 +41,31 @@ interface Prediction {
   confidenceScore: number;
   notes: string;
 }
+
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-xl border border-slate-100 bg-white/95 backdrop-blur-md p-4 shadow-lg text-xs">
+        <p className="font-bold text-slate-800 mb-2">{label}</p>
+        <div className="space-y-1.5">
+          {payload.map((entry: any, index: number) => {
+            if (entry.value === null || entry.value === undefined) return null;
+            return (
+              <div key={index} className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color || entry.stroke }} />
+                <span className="text-slate-500 font-medium">{entry.name}:</span>
+                <span className="font-bold text-slate-800">
+                  {entry.name.includes("Revenue") ? `Rp ${entry.value}jt` : entry.name.includes("Growth") ? `${entry.value}%` : entry.value.toLocaleString()}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function ForecastPage() {
   const [mounted, setMounted] = useState(false);
@@ -139,325 +164,342 @@ export default function ForecastPage() {
     : [];
 
   const getConfidenceColor = (score: number) => {
-    if (score >= 0.8) return "text-emerald-600 bg-emerald-50";
-    if (score >= 0.5) return "text-amber-600 bg-amber-50";
-    return "text-red-600 bg-red-50";
+    if (score >= 0.8) return "text-emerald-600 bg-emerald-50 border-emerald-100";
+    if (score >= 0.5) return "text-amber-600 bg-amber-50 border-amber-100";
+    return "text-red-600 bg-red-50 border-red-100";
   };
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-4 shadow-sm relative z-10 flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <div className="flex items-center gap-3">
-              <BarChart3 className="h-6 w-6 text-[#ED1C24]" />
-              <h1 className="text-2xl font-bold text-[#161616]">Forecasting</h1>
+        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10 flex items-center justify-between flex-wrap gap-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+              <BarChart3 className="h-5 w-5" />
             </div>
-            <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
+            <div>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">Forecasting</h1>
+                {/* AI Analysis Live Badge */}
+                <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[10px] font-bold text-emerald-700">AI Live Projection</span>
+                </div>
+              </div>
+              <p className="mt-0.5 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
+            </div>
           </div>
           
-          {/* Controls in Header */}
-          {(user?.role !== "founder" || availableStartups.length > 1) && (
-            <div className="flex items-center gap-3">
-              {availableStartups.length > 1 ? (
-                <select
-                  value={selectedStartup}
-                  onChange={(e) => setSelectedStartup(e.target.value)}
-                  className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
-                >
-                  <option value="">-- Pilih Startup --</option>
-                  {availableStartups.map((s) => (
-                    <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
-                  ))}
-                </select>
-              ) : (
-                availableStartups.length === 1 && (
-                  <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] px-3 py-1.5 flex items-center gap-2">
-                    <p className="text-sm font-bold text-[#0f172a]">{availableStartups[0].name}</p>
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                      ✓ Terverifikasi
-                    </span>
-                  </div>
-                )
-              )}
-              <button
-                onClick={handleForecast}
-                disabled={!selectedStartup || loading}
-                className="btn-primary-solid gap-2 px-5 py-2 text-sm disabled:opacity-50"
-              >
-                {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
-              </button>
+          <div className="flex items-center gap-4">
+            {/* Timestamp */}
+            <div className="hidden lg:block text-right">
+              <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir diproyeksikan</p>
+              <p className="text-xs font-bold text-[#344054]">
+                {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+              </p>
             </div>
-          )}
+
+            {/* Controls in Header */}
+            {(user?.role !== "founder" || availableStartups.length > 1) && (
+              <div className="flex items-center gap-3">
+                {availableStartups.length > 1 ? (
+                  <select
+                    value={selectedStartup}
+                    onChange={(e) => setSelectedStartup(e.target.value)}
+                    className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                  >
+                    <option value="">-- Pilih Startup --</option>
+                    {availableStartups.map((s) => (
+                      <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
+                    ))}
+                  </select>
+                ) : (
+                  availableStartups.length === 1 && (
+                    <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] px-3 py-1.5 flex items-center gap-2">
+                      <p className="text-sm font-bold text-[#0f172a]">{availableStartups[0].name}</p>
+                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                        ✓ Terverifikasi
+                      </span>
+                    </div>
+                  )
+                )}
+                <button
+                  onClick={handleForecast}
+                  disabled={!selectedStartup || loading}
+                  className="btn-primary-solid gap-2 px-5 py-2 text-sm disabled:opacity-50"
+                >
+                  {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Scrollable Body */}
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
+          <div className="mx-auto max-w-[1400px]">
+            <div className="flex flex-col gap-6">
+              
+              {/* Top Main Content */}
+              <div className="w-full min-w-0">
 
-        <div className="mx-auto max-w-[1400px]">
-          <div className="flex flex-col gap-6">
-            
-            {/* Top Main Content */}
-            <div className="w-full min-w-0">
-
-          {error && (
-            <div className="rounded-[20px] bg-red-50 shadow-soft border border-red-200 mb-6 p-6">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          )}
-
-          {loading && (
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-20">
-              <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
-              <p className="text-sm font-medium text-[#344054]">AI sedang memproyeksikan data...</p>
-              <p className="mt-1 text-xs text-[#8c8f93]">Menganalisis tren historis 6 bulan terakhir</p>
-            </div>
-          )}
-
-          {data && (
-            <>
-              {/* Prediction Cards */}
-              <div className="mb-6 grid gap-5 sm:grid-cols-3">
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
-                  <div className="flex items-center gap-3 relative z-10">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 text-emerald-600 shadow-sm">
-                      <TrendingUp className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-[#8c8f93]">Predicted Growth</p>
-                      <p className="text-xl font-extrabold text-[#161616]">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
-                    </div>
+                {error && (
+                  <div className="rounded-2xl bg-red-50 border border-red-200 mb-6 p-6 shadow-sm">
+                    <p className="text-sm text-red-700 font-medium">{error}</p>
                   </div>
-                </div>
+                )}
 
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
-                  <div className="flex items-center gap-3 relative z-10">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 text-blue-600 shadow-sm">
-                      <Shield className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-[#8c8f93]">Runway Estimate</p>
-                      <p className="text-xl font-extrabold text-[#161616]">{data.prediction.predictedRunwayMonths} bulan</p>
-                    </div>
+                {loading && (
+                  <div className="rounded-2xl bg-white border border-[#f1f1f5] shadow-sm flex flex-col items-center justify-center py-20">
+                    <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
+                    <p className="text-sm font-bold text-[#344054]">AI sedang memproyeksikan data...</p>
+                    <p className="mt-1 text-xs text-[#8c8f93]">Menganalisis tren historis 6 bulan terakhir</p>
                   </div>
-                </div>
+                )}
 
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
-                  <div className="flex items-center gap-3 relative z-10">
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-sm border ${getConfidenceColor(data.prediction.confidenceScore)}`}>
-                      <Lightbulb className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-[#8c8f93]">Confidence</p>
-                      <p className="text-xl font-extrabold text-[#161616]">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Charts Container */}
-              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
-                
-                {/* Revenue & Users Chart */}
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                  <h3 className="text-base font-bold text-[#161616] mb-1">Revenue & Users — Historical + Projected</h3>
-                  <p className="text-xs text-[#667085] mb-6">6 bulan historis + 3 bulan prediksi AI</p>
-                  <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
-                    <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#667085" }} />
-                    <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12, fill: "#667085" }} />
-                    {data && <ReferenceArea x1={data.historicalData[data.historicalData.length - 1].period} x2={data.projectedData[data.projectedData.length - 1].period} fill="#ED1C24" fillOpacity={0.03} />}
-                    <Tooltip
-                      contentStyle={{ borderRadius: "12px", border: "1px solid #e0e0e0", fontSize: "13px" }}
-                    />
-                    <Line
-                      yAxisId="left"
-                      type="monotone"
-                      dataKey="Revenue"
-                      stroke="#ED1C24"
-                      strokeWidth={2}
-                      dot={{ r: 4, fill: "#ED1C24" }}
-                      connectNulls
-                      activeDot={{ r: 6 }}
-                    />
-                    <Line
-                      yAxisId="left"
-                      type="monotone"
-                      dataKey="ProjectedRevenue"
-                      stroke="#ED1C24"
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      dot={{ r: 4, fill: "#fff", stroke: "#ED1C24", strokeWidth: 2 }}
-                      connectNulls
-                      activeDot={{ r: 6 }}
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="Users"
-                      stroke="#f59e0b"
-                      strokeWidth={2}
-                      dot={{ r: 4, fill: "#f59e0b" }}
-                      connectNulls
-                      activeDot={{ r: 6 }}
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="ProjectedUsers"
-                      stroke="#f59e0b"
-                      strokeWidth={2}
-                      strokeDasharray="5 5"
-                      dot={{ r: 4, fill: "#fff", stroke: "#f59e0b", strokeWidth: 2 }}
-                      connectNulls
-                      activeDot={{ r: 6 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-                <div className="mt-auto pt-3 flex items-center gap-4 text-xs text-[#8c8f93]">
-                  <span className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#ED1C24]" /> Revenue (juta)
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" /> Users (ribu)
-                  </span>
-                  <span className="ml-auto flex items-center gap-1 text-red-500 font-medium">
-                    <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-red-500 mr-1" /> Projected
-                  </span>
-                </div>
-                {/* Projected Label Overlay */}
-                <div className="absolute top-[80px] right-[25%] pointer-events-none opacity-50">
-                  <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-1 rounded">Projected</span>
-                </div>
-                </div>
-
-                {/* Growth Rate Chart */}
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                  <h3 className="text-base font-bold text-[#161616] mb-1">Growth Rate Trend</h3>
-                  <p className="text-xs text-[#667085] mb-6">Persentase pertumbuhan bulanan</p>
-                  <ResponsiveContainer width="100%" height={350}>
-                  <AreaChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
-                    <YAxis tick={{ fontSize: 12, fill: "#667085" }} domain={['auto', 'auto']} />
-                    <Tooltip
-                      contentStyle={{ borderRadius: "12px", border: "1px solid #e0e0e0", fontSize: "13px" }}
-                      formatter={(value) => [`${value}%`, "Growth"]}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="Growth"
-                      stroke={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"}
-                      strokeWidth={2}
-                      fill="url(#growthGradient)"
-                    />
-                    <defs>
-                      <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0.2} />
-                        <stop offset="95%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                  </AreaChart>
-                </ResponsiveContainer>
-                </div>
-              </div>
-
-              {/* AI Notes */}
-              <div className="rounded-[20px] bg-gradient-to-r from-red-50/50 to-orange-50/50 shadow-soft border border-red-100 p-6 relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div className="absolute -right-10 -top-10 text-red-100 opacity-50 transform rotate-12 group-hover:rotate-45 transition-transform duration-1000">
-                  <Sparkles className="h-40 w-40" />
-                </div>
-                <div className="flex items-start gap-4 relative z-10">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm border border-red-100">
-                    <Lightbulb className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Analysis</h3>
-                    <p className="mt-2 text-sm text-[#525252] leading-relaxed">{data.prediction.notes}</p>
-                    <p className="mt-3 text-[11px] font-semibold text-[#8c8f93] tracking-wider uppercase">Generated by AI · Google Gemini 2.0 Flash</p>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          {!data && !loading && (
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-20 w-full">
-              <BarChart3 className="mb-3 h-12 w-12 text-[#d0d5dd]" />
-              <p className="text-sm font-medium text-[#667085]">Pilih startup dan klik &quot;Generate Forecast&quot;</p>
-              <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
-            </div>
-          )}
-          </div> {/* End Top Main Content */}
-
-          {/* Bottom Section: Detailed Projections */}
-          {data && (
-            <div className="w-full mt-2">
-              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6">
-                <div className="mb-6 flex items-center justify-between">
-                  <div>
-                    <h3 className="text-base font-bold text-[#161616]">Detailed Projections</h3>
-                    <p className="text-xs text-[#667085] mt-1">Estimasi periodik AI</p>
-                  </div>
-                  <span className="text-[10px] font-bold text-[#ED1C24] bg-[#FEF2F2] px-2.5 py-1 rounded-md border border-[#ED1C24]/20">
-                    {data.projectedData.length} mo forecast
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {[...data.historicalData, ...data.projectedData].map((p, i) => {
-                    const isProj = i >= data.historicalData.length;
-                    return (
-                      <div 
-                        key={i} 
-                        className={`rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${isProj ? 'border-white/10 text-white hover:border-[#ED1C24]/30 hover:shadow-purple-500/5' : 'border-[#e0e0e0] bg-white text-[#161616]'}`}
-                        style={isProj ? { background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' } : undefined}
-                      >
-                        <div className="mb-3 flex items-center justify-between">
-                          <span className={`text-sm font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.period}</span>
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isProj ? "bg-[#ED1C24] text-white shadow-sm shadow-red-200" : "bg-[#f2f4f7] text-[#667085]"}`}>
-                            {isProj ? "Projected" : "Historical"}
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-y-4 gap-x-3 text-sm">
-                          <div>
-                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Revenue</p>
-                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.revenue}jt</p>
+                {data && (
+                  <>
+                    {/* Prediction Cards */}
+                    <div className="mb-6 grid gap-5 sm:grid-cols-3">
+                      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 shadow-sm">
+                            <TrendingUp className="h-6 w-6" />
                           </div>
                           <div>
-                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Users</p>
-                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.users.toLocaleString()}</p>
-                          </div>
-                          <div>
-                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Growth</p>
-                            <p className={`font-bold flex items-center gap-1 ${p.growth >= 0 ? (isProj ? 'text-emerald-400' : 'text-emerald-600') : (isProj ? 'text-rose-400' : 'text-red-600')}`}>
-                              {p.growth > 0 ? '+' : ''}{p.growth}%
-                            </p>
-                          </div>
-                          <div>
-                            <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Burn Rate</p>
-                            <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.burnRate}jt</p>
+                            <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Predicted Growth</p>
+                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
+                            <p className="text-[10px] font-medium text-emerald-600 mt-0.5">Proyeksi rata-rata 3 bulan</p>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
 
+                      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50/50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-50 border border-blue-100 text-blue-600 shadow-sm">
+                            <Shield className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Runway Estimate</p>
+                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{data.prediction.predictedRunwayMonths} bulan</p>
+                            <p className="text-[10px] font-medium text-blue-600 mt-0.5">Berdasarkan sisa kas & burn rate</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-24 h-24 bg-red-50/50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                        <div className="flex items-center gap-4 relative z-10">
+                          <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-sm border ${getConfidenceColor(data.prediction.confidenceScore)}`}>
+                            <Lightbulb className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Confidence Score</p>
+                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
+                            <p className="text-[10px] font-medium text-slate-500 mt-0.5">Ketepatan analisis data AI</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Charts Container */}
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+                      
+                      {/* Revenue & Users Chart */}
+                      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 flex flex-col hover:shadow-md transition-all duration-300">
+                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Revenue & Users — Historical + Projected</h3>
+                        <p className="text-xs text-[#667085] mt-1 mb-6">6 bulan historis + 3 bulan prediksi AI</p>
+                        <ResponsiveContainer width="100%" height={350}>
+                          <LineChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                            <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
+                            <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#667085" }} />
+                            <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12, fill: "#667085" }} />
+                            {data && <ReferenceArea x1={data.historicalData[data.historicalData.length - 1].period} x2={data.projectedData[data.projectedData.length - 1].period} fill="#ED1C24" fillOpacity={0.03} />}
+                            <Tooltip content={<CustomTooltip />} />
+                            <Line
+                              yAxisId="left"
+                              type="monotone"
+                              dataKey="Revenue"
+                              stroke="#ED1C24"
+                              strokeWidth={3}
+                              dot={{ r: 4, fill: "#ED1C24", strokeWidth: 0 }}
+                              connectNulls
+                              activeDot={{ r: 6 }}
+                            />
+                            <Line
+                              yAxisId="left"
+                              type="monotone"
+                              dataKey="ProjectedRevenue"
+                              stroke="#ED1C24"
+                              strokeWidth={3}
+                              strokeDasharray="5 5"
+                              dot={{ r: 4, fill: "#fff", stroke: "#ED1C24", strokeWidth: 2 }}
+                              connectNulls
+                              activeDot={{ r: 6 }}
+                            />
+                            <Line
+                              yAxisId="right"
+                              type="monotone"
+                              dataKey="Users"
+                              stroke="#f59e0b"
+                              strokeWidth={3}
+                              dot={{ r: 4, fill: "#f59e0b", strokeWidth: 0 }}
+                              connectNulls
+                              activeDot={{ r: 6 }}
+                            />
+                            <Line
+                              yAxisId="right"
+                              type="monotone"
+                              dataKey="ProjectedUsers"
+                              stroke="#f59e0b"
+                              strokeWidth={3}
+                              strokeDasharray="5 5"
+                              dot={{ r: 4, fill: "#fff", stroke: "#f59e0b", strokeWidth: 2 }}
+                              connectNulls
+                              activeDot={{ r: 6 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
+                        <div className="mt-auto pt-3 flex items-center gap-4 text-xs text-[#8c8f93]">
+                          <span className="flex items-center gap-1.5 font-medium">
+                            <span className="h-2.5 w-2.5 rounded-full bg-[#ED1C24]" /> Revenue (juta)
+                          </span>
+                          <span className="flex items-center gap-1.5 font-medium">
+                            <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" /> Users (ribu)
+                          </span>
+                          <span className="ml-auto flex items-center gap-1 text-red-500 font-bold">
+                            <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-red-500 mr-1" /> Projected
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Growth Rate Chart */}
+                      <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 flex flex-col hover:shadow-md transition-all duration-300">
+                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Growth Rate Trend</h3>
+                        <p className="text-xs text-[#667085] mt-1 mb-6">Persentase pertumbuhan bulanan</p>
+                        <ResponsiveContainer width="100%" height={350}>
+                          <AreaChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                            <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
+                            <YAxis tick={{ fontSize: 12, fill: "#667085" }} domain={['auto', 'auto']} />
+                            <Tooltip content={<CustomTooltip />} />
+                            <Area
+                              type="monotone"
+                              dataKey="Growth"
+                              stroke={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"}
+                              strokeWidth={3}
+                              fill="url(#growthGradient)"
+                            />
+                            <defs>
+                              <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0.2} />
+                                <stop offset="95%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0} />
+                              </linearGradient>
+                            </defs>
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* AI Notes */}
+                    <div className="rounded-2xl bg-gradient-to-r from-red-50/50 to-orange-50/50 border border-red-100 p-6 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                      <div className="absolute -right-10 -top-10 text-red-100 opacity-50 transform rotate-12 group-hover:rotate-45 transition-transform duration-1000">
+                        <Sparkles className="h-40 w-40" />
+                      </div>
+                      <div className="flex items-start gap-4 relative z-10">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm border border-red-100">
+                          <Lightbulb className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Recommendation & Analysis</h3>
+                          <p className="mt-2 text-sm text-[#525252] leading-relaxed">{data.prediction.notes}</p>
+                          <p className="mt-3 text-[10px] font-bold text-[#8c8f93] tracking-wider uppercase">Generated by AI · Google Gemini 2.0 Flash</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {!data && !loading && (
+                  <div className="rounded-2xl bg-white border border-[#f1f1f5] shadow-sm flex flex-col items-center justify-center py-20 w-full">
+                    <BarChart3 className="mb-3 h-12 w-12 text-[#d0d5dd]" />
+                    <p className="text-sm font-bold text-[#667085]">Pilih startup dan klik &quot;Generate Forecast&quot;</p>
+                    <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
+                  </div>
+                )}
+              </div> {/* End Top Main Content */}
+
+              {/* Bottom Section: Detailed Projections */}
+              {data && (
+                <div className="w-full mt-2">
+                  <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6">
+                    <div className="mb-6 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Detailed Projections</h3>
+                        <p className="text-xs text-[#667085] mt-1">Estimasi periodik AI</p>
+                      </div>
+                      <span className="text-[10px] font-bold text-[#ED1C24] bg-[#FEF2F2] px-2.5 py-1 rounded-md border border-[#ED1C24]/20 uppercase tracking-wider">
+                        {data.projectedData.length} mo forecast
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                      {[...data.historicalData, ...data.projectedData].map((p, i) => {
+                        const isProj = i >= data.historicalData.length;
+                        return (
+                          <div 
+                            key={i} 
+                            className={`rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${isProj ? 'border-white/10 text-white hover:border-[#ED1C24]/30 hover:shadow-purple-500/5' : 'border-[#e0e0e0] bg-white text-[#161616]'}`}
+                            style={isProj ? { background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' } : undefined}
+                          >
+                            <div className="mb-3 flex items-center justify-between">
+                              <span className={`text-sm font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.period}</span>
+                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${isProj ? "bg-[#ED1C24] text-white shadow-sm shadow-red-200" : "bg-[#f2f4f7] text-[#667085]"}`}>
+                                {isProj ? "Projected" : "Historical"}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-y-4 gap-x-3 text-sm">
+                              <div>
+                                <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Revenue</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.revenue}jt</p>
+                              </div>
+                              <div>
+                                <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Users</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.users.toLocaleString()}</p>
+                              </div>
+                              <div>
+                                <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Growth</p>
+                                <p className={`font-bold flex items-center gap-1 ${p.growth >= 0 ? (isProj ? 'text-emerald-400' : 'text-emerald-600') : (isProj ? 'text-rose-400' : 'text-red-600')}`}>
+                                  {p.growth > 0 ? '+' : ''}{p.growth}%
+                                </p>
+                              </div>
+                              <div>
+                                <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Burn Rate</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.burnRate}jt</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</AppShell>
+    </AppShell>
   );
 }
