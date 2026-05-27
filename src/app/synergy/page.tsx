@@ -157,22 +157,50 @@ export default function SynergyPage() {
     }
   };
 
-  const simulateAIMatchmaking = () => {
+  const handleAIMatchmaking = async () => {
+    if (!formRef.current) return;
+    const startupInput = formRef.current.elements.namedItem("startupId") as HTMLSelectElement;
+    const selectedStartupId = startupInput.value;
+
+    if (!selectedStartupId) {
+      alert("Silakan pilih Startup Partner terlebih dahulu agar AI dapat menganalisis profilnya.");
+      return;
+    }
+
+    const startup = startupsData.find(s => s.id === selectedStartupId);
+    if (!startup) return;
+
     setIsSimulatingAI(true);
-    setTimeout(() => {
-      setIsSimulatingAI(false);
-      if (formRef.current) {
-        const startupInput = formRef.current.elements.namedItem("startupId") as HTMLSelectElement;
+    try {
+      const res = await fetch("/api/ai/synergy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ narrativeText: startup.description }),
+      });
+      
+      if (!res.ok) throw new Error("Gagal mengambil data AI");
+      
+      const data = await res.json();
+      const bestMatch = data.matches?.[0];
+      
+      if (bestMatch) {
         const buInput = formRef.current.elements.namedItem("telkomBuId") as HTMLSelectElement;
         const scoreInput = formRef.current.elements.namedItem("matchScore") as HTMLInputElement;
         const reasonInput = formRef.current.elements.namedItem("reason") as HTMLTextAreaElement;
 
-        if (startupInput) startupInput.value = "s3"; // Verihubs
-        if (buInput) buInput.value = "bu1"; // Telkomsel
-        if (scoreInput) scoreInput.value = "92";
-        if (reasonInput) reasonInput.value = "AI Recommendation: Model bisnis B2B Identity Verification dari Verihubs memiliki tingkat kecocokan strategis yang sangat tinggi dengan ekosistem pelanggan enterprise Telkomsel. Direkomendasikan untuk integrasi API keamanan.";
+        if (buInput) buInput.value = bestMatch.buId;
+        // The mock returned 0.92, so we multiply by 100
+        if (scoreInput) scoreInput.value = Math.round(bestMatch.matchScore * 100).toString();
+        if (reasonInput) reasonInput.value = `AI Recommendation: ${bestMatch.reason}`;
+      } else {
+        alert("AI tidak menemukan kecocokan yang signifikan.");
       }
-    }, 1500);
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat menghubungi AI Synergy Matcher.");
+    } finally {
+      setIsSimulatingAI(false);
+    }
   };
 
   const getStartupName = (id: string) => startupsData.find((s) => s.id === id)?.name || id;
@@ -500,7 +528,7 @@ export default function SynergyPage() {
                   </div>
                   <button 
                     type="button" 
-                    onClick={simulateAIMatchmaking}
+                    onClick={handleAIMatchmaking}
                     disabled={isSimulatingAI}
                     className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 shadow-md shadow-indigo-600/20"
                   >
