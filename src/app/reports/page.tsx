@@ -136,6 +136,7 @@ export default function ReportsPage() {
   const [availableStartups, setAvailableStartups] = useState<Startup[]>([]);
   const [selectedStartup, setSelectedStartup] = useState<string>("");
   const [selectedReportId, setSelectedReportId] = useState("r1");
+  const [showOriginalReportId, setShowOriginalReportId] = useState<string | null>(null);
   const [narrativeText, setNarrativeText] = useState("");
   const [loading, setLoading] = useState(false);
   const [isParsingPdf, setIsParsingPdf] = useState(false);
@@ -530,15 +531,40 @@ export default function ReportsPage() {
 
                             </div>
 
-                            <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
-                              <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold border ${statusColor}`}>
-                                Health: {report.evaluation.healthScore}%
-                              </span>
-                              <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
-                                <ChevronRight className={`h-4 w-4 text-[#d0d5dd] transition-transform ${isActive ? "text-[#ED1C24] translate-x-0.5" : "group-hover:text-[#ED1C24] group-hover:translate-x-0.5"
-                                  }`} />
+                            <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto w-full justify-between mt-2 pt-2 border-t border-[#f2f4f7]">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setShowOriginalReportId(prev => prev === report.id ? null : report.id);
+                                }}
+                                className="text-xs font-bold text-[#667085] hover:text-[#ED1C24] transition-colors flex items-center gap-1"
+                              >
+                                {showOriginalReportId === report.id ? "Tutup Laporan" : "Lihat Laporan Asli"}
+                              </button>
+                              <div className="flex items-center gap-3">
+                                <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold border ${statusColor}`}>
+                                  Health: {report.evaluation.healthScore}%
+                                </span>
+                                <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
+                                  <ChevronRight className={`h-4 w-4 text-[#d0d5dd] transition-transform ${isActive ? "text-[#ED1C24] translate-x-0.5" : "group-hover:text-[#ED1C24] group-hover:translate-x-0.5"
+                                    }`} />
+                                </div>
                               </div>
                             </div>
+
+                            {/* Expanded Original Report */}
+                            {showOriginalReportId === report.id && (
+                              <div 
+                                className="mt-2 rounded-xl border border-dashed border-[#e0e0e0] bg-[#f8fafc] p-4 text-xs text-[#525252] leading-relaxed animate-fade-in font-medium whitespace-pre-line cursor-default" 
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#e0e0e0]/60">
+                                  <FileText className="h-3.5 w-3.5 text-[#ED1C24]" />
+                                  <span className="font-bold text-[#161616]">Detail Narasi Laporan Asli</span>
+                                </div>
+                                "{report.narrativeText}"
+                              </div>
+                            )}
                           </div>
                         );
                       })}
@@ -546,26 +572,6 @@ export default function ReportsPage() {
                   </div>
                 )}
 
-                {/* Show original narrative box below list when a report is selected (for Executive) */}
-                {user?.role !== "founder" && activeReport && (
-                  <div className="card-legion p-6 lg:p-8 animate-fade-in">
-                    <div className="flex items-center gap-2.5 mb-4">
-                      <FileText className="h-5 w-5 text-[#ED1C24]" />
-                      <h3 className="text-base font-extrabold text-[#161616]">
-                        Detail Laporan Asli: <span className="text-[#ED1C24]">{activeReport.startupName}</span>
-                      </h3>
-                    </div>
-                    <div className="rounded-xl border border-[#e0e0e0] bg-[#f8fafc] p-5 shadow-inner">
-                      <div className="flex items-center justify-between text-xs text-[#8c8f93] mb-3 pb-3 border-b border-[#e0e0e0]/60">
-                        <span>Periode: <strong>{activeReport.month}</strong></span>
-                        <span>Diterima: <strong>{activeReport.submittedDate}</strong></span>
-                      </div>
-                      <p className="text-sm text-[#525252] leading-relaxed whitespace-pre-line font-medium">
-                        "{activeReport.narrativeText}"
-                      </p>
-                    </div>
-                  </div>
-                )}
 
                 {/* Founder-only block errors and loading */}
                 {user?.role === "founder" && error && (
