@@ -70,7 +70,7 @@ export function HealthScoreCard({
             <span className={`${risk.badge} px-3 py-1 text-xs shadow-sm ring-1 ring-inset ring-black/5`}>{risk.label}</span>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-10 mt-auto">
+          <div className="flex flex-col items-center gap-8 mt-auto pt-4">
             {/* Radial Gauge as Focal Point */}
             <div className="shrink-0 relative">
               <div className="absolute inset-0 bg-red-500/5 blur-3xl rounded-full"></div>
@@ -78,18 +78,32 @@ export function HealthScoreCard({
             </div>
 
             {/* Metrics */}
-            <div className="flex-1 w-full grid grid-cols-2 gap-4">
+            <div className="w-full grid grid-cols-2 gap-4">
               {sentimentScore !== undefined && (
-                <div className="rounded-[16px] bg-white border border-slate-100 p-5 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-xs font-bold text-[#64748b] mb-1 uppercase tracking-wider">AI Sentiment Score</p>
-                  <p className="text-2xl font-extrabold text-[#0f172a]">{(sentimentScore * 100).toFixed(0)}%</p>
-                  <p className="text-[10px] text-[#94a3b8] mt-1">Based on narrative tone</p>
+                <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`h-2 w-2 rounded-full ${sentimentScore >= 0.7 ? 'bg-emerald-500' : sentimentScore >= 0.4 ? 'bg-amber-500' : 'bg-red-500'}`}></div>
+                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <p className={`text-2xl font-extrabold ${sentimentScore >= 0.7 ? 'text-emerald-600' : sentimentScore >= 0.4 ? 'text-amber-600' : 'text-red-600'}`}>
+                      {(sentimentScore * 100).toFixed(0)}%
+                    </p>
+                    <p className="text-xs font-semibold text-[#94a3b8] mb-1">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
+                  </div>
                 </div>
               )}
               {operationalStatus && (
-                <div className="rounded-[16px] bg-white border border-slate-100 p-5 shadow-sm hover:shadow-md transition-shadow">
-                  <p className="text-xs font-bold text-[#64748b] mb-1 uppercase tracking-wider">Operational Status</p>
-                  <p className="text-lg font-extrabold text-[#0f172a] mt-1">{operationalStatus}</p>
+                <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className={`h-2 w-2 rounded-full ${operationalStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
+                  </div>
+                  <div>
+                    <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-extrabold border ${operationalStatus === 'ACTIVE' ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : 'text-red-700 bg-red-50 border-red-100'}`}>
+                      {operationalStatus.replace('_', ' ')}
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
