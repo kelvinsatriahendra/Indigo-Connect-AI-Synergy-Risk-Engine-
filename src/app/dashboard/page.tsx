@@ -437,9 +437,77 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Founder gets a quick action section instead of charts */}
+        {/* Founder gets a custom hero card and quick actions */}
         {user?.role === "founder" && mounted && (
           <div className="mb-8 space-y-6">
+            
+            {/* FOUNDER'S STARTUP HERO CARD */}
+            {filteredStartups.map(startup => {
+              const isHigh = startup.status === "ACTIVE";
+              const healthScore = isHigh ? 92 : 45;
+              const healthLabel = isHigh ? "Excellent" : "Critical Risk";
+              const healthColor = isHigh ? "text-emerald-600 bg-emerald-50 border-emerald-200" : "text-rose-600 bg-rose-50 border-rose-200";
+              const healthProgressColor = isHigh ? "bg-emerald-500" : "bg-rose-500";
+              
+              return (
+                <div key={`hero-${startup.id}`} className="card-legion overflow-hidden relative group hover:border-[#ED1C24]/30 hover:shadow-xl transition-all duration-300">
+                  <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${sectorColors[startup.sector] || "bg-slate-400"}`} />
+                  <div className="p-6 pl-8 flex flex-col lg:flex-row items-start lg:items-center gap-8">
+                    
+                    {/* Company Info */}
+                    <div className="flex-1 min-w-0 flex items-start gap-5">
+                      {startup && (startup as any).logo && (
+                        <div className="h-16 w-16 shrink-0 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-sm p-1">
+                          <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain" />
+                        </div>
+                      )}
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <h2 className="text-2xl font-extrabold text-[#161616] tracking-tight">{startup.name}</h2>
+                          <span className={isHigh ? "badge-high-growth shadow-sm" : "badge-at-risk shadow-sm"}>
+                            {isHigh ? "High Growth" : "At Risk"}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-sm font-bold text-[#8c8f93] tracking-wider uppercase flex items-center gap-2">
+                          <span className="text-[#344054]">{startup.sector}</span> • <span>{startup.batch}</span>
+                        </p>
+                        <p className="mt-3 text-sm text-[#525252] leading-relaxed max-w-2xl line-clamp-2">
+                          {startup.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* AI Status & Actions */}
+                    <div className="w-full lg:w-[320px] shrink-0 bg-[#f8fafc] border border-slate-200 rounded-xl p-5 shadow-inner flex flex-col justify-center">
+                      <div className="flex items-center justify-between text-xs mb-2">
+                        <span className="font-bold text-[#667085] uppercase tracking-wider">AI Health Index</span>
+                        <span className={`px-2 py-1 rounded text-[10px] font-extrabold border ${healthColor}`}>
+                          {healthScore}% · {healthLabel}
+                        </span>
+                      </div>
+                      <div className="h-2.5 rounded-full bg-[#e2e8f0] overflow-hidden mb-4">
+                        <div 
+                          className={`h-full rounded-full ${healthProgressColor} transition-all duration-500`}
+                          style={{ width: `${healthScore}%` }}
+                        />
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-200">
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-slate-400" />
+                          <span className="text-[11px] font-bold text-slate-500">Lap. Terakhir: <span className="text-slate-700">12 Mei 2026</span></span>
+                        </div>
+                        <a href="/reports" className="text-xs font-extrabold text-[#ED1C24] hover:underline flex items-center gap-1 group/btn">
+                          Update Laporan <span className="text-sm group-hover/btn:translate-x-0.5 transition-transform">›</span>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )
+            })}
+
             {/* Quick Actions */}
             <div className="grid gap-5 sm:grid-cols-2">
               <a href="/reports" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
@@ -631,14 +699,16 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {filteredStartups.length === 0 ? (
-          <div className="card-legion flex flex-col items-center justify-center py-16">
-            <Search className="mb-3 h-10 w-10 text-[#d0d5dd]" />
-            <p className="text-sm font-medium text-[#667085]">Tidak ada startup yang cocok</p>
-            <p className="text-xs text-[#8c8f93] mt-1">Coba ubah filter atau kata kunci pencarian</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Standard Grid for Admin and Synergy (Founders already saw their card above) */}
+        {user?.role !== "founder" && (
+          filteredStartups.length === 0 ? (
+            <div className="card-legion flex flex-col items-center justify-center py-16">
+              <Search className="mb-3 h-10 w-10 text-[#d0d5dd]" />
+              <p className="text-sm font-medium text-[#667085]">Tidak ada startup yang cocok</p>
+              <p className="text-xs text-[#8c8f93] mt-1">Coba ubah filter atau kata kunci pencarian</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredStartups.map((startup) => {
               const isHigh = startup.status === "ACTIVE";
               const healthScore = isHigh ? 92 : 45;
