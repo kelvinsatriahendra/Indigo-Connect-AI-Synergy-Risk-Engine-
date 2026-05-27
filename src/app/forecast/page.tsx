@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  Area, AreaChart,
+  Area, AreaChart, ReferenceArea
 } from "recharts";
 import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap, Sparkles } from "lucide-react";
 
@@ -110,14 +110,20 @@ export default function ForecastPage() {
   };
 
   const chartData = data
-    ? [...data.historicalData, ...data.projectedData].map((p) => ({
-        period: p.period,
-        Revenue: p.revenue,
-        Users: p.users,
-        Growth: p.growth,
-        "Burn Rate": p.burnRate,
-        isProjected: data.historicalData.some((h) => h.period === p.period) ? false : true,
-      }))
+    ? [...data.historicalData, ...data.projectedData].map((p, i, arr) => {
+        const isProjected = data.historicalData.every((h) => h.period !== p.period);
+        const isLastHistorical = i === data.historicalData.length - 1;
+        return {
+          period: p.period,
+          Revenue: isProjected ? null : p.revenue,
+          ProjectedRevenue: isProjected || isLastHistorical ? p.revenue : null,
+          Users: isProjected ? null : p.users,
+          ProjectedUsers: isProjected || isLastHistorical ? p.users : null,
+          Growth: p.growth,
+          "Burn Rate": p.burnRate,
+          isProjected,
+        };
+      })
     : [];
 
   const getConfidenceColor = (score: number) => {
@@ -262,10 +268,10 @@ export default function ForecastPage() {
                     <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
                     <YAxis yAxisId="left" tick={{ fontSize: 12, fill: "#667085" }} />
                     <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12, fill: "#667085" }} />
+                    {data && <ReferenceArea x1={data.historicalData[data.historicalData.length - 1].period} x2={data.projectedData[data.projectedData.length - 1].period} fill="#ED1C24" fillOpacity={0.03} />}
                     <Tooltip
                       contentStyle={{ borderRadius: "12px", border: "1px solid #e0e0e0", fontSize: "13px" }}
                     />
-                    <Legend />
                     <Line
                       yAxisId="left"
                       type="monotone"
@@ -274,6 +280,18 @@ export default function ForecastPage() {
                       strokeWidth={2}
                       dot={{ r: 4, fill: "#ED1C24" }}
                       connectNulls
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="ProjectedRevenue"
+                      stroke="#ED1C24"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ r: 4, fill: "#fff", stroke: "#ED1C24", strokeWidth: 2 }}
+                      connectNulls
+                      activeDot={{ r: 6 }}
                     />
                     <Line
                       yAxisId="right"
@@ -283,6 +301,18 @@ export default function ForecastPage() {
                       strokeWidth={2}
                       dot={{ r: 4, fill: "#f59e0b" }}
                       connectNulls
+                      activeDot={{ r: 6 }}
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="ProjectedUsers"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={{ r: 4, fill: "#fff", stroke: "#f59e0b", strokeWidth: 2 }}
+                      connectNulls
+                      activeDot={{ r: 6 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -293,9 +323,13 @@ export default function ForecastPage() {
                   <span className="flex items-center gap-1.5">
                     <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" /> Users (ribu)
                   </span>
-                  <span className="ml-auto flex items-center gap-1 text-[#ED1C24]">
-                    <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-[#ED1C24]" /> Projected
+                  <span className="ml-auto flex items-center gap-1 text-red-500 font-medium">
+                    <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-red-500 mr-1" /> Projected
                   </span>
+                </div>
+                {/* Projected Label Overlay */}
+                <div className="absolute top-[80px] right-[25%] pointer-events-none opacity-50">
+                  <span className="text-[10px] font-bold text-red-500 uppercase tracking-widest bg-red-50 px-2 py-1 rounded">Projected</span>
                 </div>
                 </div>
 
