@@ -1043,95 +1043,103 @@ export default function DashboardPage() {
       </div>
 
       {/* Analysis Modal */}
-      {analysisModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl rounded-[24px] bg-white shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="border-b border-[#f2f4f7] p-6 flex items-start justify-between bg-gradient-to-r from-slate-50 to-white relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50" />
-              <div className="flex items-center gap-4 relative z-10">
-                <div className="h-12 w-12 rounded-xl bg-white shadow-sm border border-[#f2f4f7] p-2 flex items-center justify-center shrink-0">
-                  <img src={analysisModal.logo} alt={analysisModal.name} className="h-full w-full object-contain" />
+      {analysisModal && (() => {
+        const logo = getLogoForName(analysisModal.name) || "/startups/indigo-red.png";
+        const isHigh = analysisModal.status === "ACTIVE";
+        const healthScore = isHigh ? 92 : 45;
+        const healthLabel = isHigh ? "Excellent" : "Critical Risk";
+        const riskLabel = (isHigh ? "LOW_RISK" : "HIGH_RISK") as string;
+        
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-2xl rounded-[24px] bg-white shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              {/* Modal Header */}
+              <div className="border-b border-[#f2f4f7] p-6 flex items-start justify-between bg-gradient-to-r from-slate-50 to-white relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50" />
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="h-12 w-12 rounded-xl bg-white border border-[#f2f4f7] p-2 flex items-center justify-center shrink-0">
+                    <img src={logo} alt={analysisModal.name} className="h-full w-full object-contain" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-extrabold text-[#161616]">
+                      {user?.role === "synergy" ? "Analisis Potensi Sinergi" : user?.role === "founder" ? "Update Laporan Kinerja" : "AI Risk Analysis"}
+                    </h2>
+                    <p className="text-sm font-medium text-[#667085]">{analysisModal.name} — {analysisModal.sector}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-lg font-extrabold text-[#161616]">
-                    {user?.role === "synergy" ? "Analisis Potensi Sinergi" : user?.role === "founder" ? "Update Laporan Kinerja" : "AI Risk Analysis"}
-                  </h2>
-                  <p className="text-sm font-medium text-[#667085]">{analysisModal.name} — {analysisModal.sector}</p>
-                </div>
+                <button 
+                  onClick={() => setAnalysisModal(null)}
+                  className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[#667085] hover:bg-slate-200 transition-colors cursor-pointer relative z-10"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-              <button 
-                onClick={() => setAnalysisModal(null)}
-                className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[#667085] hover:bg-slate-200 transition-colors cursor-pointer relative z-10"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            
-            {/* Modal Body */}
-            <div className="p-6">
-              {user?.role === "synergy" ? (
-                <div className="space-y-4">
-                  <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="h-4 w-4 text-emerald-600" />
-                      <h4 className="font-bold text-emerald-800">Rekomendasi AI Matcher</h4>
+              
+              {/* Modal Body */}
+              <div className="p-6">
+                {user?.role === "synergy" ? (
+                  <div className="space-y-4">
+                    <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="h-4 w-4 text-emerald-600" />
+                        <h4 className="font-bold text-emerald-800">Rekomendasi AI Matcher</h4>
+                      </div>
+                      <p className="text-sm text-emerald-700 leading-relaxed">
+                        Sistem AI mendeteksi potensi sinergi yang tinggi antara {analysisModal.name} dengan ekosistem Telkom Group di sektor {analysisModal.sector}. AI menyarankan integrasi PoC (Proof of Concept) dalam kuartal ini.
+                      </p>
                     </div>
-                    <p className="text-sm text-emerald-700 leading-relaxed">
-                      Sistem AI mendeteksi potensi sinergi yang tinggi antara {analysisModal.name} dengan ekosistem Telkom Group di sektor {analysisModal.sector}. AI menyarankan integrasi PoC (Proof of Concept) dalam kuartal ini.
-                    </p>
+                    <div className="flex justify-end mt-4">
+                      <a href="/synergy" className="btn-primary-solid px-6 py-2.5 text-sm shadow-md hover:shadow-lg transition-all">Buka Pipeline Sinergi</a>
+                    </div>
                   </div>
-                  <div className="flex justify-end mt-4">
-                    <a href="/synergy" className="btn-primary-solid px-6 py-2.5 text-sm shadow-md hover:shadow-lg transition-all">Buka Pipeline Sinergi</a>
+                ) : user?.role === "founder" ? (
+                  <div className="space-y-4 text-center py-6">
+                    <FileText className="h-12 w-12 text-[#d0d5dd] mx-auto mb-3" />
+                    <h3 className="text-base font-bold text-[#161616]">Upload Laporan Bulanan</h3>
+                    <p className="text-sm text-[#667085] max-w-md mx-auto">AI Synergy Risk Engine akan secara otomatis mengekstrak metrik kunci (Revenue, User, Burn Rate) dari dokumen PDF laporan Anda.</p>
+                    <div className="mt-6">
+                      <a href="/reports" className="btn-primary-solid px-6 py-2.5 shadow-md hover:shadow-lg transition-all">Buka Modul Reports</a>
+                    </div>
                   </div>
-                </div>
-              ) : user?.role === "founder" ? (
-                <div className="space-y-4 text-center py-6">
-                  <FileText className="h-12 w-12 text-[#d0d5dd] mx-auto mb-3" />
-                  <h3 className="text-base font-bold text-[#161616]">Upload Laporan Bulanan</h3>
-                  <p className="text-sm text-[#667085] max-w-md mx-auto">AI Synergy Risk Engine akan secara otomatis mengekstrak metrik kunci (Revenue, User, Burn Rate) dari dokumen PDF laporan Anda.</p>
-                  <div className="mt-6">
-                    <a href="/reports" className="btn-primary-solid px-6 py-2.5 shadow-md hover:shadow-lg transition-all">Buka Modul Reports</a>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
-                      <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
-                      <div className="flex items-end gap-2">
-                        <p className="text-3xl font-extrabold text-[#161616]">{analysisModal.healthScore}</p>
-                        <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
+                ) : (
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
+                        <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
+                        <div className="flex items-end gap-2">
+                          <p className="text-3xl font-extrabold text-[#161616]">{healthScore}</p>
+                          <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
+                        <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className={`h-3 w-3 rounded-full ${riskLabel === "LOW_RISK" ? "bg-emerald-500" : riskLabel === "MEDIUM_RISK" ? "bg-amber-500" : "bg-red-500"}`} />
+                          <p className={`text-base font-bold ${riskLabel === "LOW_RISK" ? "text-emerald-700" : riskLabel === "MEDIUM_RISK" ? "text-amber-700" : "text-red-700"}`}>
+                            {riskLabel.replace("_", " ")}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
-                      <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <div className={`h-3 w-3 rounded-full ${analysisModal.riskLabel === "LOW_RISK" ? "bg-emerald-500" : analysisModal.riskLabel === "MEDIUM_RISK" ? "bg-amber-500" : "bg-red-500"}`} />
-                        <p className={`text-base font-bold ${analysisModal.riskLabel === "LOW_RISK" ? "text-emerald-700" : analysisModal.riskLabel === "MEDIUM_RISK" ? "text-amber-700" : "text-red-700"}`}>
-                          {analysisModal.riskLabel.replace("_", " ")}
-                        </p>
+                    <div className="rounded-xl bg-red-50 border border-red-100 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <AlertTriangle className="h-4 w-4 text-[#ED1C24]" />
+                        <h4 className="font-bold text-red-800">Catatan Risiko AI</h4>
                       </div>
+                      <p className="text-sm text-red-700 leading-relaxed">
+                        AI mendeteksi anomali pada rasio burn-rate 3 bulan terakhir. Terdapat potensi hambatan teknis pada skalabilitas infrastruktur saat beban puncak (peak traffic). Direkomendasikan melakukan intervensi pendampingan teknis.
+                      </p>
+                    </div>
+                    <div className="flex justify-end mt-2">
+                      <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-[#e0e0e0] text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
                     </div>
                   </div>
-                  <div className="rounded-xl bg-red-50 border border-red-100 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <AlertTriangle className="h-4 w-4 text-[#ED1C24]" />
-                      <h4 className="font-bold text-red-800">Catatan Risiko AI</h4>
-                    </div>
-                    <p className="text-sm text-red-700 leading-relaxed">
-                      AI mendeteksi anomali pada rasio burn-rate 3 bulan terakhir. Terdapat potensi hambatan teknis pada skalabilitas infrastruktur saat beban puncak (peak traffic). Direkomendasikan melakukan intervensi pendampingan teknis.
-                    </p>
-                  </div>
-                  <div className="flex justify-end mt-2">
-                    <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-[#e0e0e0] text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
     </AppShell>
   );
