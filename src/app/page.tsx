@@ -164,32 +164,32 @@ export default async function Home() {
               {
                 title: "Health Evaluator",
                 desc: "Evaluasi otomatis kesehatan bisnis startup dengan AI. Dapatkan health score, sentiment analysis, dan risk label real-time.",
-                imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/Health Evaluator.png",
               },
               {
                 title: "Synergy Matcher",
                 desc: "Temukan unit bisnis Telkom yang paling cocok untuk kolaborasi. AI mencocokkan berdasarkan profil dan kebutuhan startup.",
-                imageUrl: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/Synergy Matcher.png",
               },
               {
                 title: "Risk Detection",
                 desc: "Deteksi dini startup at risk dengan analisis sentimen dan operational status. Ambil tindakan sebelum terlambat.",
-                imageUrl: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/Risk Detection.png",
               },
               {
                 title: "Executive Summary",
                 desc: "Ringkasan eksekutif otomatis dari laporan bulanan startup. Tiga poin singkat untuk keputusan cepat.",
-                imageUrl: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/Executive Summary.png",
               },
               {
                 title: "AI Insights",
                 desc: "Wawasan cerdas dari data startup. Dapatkan rekomendasi strategis berbasis AI untuk pertumbuhan bisnis.",
-                imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/AI Insight.png",
               },
               {
                 title: "Forecasting",
                 desc: "Prediksi pertumbuhan dan runway startup 3 bulan ke depan. Antisipasi tantangan dengan data-driven decisions.",
-                imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+                imageUrl: "/features/Forecasting.png",
               },
             ].map((item) => {
               return (
