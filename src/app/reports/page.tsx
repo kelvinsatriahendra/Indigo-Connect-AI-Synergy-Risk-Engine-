@@ -659,6 +659,7 @@ export default function ReportsPage() {
                               name: bu?.name || m.buId,
                               reason: m.reason,
                               score: m.matchScore,
+                              logo: bu?.logo,
                             };
                           }) || undefined
                         }

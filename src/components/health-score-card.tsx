@@ -8,7 +8,7 @@ interface HealthScoreProps {
   sentimentScore?: number;
   operationalStatus?: string;
   summaryPoints?: string[];
-  synergyMatches?: { name: string; reason: string; score: number }[];
+  synergyMatches?: { name: string; reason: string; score: number; logo?: string }[];
 }
 
 export function HealthScoreCard({
@@ -37,10 +37,11 @@ export function HealthScoreCard({
 
   return (
     <div className="space-y-6">
-      {/* Health Score Card (Hero) */}
-      <div 
-        className="rounded-[24px] overflow-hidden relative"
-        style={{
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Health Score Card (Hero) */}
+        <div 
+          className="rounded-[24px] overflow-hidden relative flex flex-col h-full"
+          style={{
           background: 'linear-gradient(145deg, rgba(255,255,255,1), rgba(248,248,252,1))',
           border: '1px solid rgba(255,0,60,0.06)',
           boxShadow: '0 10px 40px rgba(15,0,40,0.08)'
@@ -69,7 +70,7 @@ export function HealthScoreCard({
             <span className={`${risk.badge} px-3 py-1 text-xs shadow-sm ring-1 ring-inset ring-black/5`}>{risk.label}</span>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-10">
+          <div className="flex flex-col md:flex-row items-center gap-10 mt-auto">
             {/* Radial Gauge as Focal Point */}
             <div className="shrink-0 relative">
               <div className="absolute inset-0 bg-red-500/5 blur-3xl rounded-full"></div>
@@ -97,8 +98,8 @@ export function HealthScoreCard({
       </div>
 
       {/* Executive Summary Insight Cards */}
-      {summaryPoints && summaryPoints.length > 0 && (
-        <div className="rounded-[20px] bg-[#FCFBFF] border border-[#f1f1f5] shadow-md p-6">
+      {summaryPoints && summaryPoints.length > 0 ? (
+        <div className="rounded-[20px] bg-[#FCFBFF] border border-[#f1f1f5] shadow-md p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-50 to-orange-50 text-[#ED1C24] shadow-sm">
               <Lightbulb className="h-5 w-5" />
@@ -133,7 +134,10 @@ export function HealthScoreCard({
             })}
           </div>
         </div>
+      ) : (
+        <div className="hidden"></div>
       )}
+      </div>
 
       {/* Synergy Recommendations */}
       {synergyMatches && synergyMatches.length > 0 && (
@@ -150,8 +154,15 @@ export function HealthScoreCard({
           <div className="space-y-3">
             {synergyMatches.map((match, i) => (
               <div key={i} className="rounded-xl border border-slate-100 bg-[#FAFAFD] p-5 hover:border-amber-200 transition-colors">
-                <div className="flex items-center justify-between mb-2">
-                  <p className="font-bold text-[#0f172a]">{match.name}</p>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    {match.logo && (
+                      <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center">
+                        <img src={match.logo} alt={match.name} className="h-full w-full object-contain p-1" />
+                      </div>
+                    )}
+                    <p className="font-bold text-[#0f172a]">{match.name}</p>
+                  </div>
                   <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-0.5 text-xs font-bold text-[#ED1C24] shadow-sm">
                     {Math.round(match.score * 100)}% match
                   </span>
