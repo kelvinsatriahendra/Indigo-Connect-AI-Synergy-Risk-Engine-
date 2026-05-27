@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X } from "lucide-react";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X, LayoutDashboard, Info, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis, AreaChart, Area, ReferenceArea } from "recharts";
 import { exportToPdf } from "@/lib/pdf-export";
 import { getLogoForName } from "@/lib/logos";
@@ -205,11 +205,30 @@ export default function DashboardPage() {
         {/* Fixed Header Bar */}
         <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10 print:hidden">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
-              <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
-            </div>
             <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <LayoutDashboard className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
+                <p className="mt-0.5 text-sm text-[#667085]">{config.subtitle}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* AI Analysis Live Badge */}
+              <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-bold text-emerald-700">AI Analysis Live</span>
+                <Activity className="h-3.5 w-3.5 text-emerald-600" />
+              </div>
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir diperbarui</p>
+                <p className="text-xs font-bold text-[#344054]">{new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB</p>
+              </div>
               {user?.role === "admin" && (
                 <button 
                   onClick={handleExportReport}
@@ -245,42 +264,45 @@ export default function DashboardPage() {
         {user?.role !== "founder" && (
           <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: Total Startup (Main Highlight) */}
-            <div className="card-legion p-6 flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]" style={{ background: 'linear-gradient(to bottom right, #ED1C24, #991217)' }}>
+            <div className="p-6 flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]" style={{ background: 'linear-gradient(to bottom right, #ED1C24, #B91217)' }}>
               <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <p className="text-sm font-bold text-white/90">Total Startup</p>
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white backdrop-blur-sm group-hover:scale-110 transition-transform">
-                    <Building2 className="h-4 w-4" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-white backdrop-blur-sm group-hover:scale-110 transition-transform">
+                    <Building2 className="h-4.5 w-4.5" />
                   </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <div>
-                    <p className="text-4xl font-extrabold text-white tracking-tight">{totalStartups}</p>
-                    <p className="mt-1 text-xs font-medium text-white/80">Aktif dalam program</p>
-                  </div>
+                <div>
+                  <p className="text-5xl font-extrabold text-white tracking-tight leading-none">{totalStartups}</p>
+                  <p className="mt-1.5 text-sm font-semibold text-white/70">startup</p>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 w-fit">
+                  <ArrowUpRight className="h-3 w-3 text-white" />
+                  <span className="text-[10px] font-bold text-white">↑ 20% vs last month</span>
                 </div>
               </div>
-              {/* Subtle background decoration */}
               <div className="absolute right-[-10%] top-[-20%] h-32 w-32 rounded-full bg-white/10 blur-2xl transition-transform group-hover:scale-150 duration-700 ease-in-out"></div>
+              <div className="absolute right-[-5%] bottom-[-15%] h-24 w-24 rounded-full bg-white/5 blur-xl"></div>
             </div>
 
             {/* Card 2: High Growth */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                      <TrendingUp className="h-3.5 w-3.5" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                      <TrendingUp className="h-4 w-4" />
                     </div>
                     <p className="text-sm font-bold text-[#161616]">High Growth</p>
                   </div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 group-hover:scale-110 transition-transform">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{highGrowth}</p>
-                </div>
-                <p className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari total</p>
+                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">{highGrowth}</p>
+                <p className="mt-2 text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</p>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
@@ -293,59 +315,62 @@ export default function DashboardPage() {
 
             {/* Card 3: At Risk */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600">
-                      <AlertTriangle className="h-3.5 w-3.5" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-50 text-orange-600">
+                      <AlertTriangle className="h-4 w-4" />
                     </div>
                     <p className="text-sm font-bold text-[#161616]">At Risk</p>
                   </div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-500 group-hover:scale-110 transition-transform">
+                    <AlertTriangle className="h-5 w-5" />
+                  </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{atRisk}</p>
-                </div>
-                <p className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari total</p>
+                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">{atRisk}</p>
+                <p className="mt-2 text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</p>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={sparklineAtRisk}>
-                    <Area type="monotone" dataKey="val" stroke="#ef4444" strokeWidth={2} fill="#ef4444" fillOpacity={0.2} />
+                    <Area type="monotone" dataKey="val" stroke="#f97316" strokeWidth={2} fill="#f97316" fillOpacity={0.2} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Card 4: Sektor / Batch */}
+            {/* Card 4: Batch Aktif */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] p-6 pb-4 relative overflow-hidden shadow-soft border border-pink-100 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
+              style={{ background: 'linear-gradient(135deg, #fff5f5 0%, #ffe4e6 50%, #fce7f3 100%)' }}
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                      {user?.role === "synergy" ? <GitBranch className="h-3.5 w-3.5" /> : <Layers className="h-3.5 w-3.5" />}
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-emerald-600 shadow-sm">
+                      {user?.role === "synergy" ? <GitBranch className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
                     </div>
                     <p className="text-sm font-bold text-[#161616]">
                       {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
                     </p>
                   </div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-emerald-500 group-hover:scale-110 transition-transform">
+                    <Layers className="h-5 w-5" />
+                  </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">
-                    {user?.role === "synergy"
-                      ? synergySectorMap["demo-synergy-id"]?.length || 0
-                      : uniqueBatches.length}
-                  </p>
-                </div>
-                <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded inline-block mt-2">Active batch</p>
+                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">
+                  {user?.role === "synergy"
+                    ? synergySectorMap["demo-synergy-id"]?.length || 0
+                    : uniqueBatches.length}
+                </p>
+                <p className="mt-2 text-xs font-bold text-[#667085]">Menjalankan evaluasi AI</p>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-30">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={sparklineBatch}>
-                    <Area type="monotone" dataKey="val" stroke="#3b82f6" strokeWidth={2} fill="#3b82f6" fillOpacity={0.2} />
+                    <Area type="monotone" dataKey="val" stroke="#ec4899" strokeWidth={2} fill="#ec4899" fillOpacity={0.2} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -356,99 +381,123 @@ export default function DashboardPage() {
         {/* Charts section - only for admin and synergy */}
         {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
-            {/* Health Score Distribution - Sleek Progress Cards */}
+            {/* Health Score Distribution */}
             <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 flex items-center justify-center text-[#ED1C24] shadow-sm">
-                    <Activity className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Health Score Distribution</h3>
-                    <p className="text-xs font-medium text-[#8c8f93]">Perbandingan status performa portofolio</p>
-                  </div>
+                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-[10px]">›</span>
                 </button>
               </div>
-              <div className="mt-8 space-y-7 relative z-10">
-                {healthDistribution.map((item) => (
-                  <div key={item.label}>
-                    <div className="mb-2.5 flex items-center justify-between text-sm">
-                      <span className="font-bold text-[#344054] flex items-center gap-2">
-                        <span className={`h-2 w-2 rounded-full ${item.color}`} />
-                        {item.label}
-                      </span>
-                      <span className="font-extrabold text-[#161616] bg-slate-50 px-2.5 py-0.5 rounded-md border border-slate-100">{item.count} <span className="text-xs text-[#8c8f93] font-medium ml-1">({totalStartups > 0 ? Math.round((item.count / totalStartups) * 100) : 0}%)</span></span>
-                    </div>
-                    <div className="h-3.5 rounded-full bg-[#f8fafc] overflow-hidden shadow-inner border border-slate-100/50">
-                      <div
-                        className={`h-full rounded-full ${item.color} transition-all duration-1000 ease-out relative overflow-hidden`}
-                        style={{ width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%` }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 w-full h-full transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+              <p className="text-xs font-medium text-[#8c8f93] relative z-10 mb-2">Perbandingan status performa portofolio startup</p>
+              <div className="mt-4 space-y-6 relative z-10">
+                {/* High Growth */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                        <TrendingUp className="h-4 w-4" />
                       </div>
-                    </div>
+                      High Growth
+                    </span>
+                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[0].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[0].count / totalStartups) * 100) : 0}%)</span></span>
                   </div>
-                ))}
+                  <div className="h-3 rounded-full bg-[#f0fdf4] overflow-hidden">
+                    <div className="h-full rounded-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[0].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
+                {/* Stable */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </div>
+                      Stable
+                    </span>
+                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[1].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[1].count / totalStartups) * 100) : 0}%)</span></span>
+                  </div>
+                  <div className="h-3 rounded-full bg-[#eff6ff] overflow-hidden">
+                    <div className="h-full rounded-full bg-blue-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[1].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
+                {/* At Risk */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                        <AlertTriangle className="h-4 w-4" />
+                      </div>
+                      At Risk
+                    </span>
+                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[2].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[2].count / totalStartups) * 100) : 0}%)</span></span>
+                  </div>
+                  <div className="h-3 rounded-full bg-[#fef2f2] overflow-hidden">
+                    <div className="h-full rounded-full bg-red-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[2].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Sektor Distribution - Recharts Premium Donut Chart */}
+            {/* Sektor Distribution - Donut with Center Label & Right Legend */}
             <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                    <Layers className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Sector Distribution</h3>
-                    <p className="text-xs font-medium text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
-                  </div>
+                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-[10px]">›</span>
                 </button>
               </div>
-              <div className="mt-4 h-[240px] w-full flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <defs>
-                      <filter id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="5" floodOpacity="0.15" />
-                      </filter>
-                    </defs>
-                    <Pie
-                      data={sectorData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={55}
-                      outerRadius={85}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="none"
-                      style={{ filter: "url(#pie-shadow)" }}
-                    >
-                      {sectorData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ background: '#ffffff', border: '1px solid #f2f4f7', borderRadius: '12px', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', color: '#161616', fontSize: '12px', fontWeight: 'bold' }}
-                      itemStyle={{ color: '#161616' }}
-                    />
-                    <Legend 
-                      verticalAlign="bottom" 
-                      height={36} 
-                      iconType="circle"
-                      iconSize={8}
-                      formatter={(value) => <span className="text-xs font-semibold text-[#525252]">{value}</span>}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+              <p className="text-xs font-medium text-[#8c8f93] relative z-10">Proporsi startup berdasarkan sektor industri</p>
+              <div className="mt-4 flex items-center gap-4 relative z-10">
+                {/* Donut Chart with Center Label */}
+                <div className="relative w-[200px] h-[200px] shrink-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={sectorData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={55}
+                        outerRadius={82}
+                        paddingAngle={3}
+                        dataKey="value"
+                        stroke="#fff"
+                        strokeWidth={2}
+                      >
+                        {sectorData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ background: '#ffffff', border: '1px solid #f2f4f7', borderRadius: '12px', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', color: '#161616', fontSize: '12px', fontWeight: 'bold' }}
+                        itemStyle={{ color: '#161616' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* Center Label */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-3xl font-extrabold text-[#161616]">{totalStartups}</span>
+                    <span className="text-[10px] font-semibold text-[#8c8f93] leading-tight text-center">Startup<br/>Portfolio</span>
+                  </div>
+                </div>
+                {/* Right-side Legend with Percentages */}
+                <div className="flex-1 space-y-2 min-w-0">
+                  {sectorData.map((entry) => (
+                    <div key={entry.name} className="flex items-center justify-between text-xs gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: sectorColorMap[entry.name] || '#64748b' }} />
+                        <span className="font-semibold text-[#344054] truncate">{entry.name}</span>
+                      </div>
+                      <span className="font-bold text-[#161616] shrink-0 tabular-nums">{totalStartups > 0 ? Math.round((entry.value / totalStartups) * 100) : 0}% <span className="text-[#8c8f93] font-medium">({entry.value})</span></span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
