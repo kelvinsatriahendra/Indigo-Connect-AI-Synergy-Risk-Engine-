@@ -340,7 +340,7 @@ export default function ReportsPage() {
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Fixed Header Bar */}
-        <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-4 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <FileText className="h-6 w-6 text-[#ED1C24]" />
@@ -349,11 +349,51 @@ export default function ReportsPage() {
                 <p className="mt-1 text-sm font-medium text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
               </div>
             </div>
-            <p className="mt-1 text-sm text-[#667085]">
-            {user?.role === "founder"
-              ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI"
-              : "Review hasil evaluasi laporan bulanan dan usulan sinergi dari mitra startup"}
-          </p>
+            
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-[#667085] hidden xl:block">
+                {user?.role === "founder"
+                  ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI"
+                  : "Review hasil evaluasi laporan bulanan dan usulan sinergi dari mitra startup"}
+              </p>
+              
+              {/* Header Controls for Founder */}
+              {user?.role === "founder" && (
+                <div className="flex items-center gap-3">
+                  {availableStartups.length > 1 ? (
+                    <select
+                      className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                      value={selectedStartup}
+                      onChange={(e) => setSelectedStartup(e.target.value)}
+                    >
+                      <option value="">-- Pilih Startup --</option>
+                      {availableStartups.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.name} — {s.sector}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    availableStartups.length === 1 && (
+                      <div className="hidden lg:flex rounded-lg bg-[#f8fafc] border border-[#e2e8f0] px-3 py-1.5 items-center gap-2">
+                        <p className="text-sm font-bold text-[#0f172a]">{availableStartups[0].name}</p>
+                      </div>
+                    )
+                  )}
+                  <button
+                    onClick={handleEvaluate}
+                    disabled={!selectedStartup || !narrativeText.trim() || loading}
+                    className="btn-primary-solid gap-2 px-5 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-500/20"
+                  >
+                    {loading ? (
+                      <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</>
+                    ) : (
+                      <><Send className="h-4 w-4" /> Evaluate with AI</>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -373,24 +413,8 @@ export default function ReportsPage() {
 
                     <div className="mt-8 space-y-6">
 
-                      {/* Dropdown - only shown for non-founders or founders with multiple startups */}
-                      {(!user || user.role !== "founder" || availableStartups.length > 1) && (
-                        <div>
-                          <label className="mb-2 block text-sm font-medium text-[#344054]">Pilih Startup</label>
-                          <select
-                            className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                            value={selectedStartup}
-                            onChange={(e) => setSelectedStartup(e.target.value)}
-                          >
-                            <option value="">-- Pilih Startup --</option>
-                            {availableStartups.map((s) => (
-                              <option key={s.id} value={s.id}>
-                                {s.name} — {s.sector} ({s.batch})
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
+                      {/* Select is now in the header for founders, and for non-founders we use a list view anyway */}
+
 
 
                       <div className="pt-2 border-t border-[#f2f4f7]">
@@ -445,24 +469,7 @@ export default function ReportsPage() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 pt-4">
-                        <button
-                          onClick={handleEvaluate}
-                          disabled={!selectedStartup || !narrativeText.trim() || loading}
-                          className="btn-primary-solid gap-2 px-8 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-red-500/20"
-                        >
-                          {loading ? (
-                            <><RefreshCw className="h-4 w-4 animate-spin" /> Sedang Menganalisis...</>
-                          ) : (
-                            <><Send className="h-4 w-4" /> Evaluate with AI</>
-                          )}
-                        </button>
-                        {selectedStartupData && (
-                          <span className="text-xs font-medium text-[#8c8f93]">
-                            Mengevaluasi <strong className="text-[#344054]">{selectedStartupData.name}</strong>
-                          </span>
-                        )}
-                      </div>
+                      {/* Submit action moved to header bar */}
                     </div>
                   </div>
                 ) : (

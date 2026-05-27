@@ -136,12 +136,48 @@ export default function ForecastPage() {
     <AppShell>
       <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="h-6 w-6 text-[#ED1C24]" />
-            <h1 className="text-2xl font-bold text-[#161616]">Forecasting</h1>
+        <div className="border-b bg-white px-8 py-4 shadow-sm relative z-10 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <div className="flex items-center gap-3">
+              <BarChart3 className="h-6 w-6 text-[#ED1C24]" />
+              <h1 className="text-2xl font-bold text-[#161616]">Forecasting</h1>
+            </div>
+            <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
           </div>
-          <p className="mt-1 text-sm text-[#667085]">Prediksi pertumbuhan dan runway startup dengan AI</p>
+          
+          {/* Controls in Header */}
+          {(user?.role !== "founder" || availableStartups.length > 1) && (
+            <div className="flex items-center gap-3">
+              {availableStartups.length > 1 ? (
+                <select
+                  value={selectedStartup}
+                  onChange={(e) => setSelectedStartup(e.target.value)}
+                  className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                >
+                  <option value="">-- Pilih Startup --</option>
+                  {availableStartups.map((s) => (
+                    <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
+                  ))}
+                </select>
+              ) : (
+                availableStartups.length === 1 && (
+                  <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] px-3 py-1.5 flex items-center gap-2">
+                    <p className="text-sm font-bold text-[#0f172a]">{availableStartups[0].name}</p>
+                    <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
+                      ✓ Terverifikasi
+                    </span>
+                  </div>
+                )
+              )}
+              <button
+                onClick={handleForecast}
+                disabled={!selectedStartup || loading}
+                className="btn-primary-solid gap-2 px-5 py-2 text-sm disabled:opacity-50"
+              >
+                {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Scrollable Body */}
@@ -152,50 +188,6 @@ export default function ForecastPage() {
             
             {/* Top Main Content */}
             <div className="w-full min-w-0">
-              {/* Controls */}
-              {(user?.role !== "founder" || availableStartups.length > 1) && (
-                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] mb-6 p-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[100px] z-0 opacity-50" />
-                  <div className="flex items-center gap-4 relative z-10">
-                    <div className="flex-1">
-                      {availableStartups.length > 1 ? (
-                        <>
-                          <label className="mb-1.5 block text-sm font-medium text-[#344054]">Pilih Startup</label>
-                          <select
-                            value={selectedStartup}
-                            onChange={(e) => setSelectedStartup(e.target.value)}
-                            className="w-full rounded-lg border border-[#e0e0e0] bg-white px-4 py-2.5 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-                          >
-                            <option value="">-- Pilih Startup --</option>
-                            {availableStartups.map((s) => (
-                              <option key={s.id} value={s.id}>{s.name} — {s.sector} ({s.batch})</option>
-                            ))}
-                          </select>
-                        </>
-                      ) : (
-                        availableStartups.length === 1 && (
-                          <div className="rounded-lg bg-[#f8fafc] border border-[#e2e8f0] p-4 flex items-center justify-between">
-                            <div>
-                              <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider mb-1">Startup Terpilih</p>
-                              <p className="text-base font-bold text-[#0f172a]">{availableStartups[0].name} — {availableStartups[0].sector} ({availableStartups[0].batch})</p>
-                            </div>
-                            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700 ring-1 ring-inset ring-emerald-600/20">
-                              ✓ Terverifikasi
-                            </span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                    <button
-                      onClick={handleForecast}
-                      disabled={!selectedStartup || loading}
-                      className="btn-primary-solid gap-2 px-6 py-2.5 mt-5 disabled:opacity-50"
-                    >
-                      {loading ? <><RefreshCw className="h-4 w-4 animate-spin" /> Menganalisis...</> : <><Zap className="h-4 w-4" /> Generate Forecast</>}
-                    </button>
-                  </div>
-                </div>
-              )}
 
           {error && (
             <div className="rounded-[20px] bg-red-50 shadow-soft border border-red-200 mb-6 p-6">
