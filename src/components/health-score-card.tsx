@@ -53,32 +53,44 @@ export function HealthScoreCard({
             <span className={risk.badge}>{risk.label}</span>
           </div>
 
-          <div className="mt-6 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-[#344054]">Health Score</span>
-              <span className="text-2xl font-bold text-[#161616]">{healthScore}<span className="text-sm font-normal text-[#8c8f93]">/100</span></span>
+          <div className="flex flex-row items-center gap-8 mt-auto pt-4 w-full">
+            {/* Radial Gauge as Focal Point */}
+            <div className="shrink-0 relative">
+              <div className="absolute inset-0 bg-red-500/5 blur-3xl rounded-full"></div>
+              <ScoreGauge score={healthScore} size="lg" />
             </div>
-            <div className="h-3 rounded-full bg-[#f2f4f7] overflow-hidden">
-              <div
-                className={`h-3 rounded-full transition-all duration-500 ${risk.bar}`}
-                style={{ width: `${healthScore}%` }}
-              />
+
+            {/* Metrics */}
+            <div className="flex flex-col gap-4 flex-1">
+              {sentimentScore !== undefined && (
+                <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${sentimentScore >= 0.7 ? 'bg-emerald-500' : sentimentScore >= 0.4 ? 'bg-amber-500' : 'bg-red-500'}`}></div>
+                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <p className={`text-xl font-extrabold ${sentimentScore >= 0.7 ? 'text-emerald-600' : sentimentScore >= 0.4 ? 'text-amber-600' : 'text-red-600'}`}>
+                      {(sentimentScore * 100).toFixed(0)}%
+                    </p>
+                    <p className="text-[10px] font-semibold text-[#94a3b8]">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
+                  </div>
+                </div>
+              )}
+              {operationalStatus && (
+                <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className={`h-2 w-2 rounded-full ${operationalStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
+                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
+                  </div>
+                  <div>
+                    <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-extrabold border ${operationalStatus === 'ACTIVE' ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : 'text-red-700 bg-red-50 border-red-100'}`}>
+                      {operationalStatus.replace('_', ' ')}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {sentimentScore !== undefined && (
-              <div className="rounded-xl bg-[#f2f4f7] p-4">
-                <p className="text-xs font-medium text-[#667085] mb-1">Sentiment Score</p>
-                <p className="text-lg font-bold text-[#161616]">{(sentimentScore * 100).toFixed(0)}%</p>
-              </div>
-            )}
-            {operationalStatus && (
-              <div className="rounded-xl bg-[#f2f4f7] p-4">
-                <p className="text-xs font-medium text-[#667085] mb-1">Operational Status</p>
-                <p className="text-sm text-[#344054]">{operationalStatus}</p>
-              </div>
-            )}
           </div>
         </div>
       </div>
