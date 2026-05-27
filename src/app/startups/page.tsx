@@ -249,23 +249,48 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <div className="flex items-center gap-3">
-                <Building2 className="h-6 w-6 text-[#ED1C24]" />
-                <h1 className="text-2xl font-bold text-[#161616]">Startup</h1>
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <Building2 className="h-5 w-5" />
               </div>
-              <p className="mt-1 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">Startup</h1>
+                  {/* AI Startup Monitor Live Badge */}
+                  <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-700">Startup Monitor Live</span>
+                  </div>
+                </div>
+                <p className="mt-0.5 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
+              </div>
             </div>
-            <button 
-              onClick={() => setIsCompareModalOpen(true)}
-              className="btn-primary-solid flex items-center gap-2 px-4 py-2 text-sm font-bold"
-            >
-              <Scale className="h-4 w-4" /> Compare Startups
-            </button>
+
+            <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
+              
+              <button 
+                onClick={() => setIsCompareModalOpen(true)}
+                className="btn-primary-solid flex items-center gap-2 px-4 py-2 text-sm font-bold shadow-md shadow-[#ED1C24]/10"
+              >
+                <Scale className="h-4 w-4" /> Compare Startups
+              </button>
+            </div>
           </div>
         </div>
 
