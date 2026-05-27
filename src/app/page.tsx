@@ -36,7 +36,7 @@ export default async function Home() {
         </div>
       </header>
 
-      <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-[85vh] pt-24 pb-28 px-6 text-white">
+      <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-screen pt-32 pb-36 px-6 text-white">
         {/* Full Section Background Image with high visibility and brightness filter */}
         <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
           <img
