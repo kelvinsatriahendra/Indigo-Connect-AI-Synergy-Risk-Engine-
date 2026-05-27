@@ -291,12 +291,7 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                      <TrendingUp className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">High Growth</p>
-                  </div>
+                  <p className="text-sm font-bold text-[#161616]">High Growth</p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 group-hover:scale-110 transition-transform">
                     <TrendingUp className="h-5 w-5" />
                   </div>
@@ -319,12 +314,7 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-50 text-orange-600">
-                      <AlertTriangle className="h-4 w-4" />
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">At Risk</p>
-                  </div>
+                  <p className="text-sm font-bold text-[#161616]">At Risk</p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-500 group-hover:scale-110 transition-transform">
                     <AlertTriangle className="h-5 w-5" />
                   </div>
@@ -348,16 +338,11 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-emerald-600 shadow-sm">
-                      {user?.role === "synergy" ? <GitBranch className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">
-                      {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
-                    </p>
-                  </div>
+                  <p className="text-sm font-bold text-[#161616]">
+                    {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
+                  </p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-emerald-500 group-hover:scale-110 transition-transform">
-                    <Layers className="h-5 w-5" />
+                    {user?.role === "synergy" ? <GitBranch className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
                   </div>
                 </div>
                 <p className="text-4xl font-extrabold text-[#161616] tracking-tight">
