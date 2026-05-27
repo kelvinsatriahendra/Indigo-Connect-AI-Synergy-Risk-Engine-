@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import { Bell, AlertTriangle, TrendingUp, CalendarClock, CheckCheck } from "lucide-react";
 
 interface Alert {
@@ -36,19 +35,27 @@ const typeColors: Record<string, string> = {
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
+  const [startupsData, setStartupsData] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
 
-  const fetchAlerts = async () => {
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const params = filter !== "all" ? `?type=${filter}` : "";
-      const res = await fetch(`/api/alerts${params}`);
-      if (res.ok) {
-        const data = await res.json();
+      const [alertsRes, startupsRes] = await Promise.all([
+        fetch(`/api/alerts${filter !== "all" ? `?type=${filter}` : ""}`),
+        fetch("/api/startups")
+      ]);
+      
+      if (alertsRes.ok) {
+        const data = await alertsRes.json();
         setAlerts(data.alerts);
         setUnreadCount(data.unreadCount);
+      }
+      
+      if (startupsRes.ok) {
+        setStartupsData(await startupsRes.json());
       }
     } catch {
       // ignore
@@ -58,7 +65,7 @@ export default function AlertsPage() {
   };
 
   useEffect(() => {
-    fetchAlerts();
+    fetchData();
   }, [filter]);
 
   const markRead = async (id: string) => {

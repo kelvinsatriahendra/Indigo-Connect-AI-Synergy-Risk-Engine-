@@ -2,14 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   Area, AreaChart, ReferenceArea
 } from "recharts";
 import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap, Sparkles } from "lucide-react";
 
-type Startup = (typeof startupsData)[number];
+type Startup = {
+  id: string;
+  name: string;
+  founderName: string;
+  sector: string;
+  batch: string;
+  description: string;
+  status: string;
+};
 type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 // Mock Maps
@@ -39,6 +46,8 @@ export default function ForecastPage() {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [availableStartups, setAvailableStartups] = useState<Startup[]>([]);
+  const [startupsData, setStartupsData] = useState<any[]>([]);
+
   const [selectedStartup, setSelectedStartup] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{
@@ -78,31 +87,34 @@ export default function ForecastPage() {
 
   useEffect(() => {
     setMounted(true);
-    fetch("/api/auth/me")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.user) {
-          setUser(data.user);
-          let roleStartups = startupsData;
-          if (data.user.role === "founder" && data.user.userId) {
-            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"]; 
-            roleStartups = startupsData.filter((s) => myIds.includes(s.id));
-          } else if (data.user.role === "synergy" && data.user.userId) {
-            const mySectors = synergySectorMap[data.user.userId] || [];
-            roleStartups = startupsData.filter((s) => mySectors.includes(s.sector));
-          }
-          setAvailableStartups(roleStartups);
-          
-          if (data.user.role === "founder" && roleStartups.length === 1) {
-            const targetId = roleStartups[0].id;
-            setSelectedStartup(targetId);
-            fetchForecastForStartup(targetId);
-          }
+    Promise.all([
+      fetch("/api/auth/me").then(res => res.ok ? res.json() : null),
+      fetch("/api/startups").then(res => res.ok ? res.json() : [])
+    ]).then(([userData, fetchedStartups]) => {
+      setStartupsData(fetchedStartups);
+      if (userData?.user) {
+        setUser(userData.user);
+        let roleStartups = fetchedStartups;
+        if (userData.user.role === "founder" && userData.user.userId) {
+          const myIds = founderStartupMap[userData.user.userId] || ["s3", "s8"]; 
+          roleStartups = fetchedStartups.filter((s: Startup) => myIds.includes(s.id));
+        } else if (userData.user.role === "synergy" && userData.user.userId) {
+          const mySectors = synergySectorMap[userData.user.userId] || [];
+          roleStartups = fetchedStartups.filter((s: Startup) => mySectors.includes(s.sector));
         }
-      })
-      .catch(() => {
-        setAvailableStartups(startupsData);
-      });
+        setAvailableStartups(roleStartups);
+        
+        if (userData.user.role === "founder" && roleStartups.length === 1) {
+          const targetId = roleStartups[0].id;
+          setSelectedStartup(targetId);
+          fetchForecastForStartup(targetId);
+        }
+      } else {
+        setAvailableStartups(fetchedStartups);
+      }
+    }).catch(() => {
+      setAvailableStartups([]);
+    });
   }, []);
 
   const handleForecast = async () => {

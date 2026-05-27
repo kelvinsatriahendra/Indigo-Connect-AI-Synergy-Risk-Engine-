@@ -3,12 +3,18 @@
 import { useState, useRef, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
-import startupsData from "@/data/startups.json";
-import telkomBusData from "@/data/telkom-bus.json";
 import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight, ShieldAlert, Sparkles, LineChart, PieChart, Activity, BrainCircuit, CheckCircle2, AlertTriangle, Link2, X } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
-type Startup = (typeof startupsData)[number];
+type Startup = {
+  id: string;
+  name: string;
+  founderName: string;
+  sector: string;
+  batch: string;
+  description: string;
+  status: string;
+};
 type UserInfo = { name: string; email: string; role: string; userId?: string };
 
 // Mock Maps
@@ -134,6 +140,9 @@ export default function ReportsPage() {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [availableStartups, setAvailableStartups] = useState<Startup[]>([]);
+  const [startupsData, setStartupsData] = useState<any[]>([]);
+  const [telkomBusData, setTelkomBusData] = useState<any[]>([]);
+
   const [selectedStartup, setSelectedStartup] = useState<string>("");
   const [selectedReportId, setSelectedReportId] = useState("r1");
   const [showOriginalReportId, setShowOriginalReportId] = useState<string | null>(null);
@@ -151,33 +160,38 @@ export default function ReportsPage() {
   } | null>(null);
   const [error, setError] = useState("");
 
-
-
   useEffect(() => {
     setMounted(true);
-    fetch("/api/auth/me")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.user) {
-          setUser(data.user);
-          let roleStartups = startupsData;
-          if (data.user.role === "founder" && data.user.userId) {
-            const myIds = founderStartupMap[data.user.userId] || ["s3", "s8"];
-            roleStartups = startupsData.filter((s) => myIds.includes(s.id));
-          } else if (data.user.role === "synergy" && data.user.userId) {
-            const mySectors = synergySectorMap[data.user.userId] || [];
-            roleStartups = startupsData.filter((s) => mySectors.includes(s.sector));
+    Promise.all([
+      fetch("/api/auth/me").then((res) => (res.ok ? res.json() : null)),
+      fetch("/api/startups").then((res) => (res.ok ? res.json() : [])),
+      fetch("/api/telkom-bu").then((res) => (res.ok ? res.json() : []))
+    ])
+      .then(([userData, fetchedStartups, fetchedTelkomBus]) => {
+        setStartupsData(fetchedStartups);
+        setTelkomBusData(fetchedTelkomBus);
+        if (userData?.user) {
+          setUser(userData.user);
+          let roleStartups = fetchedStartups;
+          if (userData.user.role === "founder" && userData.user.userId) {
+            const myIds = founderStartupMap[userData.user.userId] || ["s3", "s8"];
+            roleStartups = fetchedStartups.filter((s: Startup) => myIds.includes(s.id));
+          } else if (userData.user.role === "synergy" && userData.user.userId) {
+            const mySectors = synergySectorMap[userData.user.userId] || [];
+            roleStartups = fetchedStartups.filter((s: Startup) => mySectors.includes(s.sector));
           }
           setAvailableStartups(roleStartups);
 
           // Auto-select if founder and only 1 startup managed
-          if (data.user.role === "founder" && roleStartups.length === 1) {
+          if (userData.user.role === "founder" && roleStartups.length === 1) {
             setSelectedStartup(roleStartups[0].id);
           }
+        } else {
+          setAvailableStartups(fetchedStartups);
         }
       })
       .catch(() => {
-        setAvailableStartups(startupsData);
+        setAvailableStartups([]);
       });
   }, []);
 
@@ -245,7 +259,7 @@ export default function ReportsPage() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("/api/parse-pdf", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });

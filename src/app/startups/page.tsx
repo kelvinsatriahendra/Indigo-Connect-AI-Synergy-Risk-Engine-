@@ -1,11 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import { Building2, Sparkles, Coins, TrendingUp, Handshake, Activity, Scale, X } from "lucide-react";
 
-type Startup = (typeof startupsData)[number];
+type Startup = {
+  id: string;
+  name: string;
+  founderName: string;
+  sector: string;
+  batch: string;
+  description: string;
+  status: string;
+};
 
 // Detailed operational, financial, and synergy metrics mapped by startup ID
 const startupMetrics: Record<string, {
@@ -182,12 +189,25 @@ const startupMetrics: Record<string, {
 };
 
 export default function StartupsPage() {
+  const [startupsData, setStartupsData] = useState<Startup[]>([]);
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
   const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
-  const [compareStartupA, setCompareStartupA] = useState<string>(startupsData[0].id);
-  const [compareStartupB, setCompareStartupB] = useState<string>(startupsData[1].id);
+  const [compareStartupA, setCompareStartupA] = useState<string>("");
+  const [compareStartupB, setCompareStartupB] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/api/startups")
+      .then(res => res.json())
+      .then(data => {
+        setStartupsData(data);
+        if (data.length > 1) {
+          setCompareStartupA(data[0].id);
+          setCompareStartupB(data[1].id);
+        }
+      });
+  }, []);
 
   const handleAIAnalysis = async (startup: Startup) => {
     setSelectedStartup(startup);

@@ -1,10 +1,11 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {
@@ -50,7 +51,7 @@ enum AlertSeverity {
 }
 
 model User {
-  id            String   @id @default(uuid(7))
+  id            String   @id @default(uuid())
   nik           String   @unique
   email         String   @unique
   passwordHash  String   @map("password_hash")
@@ -67,7 +68,7 @@ model User {
 }
 
 model Startup {
-  id          String        @id @default(uuid(7))
+  id          String        @id @default(uuid())
   name        String
   founderName String        @map("founder_name")
   sector      String
@@ -88,7 +89,7 @@ model Startup {
 }
 
 model Report {
-  id            String       @id @default(uuid(7))
+  id            String       @id @default(uuid())
   startupId     String       @map("startup_id")
   period        String       @map("period")
   narrativeText String       @map("narrative_text")
@@ -109,7 +110,7 @@ model Report {
 }
 
 model HealthEvaluation {
-  id                String    @id @default(uuid(7))
+  id                String    @id @default(uuid())
   reportId          String    @unique @map("report_id")
   healthScore       Int       @map("health_score")
   riskLabel         RiskLabel @map("risk_label")
@@ -125,7 +126,7 @@ model HealthEvaluation {
 }
 
 model ExecutiveSummary {
-  id          String   @id @default(uuid(7))
+  id          String   @id @default(uuid())
   reportId    String   @unique @map("report_id")
   point1      String
   point2      String
@@ -140,7 +141,7 @@ model ExecutiveSummary {
 }
 
 model TelkomBU {
-  id           String   @id @default(uuid(7))
+  id           String   @id @default(uuid())
   name         String
   description  String?
   sector       String
@@ -156,7 +157,7 @@ model TelkomBU {
 }
 
 model SynergyMatch {
-  id           String   @id @default(uuid(7))
+  id           String   @id @default(uuid())
   reportId     String   @map("report_id")
   telkomBuId   String   @map("telkom_bu_id")
   matchReason  String   @map("match_reason")
@@ -171,7 +172,7 @@ model SynergyMatch {
 }
 
 model SynergyPipeline {
-  id         String         @id @default(uuid(7))
+  id         String         @id @default(uuid())
   startupId  String         @map("startup_id")
   telkomBuId String         @map("telkom_bu_id")
   status     PipelineStatus @default(PIPELINE)
@@ -188,7 +189,7 @@ model SynergyPipeline {
 }
 
 model AlertLog {
-  id            String        @id @default(uuid(7))
+  id            String        @id @default(uuid())
   startupId     String        @map("startup_id")
   alertType     AlertType     @default(RISK) @map("alert_type")
   severity      AlertSeverity @default(MEDIUM)
@@ -204,7 +205,7 @@ model AlertLog {
 }
 
 model Forecast {
-  id                   String   @id @default(uuid(7))
+  id                   String   @id @default(uuid())
   startupId            String   @map("startup_id")
   reportId             String   @map("report_id")
   predictedGrowthRate  Float?   @map("predicted_growth_rate")

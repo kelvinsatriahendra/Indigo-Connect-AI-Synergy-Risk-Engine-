@@ -4,34 +4,8 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { LoginFormSchema, FormState } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
-
-// Demo users stored in memory — works on Vercel (no filesystem needed)
-const DEMO_USERS = [
-  {
-    id: "demo-admin-id",
-    name: "Hendra Wijaya",
-    email: "hendra.wijaya@telkom.co.id",
-    nik: "940123",
-    passwordHash: "$2b$10$r84H0sR36wQ1Jhjx.51Y.OSKQroRDncUlkD14NCf/JT5Ts4Q.GRxa", // admin123
-    role: "admin",
-  },
-  {
-    id: "demo-synergy-id",
-    name: "Rina Kusuma",
-    email: "rina.kusuma@telkom.co.id",
-    nik: "940789",
-    passwordHash: "$2b$10$9ej0NlHfT6JqD8OjlxcLGuDn6nlQHKKu8heYnLvuOzbu67m1XWjC6", // synergy123
-    role: "synergy",
-  },
-  {
-    id: "demo-founder-id",
-    name: "Yusuf Pratama",
-    email: "yusuf@antarestar.com",
-    nik: "850456",
-    passwordHash: "$2b$10$FnD1lqdqrsNR1Bp8SHgPCOjPzRWYeEBcwLzkJZzvRHeVl1YikRTAS", // founder123
-    role: "founder",
-  },
-];
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 export async function login(state: FormState, formData: FormData) {
   const validatedFields = LoginFormSchema.safeParse({
@@ -45,8 +19,10 @@ export async function login(state: FormState, formData: FormData) {
 
   const { identifier, password } = validatedFields.data;
 
-  // Search by NIK
-  const user = DEMO_USERS.find((u) => u.nik === identifier);
+  // Search by NIK using Prisma
+  const user = await prisma.user.findUnique({
+    where: { nik: identifier },
+  });
 
   if (!user) {
     return { message: "NIK atau password salah." };
@@ -57,16 +33,19 @@ export async function login(state: FormState, formData: FormData) {
     return { message: "NIK atau password salah." };
   }
 
-  await createSession(user.id, user.email, user.name, user.role);
+  await createSession(user.id, user.email, user.name, user.role.toLowerCase());
   redirect("/dashboard");
 }
 
 // Quick login for demo/presentation purposes
 export async function loginAsDemo(role: "admin" | "synergy" | "founder") {
-  const user = DEMO_USERS.find((u) => u.role === role);
+  const dbRole = role.toUpperCase() as Role;
+  const user = await prisma.user.findFirst({
+    where: { role: dbRole },
+  });
 
   if (user) {
-    await createSession(user.id, user.email, user.name, user.role);
+    await createSession(user.id, user.email, user.name, user.role.toLowerCase());
     redirect("/dashboard");
   }
 }

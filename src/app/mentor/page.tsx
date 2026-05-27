@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import { Bot, User, Send, Sparkles, BookOpen, TrendingUp, Shield, Lightbulb } from "lucide-react";
 
 type UserInfo = { name: string; email: string; role: string; userId?: string };
@@ -77,14 +76,16 @@ export default function MentorPage() {
 
   useEffect(() => {
     setMounted(true);
-    fetch("/api/auth/me")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.user) {
-          setUser(data.user);
-          if (data.user.role === "founder" && data.user.userId) {
-            const myIds = founderStartupMap[data.user.userId] || ["s3"];
-            const startup = startupsData.find((s) => myIds.includes(s.id));
+    Promise.all([
+      fetch("/api/auth/me").then((res) => (res.ok ? res.json() : null)),
+      fetch("/api/startups").then((res) => (res.ok ? res.json() : []))
+    ])
+      .then(([userData, fetchedStartups]) => {
+        if (userData?.user) {
+          setUser(userData.user);
+          if (userData.user.role === "founder" && userData.user.userId) {
+            const myIds = founderStartupMap[userData.user.userId] || ["s3"];
+            const startup = fetchedStartups.find((s: any) => myIds.includes(s.id));
             if (startup) setStartupName(startup.name);
           }
         }
