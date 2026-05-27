@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
-import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight } from "lucide-react";
+import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight, ShieldAlert, Sparkles, LineChart, PieChart, Activity, BrainCircuit, CheckCircle2, AlertTriangle, Link2, X } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
 type Startup = (typeof startupsData)[number];
@@ -322,14 +322,10 @@ export default function ReportsPage() {
     await exportToPdf(reportRef.current, `Indigo-Connect-Evaluation-${startup?.name || "Startup"}.pdf`);
   };
 
-  const selectedStartupData = startupsData.find((s) => s.id === selectedStartup);
-  const activeReport = mockSubmittedReports.find((r) => r.id === selectedReportId);
-
-  // Dummy history data
   const reportHistory = [
     { month: "April 2026", date: "12 Apr 2026", healthScore: 88, status: "Excellent" },
     { month: "Maret 2026", date: "15 Mar 2026", healthScore: 85, status: "Good" },
-    { month: "Februari 2026", date: "10 Feb 2026", healthScore: 78, status: "Stable" },
+    { month: "Februari 2026", date: "11 Feb 2026", healthScore: 82, status: "Good" },
   ];
 
   if (!mounted) return null;
@@ -337,10 +333,8 @@ export default function ReportsPage() {
   return (
     <AppShell>
       <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
-        {/* Subtle AI Mesh/Pattern Background */}
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
-        {/* Fixed Header Bar */}
         <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-4 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
@@ -352,13 +346,6 @@ export default function ReportsPage() {
             </div>
             
             <div className="flex items-center gap-4">
-              <p className="text-sm text-[#667085] hidden xl:block">
-                {user?.role === "founder"
-                  ? "Submit laporan bulanan startup untuk evaluasi otomatis oleh AI"
-                  : "Review hasil evaluasi laporan bulanan dan usulan sinergi dari mitra startup"}
-              </p>
-              
-              {/* Header Controls for Founder */}
               {user?.role === "founder" && (
                 <div className="flex items-center gap-3">
                   {availableStartups.length > 1 ? (
@@ -398,33 +385,22 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        {/* Scrollable Body */}
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
-
           <div className="mx-auto max-w-[1400px]">
             <div className="flex flex-col gap-6">
-
-              {/* Left Column: Form Input & History */}
               <div className="flex-1 min-w-0 space-y-6">
                 {user?.role === "founder" ? (
-                  // FOUNDER VIEW: Form Input
                   <div className="card-legion p-6 lg:p-8">
                     <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
                     <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
 
                     <div className="mt-8 space-y-6">
-
-                      {/* Select is now in the header for founders, and for non-founders we use a list view anyway */}
-
-
-
                       <div className="pt-2 border-t border-[#f2f4f7]">
                         <div className="mb-3 flex items-center justify-between">
                           <label className="block text-sm font-bold text-[#344054]">Narrative Report</label>
                           <span className="text-xs font-medium text-[#667085]">Upload PDF / Ketik Manual</span>
                         </div>
 
-                        {/* Drag and Drop Zone */}
                         <div className="space-y-5">
                           <div
                             className={`group relative flex cursor-pointer flex-col items-center justify-center rounded-[20px] border-2 border-dashed transition-all duration-300 p-10 ${
@@ -469,12 +445,9 @@ export default function ReportsPage() {
                           />
                         </div>
                       </div>
-
-                      {/* Submit action moved to header bar */}
                     </div>
                   </div>
                 ) : (
-                  // EXECUTIVE & SYNERGY VIEW: AI Evaluation Explorer List
                   <div className="card-legion p-6 lg:p-8 animate-fade-in">
                     <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
                       <div>
@@ -490,11 +463,6 @@ export default function ReportsPage() {
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       {mockSubmittedReports.map((report) => {
                         const isActive = selectedReportId === report.id;
-                        const isHigh = report.evaluation.operationalStatus === "ACTIVE";
-                        const statusColor = isHigh
-                          ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                          : "bg-rose-50 text-rose-700 border-rose-100";
-
                         return (
                           <div
                             key={report.id}
@@ -502,78 +470,37 @@ export default function ReportsPage() {
                               setSelectedReportId(report.id);
                               setResult(report.evaluation);
                             }}
-                            className={`group cursor-pointer rounded-xl border p-5 transition-all flex flex-col justify-between gap-4 ${isActive
-                                ? "border-[#ED1C24] bg-red-50/10 shadow-md"
-                                : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
-                              }`}
+                            className={`group relative cursor-pointer overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 transition-all hover:border-[#ED1C24]/50 hover:shadow-xl ${isActive ? "ring-2 ring-[#ED1C24]" : ""}`}
                           >
-                            <div className="space-y-1.5">
-                              <div className="flex items-center gap-2.5 flex-wrap">
-                                {(() => {
-                                  const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
-                                  return logo ? (
-                                    <div className="h-6 w-6 shrink-0 rounded bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                      <img src={logo} alt={report.startupName} className="h-full w-full object-contain p-0.5" />
-                                    </div>
-                                  ) : null;
-                                })()}
-                                <h3 className={`text-base font-extrabold transition-colors ${isActive ? "text-[#ED1C24]" : "text-[#161616] group-hover:text-[#ED1C24]"
-                                  }`}>
-                                  {report.startupName}
-                                </h3>
-                                <span className="text-[10px] font-bold text-[#8c8f93] uppercase bg-[#f2f4f7] px-2 py-0.5 rounded">
-                                  {report.sector} · {report.batch}
-                                </span>
+                            <div className="flex items-center justify-between mb-4">
+                              <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center font-bold text-slate-400">
+                                {report.startupName.substring(0, 2).toUpperCase()}
                               </div>
-                              <p className="text-xs font-bold text-[#344054]">
-                                Periode Laporan: <span className="font-medium text-[#667085]">{report.month}</span>
-                              </p>
-
+                              <span className="text-[10px] font-bold text-[#64748b] bg-slate-100 px-2 py-1 rounded-lg">
+                                {report.batch}
+                              </span>
                             </div>
-
-                            <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto w-full justify-between mt-2 pt-2 border-t border-[#f2f4f7]">
+                            <h3 className="text-lg font-extrabold text-[#0f172a] mb-1">{report.startupName}</h3>
+                            <p className="text-xs font-medium text-slate-500 mb-6">{report.sector}</p>
+                            
+                            <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setShowOriginalReportId(prev => prev === report.id ? null : report.id);
+                                  setShowOriginalReportId(report.id);
                                 }}
-                                className="text-xs font-bold text-[#667085] hover:text-[#ED1C24] transition-colors flex items-center gap-1"
+                                className="flex-1 text-xs font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 py-2.5 rounded-xl transition-colors"
                               >
-                                {showOriginalReportId === report.id ? "Tutup Laporan" : "Lihat Laporan Asli"}
+                                View Report
                               </button>
-                              <div className="flex items-center gap-3">
-                                <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-[11px] font-extrabold border ${statusColor}`}>
-                                  Health: {report.evaluation.healthScore}%
-                                </span>
-                                <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
-                                  <ChevronRight className={`h-4 w-4 text-[#d0d5dd] transition-transform ${isActive ? "text-[#ED1C24] translate-x-0.5" : "group-hover:text-[#ED1C24] group-hover:translate-x-0.5"
-                                    }`} />
-                                </div>
-                              </div>
                             </div>
-
-                            {/* Expanded Original Report */}
-                            {showOriginalReportId === report.id && (
-                              <div 
-                                className="mt-2 rounded-xl border border-dashed border-[#e0e0e0] bg-[#f8fafc] p-4 text-xs text-[#525252] leading-relaxed animate-fade-in font-medium whitespace-pre-line cursor-default" 
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <div className="flex items-center gap-2 mb-2 pb-2 border-b border-[#e0e0e0]/60">
-                                  <FileText className="h-3.5 w-3.5 text-[#ED1C24]" />
-                                  <span className="font-bold text-[#161616]">Detail Narasi Laporan Asli</span>
-                                </div>
-                                "{report.narrativeText}"
-                              </div>
-                            )}
                           </div>
                         );
                       })}
                     </div>
                   </div>
                 )}
-
-
-                {/* Founder-only block errors and loading */}
+                
                 {user?.role === "founder" && error && (
                   <div className="card-legion border-red-200 bg-red-50 p-6 flex items-center gap-3">
                     <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
@@ -633,7 +560,6 @@ export default function ReportsPage() {
                 )}
               </div>
 
-              {/* Right Column: AI Result */}
               {result && (
                 <div className="w-full shrink-0">
                   <div className="sticky top-6">
@@ -671,16 +597,59 @@ export default function ReportsPage() {
                         }
                       />
                     </div>
-
-
                   </div>
                 </div>
               )}
-
             </div>
           </div>
         </div>
-      </div>
-    </AppShell>
+
+      {showOriginalReportId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4 animate-in fade-in duration-200" onClick={() => setShowOriginalReportId(null)}>
+          <div 
+            className="w-full max-w-2xl max-h-[85vh] bg-white rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300" 
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 border-b border-slate-100 bg-slate-50/50">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-red-50 text-[#ED1C24] flex items-center justify-center shadow-inner">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-extrabold text-[#0f172a] tracking-tight">Narasi Laporan Asli</h3>
+                  <p className="text-sm font-semibold text-[#64748b] mt-0.5">
+                    {mockSubmittedReports.find(r => r.id === showOriginalReportId)?.startupName} • {mockSubmittedReports.find(r => r.id === showOriginalReportId)?.month}
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowOriginalReportId(null)}
+                className="h-10 w-10 shrink-0 rounded-full bg-white border border-slate-200 text-slate-500 hover:text-red-600 hover:border-red-200 hover:bg-red-50 flex items-center justify-center transition-all shadow-sm"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <div className="bg-[#f8fafc] rounded-2xl border border-slate-200 p-6 shadow-inner">
+                <p className="text-sm text-[#334155] leading-loose whitespace-pre-line font-medium">
+                  "{mockSubmittedReports.find(r => r.id === showOriginalReportId)?.narrativeText}"
+                </p>
+              </div>
+            </div>
+            
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+               <button 
+                 onClick={() => setShowOriginalReportId(null)}
+                 className="px-6 py-2.5 rounded-xl bg-[#0f172a] text-white text-sm font-bold hover:bg-[#1e293b] transition-colors shadow-md"
+               >
+                 Tutup
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  </AppShell>
   );
 }
