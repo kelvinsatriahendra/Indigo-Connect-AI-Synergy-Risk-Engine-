@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { getLogoForName } from "@/lib/logos";
 import {
   GitBranch,
   Plus,
@@ -333,9 +334,9 @@ export default function SynergyPage() {
                                 {/* Startup */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    {startup && (startup as any).logo ? (
+                                    {startup && getLogoForName(startup.name) ? (
                                       <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-0.5" />
+                                        <img src={getLogoForName(startup.name)} alt={startup.name} className="h-full w-full object-contain p-0.5" />
                                       </div>
                                     ) : (
                                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 text-[11px] font-extrabold border border-blue-100 shadow-2xs">
@@ -358,9 +359,9 @@ export default function SynergyPage() {
                                 {/* Telkom BU */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    {bu && (bu as any).logo ? (
+                                    {bu && getLogoForName(bu.name) ? (
                                       <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                        <img src={(bu as any).logo} alt={bu.name} className="h-full w-full object-contain p-0.5" />
+                                        <img src={getLogoForName(bu.name)} alt={bu.name} className="h-full w-full object-contain p-0.5" />
                                       </div>
                                     ) : (
                                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#ED1C24] text-[11px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">

@@ -1,6 +1,7 @@
 "use client";
 
-import { Shield, TrendingUp, AlertTriangle, Target, Lightbulb } from "lucide-react";
+import { ShieldAlert, TrendingUp, TrendingDown, Users, Activity, BarChart4, ChevronRight, Zap, Target, Lightbulb, Clock, CheckCircle2, ShieldCheck, HeartPulse, Stethoscope, AlertTriangle, Shield } from "lucide-react";
+import { getLogoForName } from "@/lib/logos";
 
 interface HealthScoreProps {
   healthScore: number;
@@ -171,9 +172,9 @@ export function HealthScoreCard({
               <div key={i} className="rounded-xl border border-slate-100 bg-[#FAFAFD] p-5 hover:border-amber-200 transition-colors">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    {match.logo && (
+                    {(match.logo || getLogoForName(match.name)) && (
                       <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center">
-                        <img src={match.logo} alt={match.name} className="h-full w-full object-contain p-1" />
+                        <img src={match.logo || getLogoForName(match.name)} alt={match.name} className="h-full w-full object-contain p-1" />
                       </div>
                     )}
                     <p className="font-bold text-[#0f172a]">{match.name}</p>

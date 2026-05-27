@@ -5,6 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis, AreaChart, Area, ReferenceArea } from "recharts";
 import { exportToPdf } from "@/lib/pdf-export";
+import { getLogoForName } from "@/lib/logos";
 
 type Startup = {
   id: string;
@@ -578,9 +579,9 @@ export default function DashboardPage() {
                     
                     {/* Company Info */}
                     <div className="flex-1 min-w-0 flex items-start gap-5">
-                      {startup && (startup as any).logo && (
+                      {startup && getLogoForName(startup.name) && (
                         <div className="h-16 w-16 shrink-0 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-sm p-1">
-                          <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain" />
+                          <img src={getLogoForName(startup.name) || "/startups/indigo-red.png"} alt={startup.name} className="h-full w-full object-contain" />
                         </div>
                       )}
                       <div>
@@ -873,9 +874,9 @@ export default function DashboardPage() {
                   <div className="p-6 pl-7 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-3">
-                        {startup && (startup as any).logo && (
+                        {startup && getLogoForName(startup.name) && (
                           <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm">
-                            <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                            <img src={getLogoForName(startup.name) || "/startups/indigo-red.png"} alt={startup.name} className="h-full w-full object-contain p-1" />
                           </div>
                         )}
                         <div>

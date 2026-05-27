@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { getLogoForName } from "@/lib/logos";
 import { Building2, Sparkles, Coins, TrendingUp, Handshake, Activity, Scale, X } from "lucide-react";
 
 type Startup = {
@@ -288,7 +289,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-md bg-white border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
-                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                        {getLogoForName(startup.name) ? (
+                          <img src={getLogoForName(startup.name)} alt={startup.name} className="h-full w-full object-contain p-1" />
+                        ) : (
+                          <span className="text-[10px] font-bold text-slate-400">{startup.name.charAt(0)}</span>
+                        )}
                       </div>
                       <span className="font-semibold text-[#161616]">{startup.name}</span>
                     </div>
