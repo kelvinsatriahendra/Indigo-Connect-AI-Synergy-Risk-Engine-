@@ -665,27 +665,6 @@ export default function DashboardPage() {
               )
             })}
 
-            {/* Quick Actions */}
-            <div className="grid gap-5 sm:grid-cols-2">
-              <a href="/reports" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
-                  <FileText className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#161616]">Submit Laporan Baru</p>
-                  <p className="text-xs text-[#667085]">Kirim laporan bulanan untuk evaluasi AI</p>
-                </div>
-              </a>
-              <a href="/forecast" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#16a34a] hover:shadow-lg hover:shadow-green-500/10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
-                  <TrendingUp className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#161616]">Lihat Forecast</p>
-                  <p className="text-xs text-[#667085]">Prediksi pertumbuhan 3 bulan ke depan</p>
-                </div>
-              </a>
-            </div>
 
             {/* Peer Benchmarking & Resource Hub Grid */}
             <div className="grid gap-6 lg:grid-cols-2">
