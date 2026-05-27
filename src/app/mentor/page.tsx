@@ -15,14 +15,14 @@ const founderStartupMap: Record<string, string[]> = {
 // Mock evaluation context for the mentor to reference
 const mockEvaluationContext = {
   startupId: "s3",
-  startupName: "FinAccess",
+  startupName: "Verihubs",
   healthScore: 94,
   riskLabel: "LOW_RISK",
   month: "Mei 2026",
   summaryPoints: [
-    "Penyaluran pembiayaan tumbuh stabil dengan peluncuran credit scoring instan 5 menit.",
-    "NPL terjaga sangat baik di angka 1.8%, jauh di bawah batas rata-rata industri.",
-    "Rencana integrasi dengan LinkAja berpotensi melipatgandakan akuisisi merchant mikro.",
+    "Volume verifikasi API meningkat tajam dengan tingkat keberhasilan (True Acceptance Rate) mencapai 99.8%.",
+    "SLA Uptime sistem sangat stabil di angka 99.99%, memenuhi standar perbankan tier-1.",
+    "Rencana integrasi dengan ekosistem enterprise berpotensi melipatgandakan hit rate API harian.",
   ],
 };
 
@@ -36,11 +36,11 @@ const quickPrompts = [
 
 // Mock AI responses based on keywords
 const mockResponses: Record<string, string> = {
-  "pertumbuhan": "Berdasarkan evaluasi terakhir FinAccess, pertumbuhan penyaluran pembiayaan Anda sudah stabil. Saya merekomendasikan tiga langkah strategis:\n\n1. **Ekspansi Vertikal** — Tambahkan produk tabungan mikro atau asuransi mikro untuk meningkatkan ARPU (Average Revenue Per User) dari merchant yang sudah ada.\n2. **Kemitraan Distribusi** — Percepat integrasi dengan LinkAja untuk mengakses basis 40 juta pengguna aktifnya sebagai kanal distribusi baru.\n3. **Optimasi Funnel** — Dengan credit scoring 5 menit, fokuslah pada campaign referral merchant-to-merchant untuk menurunkan CAC (Customer Acquisition Cost).",
-  "risiko": "Berdasarkan profil risiko FinAccess saat ini (Health Score 94, Low Risk), area yang perlu diwaspadai:\n\n1. **Risiko Regulasi** — OJK sedang menyiapkan regulasi baru terkait P2P lending. Pastikan tim compliance Anda aktif memonitor perkembangan ini.\n2. **Risiko Kredit** — NPL Anda di 1.8% sangat baik, namun jika Anda melakukan ekspansi agresif, pastikan model credit scoring divalidasi ulang untuk segmen merchant baru.\n3. **Konsentrasi Pendapatan** — Diversifikasi sumber pendapatan agar tidak terlalu bergantung pada satu produk pembiayaan saja.",
-  "sinergi": "Peluang sinergi FinAccess dengan ekosistem Telkom Group sangat menjanjikan:\n\n1. **LinkAja (Match Score: 95%)** — Integrasi pembayaran dan penyaluran modal produktif langsung dari e-wallet. Ini bisa menjadi game-changer untuk distribusi.\n2. **PADI UMKM** — Akses ke database merchant UMKM yang terkurasi untuk cross-selling produk pembiayaan.\n3. **Telkomsel** — Leverage data mobilitas pelanggan untuk enrichment credit scoring model Anda.\n\nRekomendasi: Mulai dengan PoC (Proof of Concept) bersama LinkAja di Q3 2026.",
-  "fundraising": "Untuk presentasi di hadapan investor Telkom, persiapkan hal berikut:\n\n1. **Metrik Kunci** — Highlight NPL 1.8% (di bawah rata-rata industri 3.5%), pertumbuhan penyaluran yang konsisten, dan unit economics yang sehat.\n2. **Traksi Sinergi** — Tunjukkan pipeline integrasi dengan LinkAja dan potensi TAM (Total Addressable Market) dari kolaborasi tersebut.\n3. **Roadmap Teknologi** — Presentasikan keunggulan credit scoring instan 5 menit sebagai competitive moat.\n4. **Ask yang Jelas** — Tentukan jumlah dana yang dibutuhkan, penggunaan dana (hiring, expansion, tech), dan milestone yang akan dicapai dalam 6-12 bulan ke depan.",
-  "default": "Terima kasih atas pertanyaan Anda. Berdasarkan evaluasi AI terakhir FinAccess (Health Score: 94, Low Risk), performa startup Anda sangat baik. NPL terjaga di angka 1.8% dan fitur credit scoring instan menjadi keunggulan kompetitif yang signifikan.\n\nSaya merekomendasikan untuk fokus pada tiga hal: (1) percepatan integrasi LinkAja untuk ekspansi distribusi, (2) diversifikasi produk fintech untuk meningkatkan ARPU, dan (3) penguatan tim compliance untuk mengantisipasi regulasi baru OJK.\n\nApakah ada topik spesifik yang ingin Anda dalami lebih lanjut?",
+  "pertumbuhan": "Berdasarkan evaluasi terakhir Verihubs, volume verifikasi API Anda sudah stabil. Saya merekomendasikan tiga langkah strategis:\n\n1. **Ekspansi Sektoral** — Perluas layanan dari perbankan ke sektor telco dan e-commerce yang juga membutuhkan e-KYC kuat.\n2. **Kemitraan Distribusi** — Jajaki integrasi dengan penyedia gateway pembayaran sebagai layanan bundling.\n3. **Optimasi Model AI** — Terus latih model Liveness Detection untuk menekan angka spoofing attack yang semakin canggih.",
+  "risiko": "Berdasarkan profil risiko Verihubs saat ini (Health Score 94, Low Risk), area yang perlu diwaspadai:\n\n1. **Risiko Keamanan Data** — Pastikan sertifikasi ISO 27001 dan audit pentest rutin dilakukan mengingat data biometrik yang dikelola sangat sensitif.\n2. **Risiko Infrastruktur** — Skalabilitas server perlu ditingkatkan seiring dengan lonjakan request API dari klien enterprise.\n3. **Ketergantungan Vendor** — Diversifikasi penyedia cloud untuk menghindari single point of failure dan menjaga SLA 99.99%.",
+  "sinergi": "Peluang sinergi Verihubs dengan ekosistem Telkom Group sangat menjanjikan:\n\n1. **Telkomsel (Match Score: 95%)** — Integrasi layanan verifikasi identitas untuk proses registrasi nomor prabayar (Prepaid) dan layanan finansial Telkomsel.\n2. **LinkAja** — Penguatan proses e-KYC untuk meminimalisir akun palsu dan fraud transaksi.\n3. **Telkom Data Ekosistem** — Pemanfaatan infrastruktur data center lokal (NeutraDC) untuk compliance regulasi penyimpanan data BSSN.\n\nRekomendasi: Mulai dengan PoC (Proof of Concept) bersama Telkomsel di Q3 2026.",
+  "fundraising": "Untuk presentasi di hadapan investor Telkom, persiapkan hal berikut:\n\n1. **Metrik Kunci** — Highlight API Uptime 99.99%, FAR (False Acceptance Rate) < 0.01%, dan pertumbuhan klien B2B yang konsisten.\n2. **Traksi Sinergi** — Tunjukkan pipeline integrasi dengan Telkomsel dan potensi penghematan biaya e-KYC bagi seluruh ekosistem BUMN.\n3. **Roadmap Teknologi** — Presentasikan keunggulan proprietary AI engine Anda sebagai competitive moat.\n4. **Ask yang Jelas** — Tentukan jumlah dana yang dibutuhkan, penggunaan dana (R&D AI, expansion, hiring), dan milestone 12 bulan ke depan.",
+  "default": "Terima kasih atas pertanyaan Anda. Berdasarkan evaluasi AI terakhir Verihubs (Health Score: 94, Low Risk), performa startup Anda sangat baik. SLA terjaga di angka 99.99% dan teknologi biometrik proprietary menjadi keunggulan kompetitif yang signifikan.\n\nSaya merekomendasikan untuk fokus pada tiga hal: (1) eksplorasi use-case baru di luar sektor finansial, (2) percepatan integrasi dengan Telkomsel, dan (3) penguatan sertifikasi keamanan data (compliance).\n\nApakah ada topik spesifik yang ingin Anda dalami lebih lanjut?",
 };
 
 function getAIResponse(userMessage: string): string {
@@ -63,7 +63,7 @@ function getAIResponse(userMessage: string): string {
 export default function MentorPage() {
   const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
-  const [startupName, setStartupName] = useState("FinAccess");
+  const [startupName, setStartupName] = useState("Verihubs");
 
   const [chatMessages, setChatMessages] = useState<{ role: "user" | "ai"; content: string }[]>([
     {
