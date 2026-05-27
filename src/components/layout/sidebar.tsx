@@ -17,7 +17,7 @@ import {
 
 const allNavItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "synergy", "founder"] },
-  { href: "/reports", label: "AI Evaluation", icon: FileText, roles: ["admin", "founder"] },
+  { href: "/reports", label: "AI Evaluation", icon: FileText, roles: ["admin", "synergy", "founder"] },
   { href: "/startups", label: "Startups", icon: BarChart3, roles: ["admin"] },
   { href: "/synergy", label: "Synergy Pipeline", icon: GitBranch, roles: ["admin", "synergy"] },
   { href: "/forecast", label: "Forecast", icon: Shield, roles: ["admin", "founder"] },

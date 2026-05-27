@@ -1,8 +1,21 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { decrypt } from '@/lib/session';
+
+// Define route permissions
+const routePermissions: Record<string, string[]> = {
+  '/dashboard': ['admin', 'synergy', 'founder'],
+  '/reports': ['admin', 'founder', 'synergy'],
+  '/synergy': ['admin', 'synergy'],
+  '/forecast': ['admin', 'founder'],
+  '/mentor': ['founder'],
+  '/startups': ['admin'],
+  '/alerts': ['admin', 'synergy'],
+};
+
 // Protected routes that require authentication
-const protectedRoutes = ['/dashboard', '/reports', '/synergy', '/forecast', '/mentor', '/startups', '/alerts'];
+const protectedRoutes = Object.keys(routePermissions);
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -12,23 +25,37 @@ export async function proxy(request: NextRequest) {
 
   // If it's a protected route, verify session
   if (isProtectedRoute) {
-    const session = request.cookies.get('session')?.value;
+    const sessionCookie = request.cookies.get('session')?.value;
     
     // If no session exists, redirect to login
-    if (!session) {
+    if (!sessionCookie) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('callbackUrl', pathname);
       return NextResponse.redirect(loginUrl);
     }
     
-    // In a real app, we would verify the JWT here. 
-    // For this prototype, checking cookie existence is enough since the session API handles validation
+    // Verify JWT and Role
+    const session = await decrypt(sessionCookie);
+    if (!session || !session.role) {
+      const loginUrl = new URL('/login', request.url);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Role-based Access Control
+    const matchingRoute = protectedRoutes.find(route => pathname.startsWith(route));
+    if (matchingRoute) {
+      const allowedRoles = routePermissions[matchingRoute];
+      if (!allowedRoles.includes(session.role as string)) {
+        // User doesn't have permission, redirect to dashboard
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
+    }
   }
 
   // If user is logged in and tries to access login or root, redirect to dashboard
   if (pathname === '/login' || pathname === '/') {
-    const session = request.cookies.get('session')?.value;
-    if (session) {
+    const sessionCookie = request.cookies.get('session')?.value;
+    if (sessionCookie) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
