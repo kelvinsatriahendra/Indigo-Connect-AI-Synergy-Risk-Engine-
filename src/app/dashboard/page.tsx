@@ -500,63 +500,51 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Resource Hub & Perks */}
-              <div className="card-legion p-6 flex flex-col">
+              {/* AI Action Items (Replaced Resource Hub) */}
+              <div className="card-legion p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Gift className="h-4 w-4 text-emerald-600" />
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Resource Hub & Perks</h3>
+                    <Sparkles className="h-4 w-4 text-[#ED1C24]" />
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Action Items</h3>
                   </div>
-                  <p className="text-xs text-[#8c8f93]">Klaim benefit eksklusif jaringan Telkom Group</p>
+                  <p className="text-xs text-[#8c8f93]">Fokus perbaikan berdasarkan evaluasi laporan bulan lalu</p>
                 </div>
-                <div className="mt-5 space-y-3 flex-1">
+                <div className="mt-5 space-y-4 flex-1">
                   
-                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
-                        <Cloud className="h-5 w-5 text-orange-500" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-[#161616]">AWS Activate Credits</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">Hingga $100k credit untuk startup aktif</p>
-                      </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-100 text-[#ED1C24]">
+                      <AlertTriangle className="h-3 w-3" />
                     </div>
-                    <button onClick={() => alert("Fitur AWS Activate Credits akan segera hadir untuk startup aktif!")} className="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-full border border-orange-200 transition-colors cursor-pointer">
-                      Claim
-                    </button>
+                    <div>
+                      <p className="text-sm font-bold text-[#161616]">Optimalkan Margin Mitra</p>
+                      <p className="text-xs text-[#667085] mt-1 leading-relaxed">AI mendeteksi sentimen peringatan pada penurunan retensi aktif bulan lalu. Rancang strategi insentif baru bulan ini.</p>
+                    </div>
                   </div>
 
-                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
-                        <TerminalSquare className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-[#161616]">Telkom API Sandbox</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">Akses gratis API Telkomsel & IndiHome</p>
-                      </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                      <CheckCircle2 className="h-3 w-3" />
                     </div>
-                    <button onClick={() => alert("Fitur integrasi Telkom API Sandbox sedang dalam pengembangan.")} className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full border border-blue-200 transition-colors cursor-pointer">
-                      Connect
-                    </button>
+                    <div>
+                      <p className="text-sm font-bold text-[#161616]">Follow-up Sinergi Telkom</p>
+                      <p className="text-xs text-[#667085] mt-1 leading-relaxed">Peluang sinergi dengan LinkAja & PADI UMKM (Match: 95%). Siapkan ringkasan teknis API untuk diajukan ke manajer Sinergi.</p>
+                    </div>
                   </div>
 
-                  <div className="group flex items-center justify-between p-3 rounded-xl border border-slate-100 bg-slate-50 hover:bg-white hover:border-slate-200 hover:shadow-sm transition-all">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm">
-                        <Building2 className="h-5 w-5 text-indigo-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-bold text-[#161616]">Legal & Compliance Vault</p>
-                        <p className="text-[10px] text-slate-500 mt-0.5">Ruang dokumen aman untuk due diligence</p>
-                      </div>
+                  <div className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                      <RefreshCw className="h-3 w-3" />
                     </div>
-                    <button onClick={() => alert("Vault hukum dan kepatuhan akan tersedia setelah tahap due diligence dimulai.")} className="text-[10px] font-bold text-slate-600 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-300 transition-colors cursor-pointer">
-                      Open
-                    </button>
+                    <div>
+                      <p className="text-sm font-bold text-[#161616]">Persiapan Laporan Selanjutnya</p>
+                      <p className="text-xs text-[#667085] mt-1 leading-relaxed">Laporan berikutnya dijadwalkan dalam 8 hari. Pastikan Anda menyertakan data burn-rate (pengeluaran) terbaru.</p>
+                    </div>
                   </div>
 
                 </div>
+                <a href="/reports" className="mt-5 text-xs font-bold text-[#ED1C24] hover:underline flex items-center gap-1 group w-max transition-all">
+                  Lihat Hasil AI Lengkap <span className="group-hover:translate-x-0.5 transition-transform">›</span>
+                </a>
               </div>
 
             </div>
