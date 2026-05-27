@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
 import startupsData from "@/data/startups.json";
 import telkomBusData from "@/data/telkom-bus.json";
-import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight, MessageSquare, Bot, User } from "lucide-react";
+import { FileText, Send, RefreshCw, Download, Upload, History, ChevronRight } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
 type Startup = (typeof startupsData)[number];
@@ -150,34 +150,7 @@ export default function ReportsPage() {
   } | null>(null);
   const [error, setError] = useState("");
 
-  // AI Chat States
-  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'ai', content: string }[]>([
-    { role: 'ai', content: 'Halo! Laporan bulan ini sudah saya evaluasi. Ada hal spesifik yang ingin didiskusikan terkait strategi atau rekomendasi sinergi?' }
-  ]);
-  const [chatInput, setChatInput] = useState("");
-  const [isChatLoading, setIsChatLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
-
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim() || isChatLoading) return;
-
-    setChatMessages(prev => [...prev, { role: 'user', content: chatInput }]);
-    setChatInput("");
-    setIsChatLoading(true);
-
-    setTimeout(() => {
-      setChatMessages(prev => [...prev, {
-        role: 'ai',
-        content: 'Berdasarkan analisis evaluasi terbaru, saya merekomendasikan untuk menunda ekspansi fitur dan lebih berfokus pada retensi pengguna aktif bulan ini guna menekan burn rate.'
-      }]);
-      setIsChatLoading(false);
-    }, 1500);
-  };
 
   useEffect(() => {
     setMounted(true);
@@ -609,7 +582,7 @@ export default function ReportsPage() {
 
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {reportHistory.map((hist, i) => (
-                        <div key={i} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
+                        <div key={i} onClick={() => alert("Fitur riwayat historis masih dalam tahap pengembangan.")} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
                           <div className="flex items-center justify-between mb-3">
                             <div>
                               <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
@@ -629,7 +602,7 @@ export default function ReportsPage() {
                       ))}
                     </div>
 
-                    <button className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
+                    <button onClick={() => alert("Halaman daftar riwayat lengkap akan segera hadir!")} className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
                       Lihat Semua Riwayat
                     </button>
                   </div>
@@ -670,62 +643,7 @@ export default function ReportsPage() {
                       />
                     </div>
 
-                    {/* Interactive AI Mentor Chat (Visible only for founder after evaluation) */}
-                    {user?.role === "founder" && (
-                      <div className="mt-6 shadow-lg shadow-black/5 rounded-2xl border border-[#e0e0e0] bg-white overflow-hidden flex flex-col h-[400px]">
-                        <div className="bg-[#f8fafc] px-5 py-3 border-b border-[#e0e0e0] flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <div className="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
-                              <Bot className="h-4 w-4 text-indigo-600" />
-                            </div>
-                            <div>
-                              <h3 className="text-sm font-bold text-[#161616]">Interactive AI Mentor</h3>
-                              <p className="text-[10px] text-[#667085]">Tanyakan strategi berdasarkan evaluasi Anda</p>
-                            </div>
-                          </div>
-                          <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        </div>
 
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
-                          {chatMessages.map((msg, i) => (
-                            <div key={i} className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                              <div className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center ${msg.role === 'user' ? 'bg-[#ED1C24] text-white' : 'bg-indigo-600 text-white'}`}>
-                                {msg.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                              </div>
-                              <div className={`rounded-2xl px-4 py-2.5 text-sm max-w-[80%] ${msg.role === 'user' ? 'bg-[#ED1C24] text-white rounded-tr-none' : 'bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-none shadow-sm'}`}>
-                                {msg.content}
-                              </div>
-                            </div>
-                          ))}
-                          {isChatLoading && (
-                            <div className="flex gap-3">
-                              <div className="h-8 w-8 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center">
-                                <Bot className="h-4 w-4" />
-                              </div>
-                              <div className="rounded-2xl px-4 py-3 bg-white border border-[#e0e0e0] rounded-tl-none shadow-sm flex items-center gap-1.5">
-                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce"></span>
-                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                                <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                              </div>
-                            </div>
-                          )}
-                          <div ref={chatEndRef} />
-                        </div>
-
-                        <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-[#e0e0e0] flex items-center gap-2">
-                          <input
-                            type="text"
-                            value={chatInput}
-                            onChange={(e) => setChatInput(e.target.value)}
-                            placeholder="Tanya rekomendasi spesifik..."
-                            className="flex-1 rounded-full border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2 text-sm text-[#344054] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none"
-                          />
-                          <button type="submit" disabled={!chatInput.trim() || isChatLoading} className="h-9 w-9 shrink-0 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-50 transition-colors cursor-pointer">
-                            <Send className="h-4 w-4 ml-0.5" />
-                          </button>
-                        </form>
-                      </div>
-                    )}
                   </div>
                 </div>
               )}

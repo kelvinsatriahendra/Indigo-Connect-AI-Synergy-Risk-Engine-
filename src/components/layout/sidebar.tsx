@@ -21,7 +21,7 @@ const allNavItems = [
   { href: "/startups", label: "Startups", icon: BarChart3, roles: ["admin"] },
   { href: "/synergy", label: "Synergy Pipeline", icon: GitBranch, roles: ["admin", "synergy"] },
   { href: "/forecast", label: "Forecast", icon: Shield, roles: ["admin", "founder"] },
-  { href: "/mentor", label: "AI Mentor", icon: Bot, roles: ["admin", "founder"] },
+  { href: "/mentor", label: "AI Mentor", icon: Bot, roles: ["founder"] },
   { href: "/alerts", label: "Alerts", icon: Bell, roles: ["admin", "synergy"] },
 ];
 

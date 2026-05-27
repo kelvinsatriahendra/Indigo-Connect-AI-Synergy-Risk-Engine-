@@ -521,7 +521,7 @@ export default function DashboardPage() {
                         <p className="text-[10px] text-slate-500 mt-0.5">Hingga $100k credit untuk startup aktif</p>
                       </div>
                     </div>
-                    <button className="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-full border border-orange-200 transition-colors cursor-pointer">
+                    <button onClick={() => alert("Fitur AWS Activate Credits akan segera hadir untuk startup aktif!")} className="text-[10px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-full border border-orange-200 transition-colors cursor-pointer">
                       Claim
                     </button>
                   </div>
@@ -536,7 +536,7 @@ export default function DashboardPage() {
                         <p className="text-[10px] text-slate-500 mt-0.5">Akses gratis API Telkomsel & IndiHome</p>
                       </div>
                     </div>
-                    <button className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full border border-blue-200 transition-colors cursor-pointer">
+                    <button onClick={() => alert("Fitur integrasi Telkom API Sandbox sedang dalam pengembangan.")} className="text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full border border-blue-200 transition-colors cursor-pointer">
                       Connect
                     </button>
                   </div>
@@ -551,7 +551,7 @@ export default function DashboardPage() {
                         <p className="text-[10px] text-slate-500 mt-0.5">Ruang dokumen aman untuk due diligence</p>
                       </div>
                     </div>
-                    <button className="text-[10px] font-bold text-slate-600 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-300 transition-colors cursor-pointer">
+                    <button onClick={() => alert("Vault hukum dan kepatuhan akan tersedia setelah tahap due diligence dimulai.")} className="text-[10px] font-bold text-slate-600 bg-white hover:bg-slate-100 px-3 py-1.5 rounded-full border border-slate-300 transition-colors cursor-pointer">
                       Open
                     </button>
                   </div>
@@ -774,7 +774,10 @@ export default function DashboardPage() {
                     )}
 
                     {/* Right Action Button */}
-                    <button className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1 group/btn transition-colors">
+                    <a 
+                      href={user?.role === "synergy" ? "/synergy" : "/reports"}
+                      className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1 group/btn transition-colors"
+                    >
                       {user?.role === "synergy" ? (
                         <span>Potensi Sinergi</span>
                       ) : user?.role === "founder" ? (
@@ -783,7 +786,7 @@ export default function DashboardPage() {
                         <span>AI Risk Analysis</span>
                       )}
                       <span className="text-sm group-hover/btn:translate-x-0.5 transition-transform">›</span>
-                    </button>
+                    </a>
                   </div>
                 </div>
               );
