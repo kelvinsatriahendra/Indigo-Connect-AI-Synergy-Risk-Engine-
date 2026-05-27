@@ -38,12 +38,14 @@ export default async function Home() {
 
       <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-[85vh] pt-24 pb-28 px-6 text-white">
         {/* Full Section Background Image with elegant blending */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none opacity-30 mix-blend-overlay overflow-hidden">
+        <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
           <img
             src="/hero-section.png"
             alt="Hero Background Graphic"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center opacity-55"
           />
+          {/* Dark gradient mask to ensure high text contrast and readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1e1136]/50 via-[#0d0a1b]/80 to-[#0d0a1b]" />
         </div>
 
         {/* Glow ambient spots */}
