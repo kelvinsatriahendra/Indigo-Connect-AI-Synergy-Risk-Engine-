@@ -401,7 +401,7 @@ export default function ReportsPage() {
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
           <div className="mx-auto max-w-[1400px]">
-            <div className="flex flex-col lg:flex-row gap-6">
+            <div className={`flex flex-col ${user?.role === "founder" ? "lg:flex-row" : ""} gap-6`}>
 
               {/* Left Column: Form Input & History */}
               <div className="flex-1 min-w-0 space-y-6">
@@ -631,7 +631,7 @@ export default function ReportsPage() {
 
               {/* Right Column: AI Result */}
               {result && (
-                <div className="w-full lg:w-[480px] shrink-0">
+                <div className={`w-full ${user?.role === "founder" ? "lg:w-[480px]" : ""} shrink-0`}>
                   <div className="sticky top-6">
                     <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
                       <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
