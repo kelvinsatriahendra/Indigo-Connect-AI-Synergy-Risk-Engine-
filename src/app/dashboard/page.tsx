@@ -296,7 +296,7 @@ export default function DashboardPage() {
         {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
             {/* Health Score Distribution - Sleek Progress Cards */}
-            <div className="card-legion p-6 flex flex-col justify-between">
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Health Score Distribution</h3>
                 <p className="text-xs text-[#8c8f93]">Perbandingan status performa portofolio startup</p>
@@ -320,7 +320,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Sektor Distribution - Recharts Premium Donut Chart */}
-            <div className="card-legion p-6 flex flex-col justify-between">
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
               <div>
                 <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Sector Distribution</h3>
                 <p className="text-xs text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
@@ -359,7 +359,7 @@ export default function DashboardPage() {
 
             {/* Risk Matrix & Synergy Potential Heatmap (Admin Only) */}
             {user?.role === "admin" && (
-              <div className="lg:col-span-2 card-legion p-6 flex flex-col justify-between mt-2">
+              <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2">
                 <div className="mb-4">
                   <h3 className="text-base font-extrabold text-[#161616] tracking-wide mb-1">Executive Risk Matrix</h3>
                   <p className="text-xs text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
@@ -412,7 +412,7 @@ export default function DashboardPage() {
               const healthProgressColor = isHigh ? "bg-emerald-500" : "bg-rose-500";
               
               return (
-                <div key={`hero-${startup.id}`} className="card-legion overflow-hidden relative group hover:border-[#ED1C24]/30 hover:shadow-xl transition-all duration-300">
+                <div key={`hero-${startup.id}`} className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] overflow-hidden relative group hover:border-[#ED1C24]/30 hover:shadow-xl transition-all duration-300">
                   <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${sectorColors[startup.sector] || "bg-slate-400"}`} />
                   <div className="p-6 pl-8 flex flex-col lg:flex-row items-start lg:items-center gap-8">
                     
@@ -472,7 +472,7 @@ export default function DashboardPage() {
 
             {/* Quick Actions */}
             <div className="grid gap-5 sm:grid-cols-2">
-              <a href="/reports" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
+              <a href="/reports" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
                   <FileText className="h-5 w-5" />
                 </div>
@@ -481,7 +481,7 @@ export default function DashboardPage() {
                   <p className="text-xs text-[#667085]">Kirim laporan bulanan untuk evaluasi AI</p>
                 </div>
               </a>
-              <a href="/forecast" className="card-legion group flex items-center gap-4 p-6 transition-all hover:border-[#16a34a] hover:shadow-lg hover:shadow-green-500/10">
+              <a href="/forecast" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#16a34a] hover:shadow-lg hover:shadow-green-500/10">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
                   <TrendingUp className="h-5 w-5" />
                 </div>
@@ -496,7 +496,7 @@ export default function DashboardPage() {
             <div className="grid gap-6 lg:grid-cols-2">
               
               {/* Peer Benchmarking (Anonim) */}
-              <div className="card-legion p-6 flex flex-col justify-between">
+              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
@@ -531,7 +531,7 @@ export default function DashboardPage() {
               </div>
 
               {/* AI Action Items (Replaced Resource Hub) */}
-              <div className="card-legion p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
+              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Sparkles className="h-4 w-4 text-[#ED1C24]" />
@@ -664,7 +664,7 @@ export default function DashboardPage() {
         {/* Standard Grid for Admin and Synergy (Founders already saw their card above) */}
         {user?.role !== "founder" && (
           filteredStartups.length === 0 ? (
-            <div className="card-legion flex flex-col items-center justify-center py-16">
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-16">
               <Search className="mb-3 h-10 w-10 text-[#d0d5dd]" />
               <p className="text-sm font-medium text-[#667085]">Tidak ada startup yang cocok</p>
               <p className="text-xs text-[#8c8f93] mt-1">Coba ubah filter atau kata kunci pencarian</p>
@@ -693,7 +693,7 @@ export default function DashboardPage() {
               return (
                 <div 
                   key={startup.id} 
-                  className="card-legion overflow-hidden relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                  className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] overflow-hidden relative group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between hover:shadow-xl hover:border-[#ED1C24]/20"
                 >
                   {/* Left accent bar matching sector color */}
                   <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${sectorColors[startup.sector] || "bg-slate-400"}`} />
