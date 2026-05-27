@@ -698,16 +698,16 @@ export default function DashboardPage() {
               const healthProgressColor = isHigh ? "bg-emerald-500" : "bg-rose-500";
               
               // Map Synergy target based on sector
-              const synergyMap: Record<string, { target: string; match: number }> = {
-                "Fintech": { target: "LinkAja / PADI UMKM", match: 94 },
-                "Logistik": { target: "Logee / Pos Indo", match: 88 },
-                "Agritech": { target: "Sayurbox / T-Con", match: 91 },
-                "Healthtech": { target: "Adamedika / Telkomsel", match: 79 },
-                "Edtech": { target: "Pijar Mahir", match: 86 },
-                "Energy": { target: "Telkom Infra", match: 82 },
-                "Travel": { target: "Mitra Tours", match: 85 },
+              const synergyMap: Record<string, { target: string; match: number; logos: string[] }> = {
+                "Fintech": { target: "LinkAja / PADI UMKM", match: 94, logos: ["/startups/linkaja.svg", "/startups/padi umkm.png"] },
+                "Logistik": { target: "Logee / Pos Indo", match: 88, logos: ["/startups/logee.jpg", "/startups/pos indo.webp"] },
+                "Agritech": { target: "Telkomsel / T-Con", match: 91, logos: ["/startups/telkomsel.png"] },
+                "Healthtech": { target: "Adamedika / Telkomsel", match: 79, logos: ["/startups/ada medika.png", "/startups/telkomsel.png"] },
+                "Edtech": { target: "Pijar Belajar", match: 86, logos: ["/startups/pijar.webp"] },
+                "Energy": { target: "Telkom Infra", match: 82, logos: ["/startups/telkom infra.png"] },
+                "Travel": { target: "MDI Ventures", match: 85, logos: ["/startups/mdi ventures.jpeg"] },
               };
-              const synergy = synergyMap[startup.sector] || { target: "Telkom Group", match: 85 };
+              const synergy = synergyMap[startup.sector] || { target: "Telkom Group", match: 85, logos: ["/startups/indigo-red.png"] };
 
               return (
                 <div 
@@ -766,8 +766,17 @@ export default function DashboardPage() {
                             <span className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
                           </div>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-bold text-[#344054] truncate pr-2">{synergy.target}</span>
-                            <span className="text-lg font-extrabold text-emerald-600">{synergy.match}%</span>
+                            <div className="flex items-center gap-2 pr-2 truncate">
+                              {synergy.logos && synergy.logos.length > 0 && (
+                                <div className="flex -space-x-1.5 shrink-0">
+                                  {synergy.logos.map((logo, i) => (
+                                    <img key={i} src={logo} alt="Logo" className="w-5 h-5 rounded-full border border-white bg-white object-contain shadow-sm" />
+                                  ))}
+                                </div>
+                              )}
+                              <span className="text-sm font-bold text-[#344054] truncate">{synergy.target}</span>
+                            </div>
+                            <span className="text-lg font-extrabold text-emerald-600 shrink-0">{synergy.match}%</span>
                           </div>
                         </div>
                       )}
@@ -776,8 +785,17 @@ export default function DashboardPage() {
                       {(user?.role === "admin" || !user) && (
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
                           <div className="truncate pr-2">
-                            <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</p>
-                            <p className="text-xs font-bold text-[#344054] mt-0.5 truncate">{synergy.target}</p>
+                            <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Synergy Target</p>
+                            <div className="flex items-center gap-1.5">
+                              {synergy.logos && synergy.logos.length > 0 && (
+                                <div className="flex -space-x-1 shrink-0">
+                                  {synergy.logos.map((logo, i) => (
+                                    <img key={i} src={logo} alt="Logo" className="w-3.5 h-3.5 rounded-full border border-white bg-white object-cover shadow-sm" />
+                                  ))}
+                                </div>
+                              )}
+                              <p className="text-xs font-bold text-[#344054] truncate">{synergy.target}</p>
+                            </div>
                           </div>
                           <div className="text-right shrink-0">
                             <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
