@@ -328,22 +328,29 @@ export default function DashboardPage() {
               <div className="mt-4 h-[240px] w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
+                    <defs>
+                      <filter id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="4" stdDeviation="5" floodOpacity="0.15" />
+                      </filter>
+                    </defs>
                     <Pie
                       data={sectorData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={3}
+                      innerRadius={55}
+                      outerRadius={85}
+                      paddingAngle={5}
                       dataKey="value"
+                      stroke="none"
+                      style={{ filter: "url(#pie-shadow)" }}
                     >
                       {sectorData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
                       ))}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ background: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
-                      itemStyle={{ color: '#fff' }}
+                      contentStyle={{ background: '#ffffff', border: '1px solid #f2f4f7', borderRadius: '12px', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', color: '#161616', fontSize: '12px', fontWeight: 'bold' }}
+                      itemStyle={{ color: '#161616' }}
                     />
                     <Legend 
                       verticalAlign="bottom" 
@@ -367,18 +374,18 @@ export default function DashboardPage() {
                 <div className="mt-2 h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                      <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -10, fontSize: 12, fill: '#94a3b8', fontWeight: 'bold' }} />
-                      <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', fontSize: 12, fill: '#94a3b8', fontWeight: 'bold' }} />
-                      <ZAxis type="number" dataKey="z" range={[100, 500]} name="Valuasi" />
-                      <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
+                      <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -10, fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
+                      <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
+                      <ZAxis type="number" dataKey="z" range={[100, 600]} name="Valuasi" />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)' }} />
                       <Scatter name="Startups" data={[
                         { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
                         { name: 'FinAccess', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
                         { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
                         { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
                         { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
-                      ]} fill="#8884d8">
+                      ]} fill="#8884d8" opacity={0.85}>
                         {
                           [
                             { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
@@ -387,7 +394,7 @@ export default function DashboardPage() {
                             { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
                             { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
                           ].map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                            <Cell key={`cell-${index}`} fill={entry.fill} stroke="#ffffff" strokeWidth={2} />
                           ))
                         }
                       </Scatter>
@@ -513,18 +520,30 @@ export default function DashboardPage() {
                         { metric: "Runway (Mo)", you: 18, avg: 12 },
                       ]}
                       margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                      barGap={6}
                     >
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis dataKey="metric" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 600 }} dy={10} />
-                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                      <defs>
+                        <linearGradient id="colorYou" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#ED1C24" stopOpacity={1}/>
+                          <stop offset="100%" stopColor="#ef4444" stopOpacity={0.7}/>
+                        </linearGradient>
+                        <linearGradient id="colorAvg" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#cbd5e1" stopOpacity={1}/>
+                          <stop offset="100%" stopColor="#f1f5f9" stopOpacity={0.8}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f8fafc" />
+                      <XAxis dataKey="metric" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: 600 }} dy={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#cbd5e1' }} />
                       <Tooltip 
-                        cursor={{fill: '#f8fafc'}}
-                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        labelStyle={{ color: '#0f172a', fontWeight: 'bold', marginBottom: '4px' }}
+                        cursor={{fill: '#f8fafc', opacity: 0.5}}
+                        contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', background: '#ffffff' }}
+                        labelStyle={{ color: '#161616', fontWeight: 'bold', marginBottom: '4px' }}
+                        itemStyle={{ fontWeight: 'bold' }}
                       />
                       <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: '11px', paddingTop: '10px', fontWeight: 600 }} />
-                      <Bar dataKey="you" name="Startup Anda" fill="#ED1C24" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      <Bar dataKey="avg" name="Rata-rata Indigo" fill="#cbd5e1" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="you" name="Startup Anda" fill="url(#colorYou)" radius={[6, 6, 6, 6]} maxBarSize={24} />
+                      <Bar dataKey="avg" name="Rata-rata Indigo" fill="url(#colorAvg)" radius={[6, 6, 6, 6]} maxBarSize={24} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
