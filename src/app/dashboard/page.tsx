@@ -51,7 +51,7 @@ export default function DashboardPage() {
   const [aiSearchLoading, setAiSearchLoading] = useState(false);
   const [aiSearchActive, setAiSearchActive] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
-  const [analysisModal, setAnalysisModal] = useState<Startup | null>(null);
+  const [analysisModal, setAnalysisModal] = useState<any | null>(null);
 
   useEffect(() => {
     setMounted(true);
