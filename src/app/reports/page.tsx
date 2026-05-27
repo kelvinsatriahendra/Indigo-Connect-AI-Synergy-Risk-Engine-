@@ -527,9 +527,7 @@ export default function ReportsPage() {
                               <p className="text-xs font-bold text-[#344054]">
                                 Periode Laporan: <span className="font-medium text-[#667085]">{report.month}</span>
                               </p>
-                              <p className="text-xs font-bold text-[#344054] line-clamp-1 leading-relaxed">
-                                Excerpt: <span className="font-medium text-[#8c8f93]">"{report.narrativeText}"</span>
-                              </p>
+
                             </div>
 
                             <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
