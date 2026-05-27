@@ -21,13 +21,13 @@
   },
   {
     "id": "s3",
-    "name": "FinAccess",
-    "founderName": "Yusuf Pratama",
+    "name": "Verihubs",
+    "founderName": "Rick Firnando",
     "sector": "Fintech",
     "batch": "Batch 8",
-    "description": "Platform pembiayaan mikro B2B dan credit scoring instan",
+    "description": "Platform verifikasi identitas berbasis AI dan biometrik",
     "status": "ACTIVE",
-    "logo": "/startups/finaccess.png"
+    "logo": "/startups/verihubs.png"
   },
   {
     "id": "s9",

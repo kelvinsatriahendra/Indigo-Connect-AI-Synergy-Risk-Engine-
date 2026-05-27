@@ -21,7 +21,7 @@ const sectorColors: Record<string, string> = {
 
 // Mapping: founder user ID → startup IDs they own
 const founderStartupMap: Record<string, string[]> = {
-  "demo-founder-id": ["s3"], // Yusuf Pratama owns FinAccess (strictly 1 startup under Indigo rules)
+  "demo-founder-id": ["s3"], // Rick Firnando owns Verihubs (strictly 1 startup under Indigo rules)
 };
 
 // Mapping: synergy user ID → sectors they manage
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                       <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)' }} />
                       <Scatter name="Startups" data={[
                         { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
-                        { name: 'FinAccess', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                        { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
                         { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
                         { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
                         { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
@@ -389,7 +389,7 @@ export default function DashboardPage() {
                         {
                           [
                             { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
-                            { name: 'FinAccess', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                            { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
                             { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
                             { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
                             { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
