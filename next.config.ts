@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  serverExternalPackages: ["pdf2json"],
   experimental: {
     authInterrupts: true,
   },
