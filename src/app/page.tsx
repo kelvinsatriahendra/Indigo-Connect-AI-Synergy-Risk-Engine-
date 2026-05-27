@@ -42,10 +42,10 @@ export default async function Home() {
           <img
             src="/hero-section.png"
             alt="Hero Background Graphic"
-            className="w-full h-full object-cover object-center opacity-80 brightness-[0.38]"
+            className="w-full h-full object-cover object-center opacity-90 brightness-[0.48]"
           />
           {/* Subtle bottom fade to merge smoothly with the dark themed section separation */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0d0a1b]/40 to-[#0d0a1b]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0a1b]/80" />
         </div>
 
         {/* Glow ambient spots */}
