@@ -244,25 +244,23 @@ export default function DashboardPage() {
         {user?.role !== "founder" && (
           <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: Total Startup (Main Highlight) */}
-            <div 
-              className="rounded-[20px] p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-[#ED1C24]/20"
-              style={{ background: 'linear-gradient(135deg, #ff0a16 0%, #b30000 100%)' }}
-            >
-              <div className="absolute right-[-20px] bottom-[-20px] w-40 h-40 opacity-90 pointer-events-none">
-                <img src="/images/red-cubes.png" alt="3D Cubes" className="w-full h-full object-contain" />
-              </div>
+            <div className="card-legion p-6 bg-[#ED1C24] flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]">
               <div className="relative z-10">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-white/90 mb-1">Total Startup</p>
-                    <p className="text-[40px] leading-none font-extrabold text-white tracking-wide">{totalStartups}</p>
-                    <p className="text-xs font-medium text-white/80 mt-1">Portfolio Active</p>
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-sm font-bold text-white/90">Total Startup</p>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white backdrop-blur-sm group-hover:scale-110 transition-transform">
+                    <Building2 className="h-4 w-4" />
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm">
-                    <Building2 className="h-5 w-5" />
+                </div>
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p className="text-4xl font-extrabold text-white tracking-tight">{totalStartups}</p>
+                    <p className="mt-1 text-xs font-medium text-white/80">Aktif dalam program</p>
                   </div>
                 </div>
               </div>
+              {/* Subtle background decoration */}
+              <div className="absolute right-[-10%] top-[-20%] h-32 w-32 rounded-full bg-white/10 blur-2xl transition-transform group-hover:scale-150 duration-700 ease-in-out"></div>
             </div>
 
             {/* Card 2: High Growth */}
