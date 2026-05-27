@@ -401,7 +401,7 @@ export default function ReportsPage() {
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
           <div className="mx-auto max-w-[1400px]">
-            <div className={`flex flex-col ${user?.role === "founder" ? "lg:flex-row" : ""} gap-6`}>
+            <div className="flex flex-col gap-6">
 
               {/* Left Column: Form Input & History */}
               <div className="flex-1 min-w-0 space-y-6">
@@ -486,7 +486,7 @@ export default function ReportsPage() {
                       </span>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                       {mockSubmittedReports.map((report) => {
                         const isActive = selectedReportId === report.id;
                         const isHigh = report.evaluation.operationalStatus === "ACTIVE";
@@ -501,7 +501,7 @@ export default function ReportsPage() {
                               setSelectedReportId(report.id);
                               setResult(report.evaluation);
                             }}
-                            className={`group cursor-pointer rounded-xl border p-5 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${isActive
+                            className={`group cursor-pointer rounded-xl border p-5 transition-all flex flex-col justify-between gap-4 ${isActive
                                 ? "border-[#ED1C24] bg-red-50/10 shadow-md"
                                 : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
                               }`}
@@ -631,7 +631,7 @@ export default function ReportsPage() {
 
               {/* Right Column: AI Result */}
               {result && (
-                <div className={`w-full ${user?.role === "founder" ? "lg:w-[480px]" : ""} shrink-0`}>
+                <div className="w-full shrink-0">
                   <div className="sticky top-6">
                     <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
                       <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
