@@ -1,28 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const DATA_FILE = path.join(process.cwd(), "src/data/pipelines.json");
-
-function readPipelines() {
-  const raw = fs.readFileSync(DATA_FILE, "utf-8");
-  return JSON.parse(raw);
-}
-
-function writePipelines(data: unknown) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
-}
+import { prisma } from "@/lib/prisma";
+import { PipelineStatus } from "@prisma/client";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
 
-  let pipelines = readPipelines();
-
+  let where: any = {};
   if (status) {
-    pipelines = pipelines.filter((p: { status: string }) => p.status === status);
+    where.status = status as PipelineStatus;
   }
 
+  const pipelines = await prisma.synergyPipeline.findMany({ where, orderBy: { createdAt: "desc" } });
   return NextResponse.json(pipelines);
 }
 
@@ -35,23 +24,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "startupId and telkomBuId are required" }, { status: 400 });
     }
 
-    const pipelines = readPipelines();
-
-    const newPipeline = {
-      id: `p${Date.now()}`,
-      startupId,
-      telkomBuId,
-      status: "PIPELINE",
-      matchScore: matchScore || 0.5,
-      reason: reason || "Sinergi potensial",
-      notes: "",
-      assignedTo: null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    pipelines.push(newPipeline);
-    writePipelines(pipelines);
+    const newPipeline = await prisma.synergyPipeline.create({
+      data: {
+        startupId,
+        telkomBuId,
+        status: PipelineStatus.PIPELINE,
+        notes: "",
+      },
+    });
 
     return NextResponse.json(newPipeline, { status: 201 });
   } catch (error) {
@@ -69,21 +49,22 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "id is required" }, { status: 400 });
     }
 
-    const pipelines = readPipelines();
-    const index = pipelines.findIndex((p: { id: string }) => p.id === id);
-
-    if (index === -1) {
+    const existing = await prisma.synergyPipeline.findUnique({ where: { id } });
+    if (!existing) {
       return NextResponse.json({ error: "Pipeline not found" }, { status: 404 });
     }
 
-    if (status) pipelines[index].status = status;
-    if (notes !== undefined) pipelines[index].notes = notes;
-    if (assignedTo !== undefined) pipelines[index].assignedTo = assignedTo;
-    pipelines[index].updatedAt = new Date().toISOString();
+    let updateData: any = {};
+    if (status) updateData.status = status as PipelineStatus;
+    if (notes !== undefined) updateData.notes = notes;
+    if (assignedTo !== undefined) updateData.assignedTo = assignedTo;
 
-    writePipelines(pipelines);
+    const updated = await prisma.synergyPipeline.update({
+      where: { id },
+      data: updateData,
+    });
 
-    return NextResponse.json(pipelines[index]);
+    return NextResponse.json(updated);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ error: message }, { status: 500 });

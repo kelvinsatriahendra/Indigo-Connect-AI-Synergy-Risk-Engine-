@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
-import telkomBusData from "@/data/telkom-bus.json";
 import {
   GitBranch,
   Plus,
@@ -50,18 +48,24 @@ const statusFlow: Record<PipelineStatus, PipelineStatus[]> = {
 
 export default function SynergyPage() {
   const [pipelines, setPipelines] = useState<Pipeline[]>([]);
+  const [startupsData, setStartupsData] = useState<any[]>([]);
+  const [telkomBusData, setTelkomBusData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewForm, setShowNewForm] = useState(false);
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
 
-  const fetchPipelines = async () => {
+  const fetchData = async () => {
     try {
-      const res = await fetch("/api/synergy/pipeline");
-      if (res.ok) {
-        const data = await res.json();
-        setPipelines(data);
-      }
+      const [pipelinesRes, startupsRes, busRes] = await Promise.all([
+        fetch("/api/synergy/pipeline"),
+        fetch("/api/startups"),
+        fetch("/api/telkom-bu")
+      ]);
+      
+      if (pipelinesRes.ok) setPipelines(await pipelinesRes.json());
+      if (startupsRes.ok) setStartupsData(await startupsRes.json());
+      if (busRes.ok) setTelkomBusData(await busRes.json());
     } catch {
       // ignore
     } finally {
@@ -70,7 +74,7 @@ export default function SynergyPage() {
   };
 
   useEffect(() => {
-    fetchPipelines();
+    fetchData();
   }, []);
 
   const moveStatus = async (id: string, newStatus: PipelineStatus) => {

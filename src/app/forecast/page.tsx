@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   Area, AreaChart,
@@ -25,6 +24,12 @@ interface Prediction {
 }
 
 export default function ForecastPage() {
+  const [startupsData, setStartupsData] = useState<any[]>([]);
+  
+  useEffect(() => {
+    fetch("/api/startups").then(res => res.json()).then(setStartupsData);
+  }, []);
+
   const [selectedStartup, setSelectedStartup] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { forecastGrowth } from "@/lib/openrouter";
-import historicalData from "@/data/historical.json";
+import { prisma } from "@/lib/prisma";
 
 interface MetricPeriod {
   period: string;
@@ -15,6 +15,34 @@ interface Prediction {
   predictedRunwayMonths: number;
   confidenceScore: number;
   notes: string;
+}
+
+function generateDummyHistorical(startupId: string): MetricPeriod[] {
+  const seed = startupId.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const baseRevenue = 20 + (seed % 100);
+  const baseUsers = 500 + (seed % 2000);
+  const growthTrend = (seed % 3) === 0 ? -1 : (seed % 3) === 1 ? 2 : 5; // Negative, slow, or fast growth
+  
+  const periods = ["Des 2025", "Jan 2026", "Feb 2026", "Mar 2026", "Apr 2026", "Mei 2026"];
+  let currentRev = baseRevenue;
+  let currentUsers = baseUsers;
+  let currentGrowth = 10 + growthTrend;
+  let currentBurn = 30 + (seed % 50);
+
+  return periods.map(p => {
+    currentRev = Math.round(currentRev * (1 + currentGrowth / 100));
+    currentUsers = Math.round(currentUsers * (1 + currentGrowth / 100));
+    currentBurn = Math.round(currentBurn * 1.05);
+    currentGrowth = Math.max(-5, currentGrowth + (Math.random() * 4 - 2));
+
+    return {
+      period: p,
+      revenue: currentRev,
+      users: currentUsers,
+      growth: Math.round(currentGrowth * 10) / 10,
+      burnRate: currentBurn
+    };
+  });
 }
 
 function generateProjectedData(
@@ -68,16 +96,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "startupId is required" }, { status: 400 });
     }
 
-    const entry = (historicalData as Record<string, { name: string; periods: MetricPeriod[] }>)[startupId];
-    if (!entry) {
+    const startup = await prisma.startup.findUnique({ where: { id: startupId } });
+    if (!startup) {
       return NextResponse.json({ error: "Startup not found" }, { status: 404 });
     }
 
+    const historicalPeriods = generateDummyHistorical(startupId);
     let prediction: Prediction;
 
     try {
       const aiResult = await forecastGrowth(
-        entry.periods.map((p) => ({
+        historicalPeriods.map((p) => ({
           period: p.period,
           metrics: { revenue: p.revenue, users: p.users, growth: p.growth, burnRate: p.burnRate },
         }))
@@ -89,15 +118,15 @@ export async function POST(req: NextRequest) {
         notes: aiResult.notes,
       };
     } catch {
-      prediction = mockForecast(entry.periods);
+      prediction = mockForecast(historicalPeriods);
     }
 
-    const projectedData = generateProjectedData(entry.periods, prediction);
+    const projectedData = generateProjectedData(historicalPeriods, prediction);
 
     return NextResponse.json({
       startupId,
-      startupName: entry.name,
-      historicalData: entry.periods,
+      startupName: startup.name,
+      historicalData: historicalPeriods,
       projectedData,
       prediction,
     });

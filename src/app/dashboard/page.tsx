@@ -2,10 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText } from "lucide-react";
 
-type Startup = (typeof startupsData)[number];
+type Startup = {
+  id: string;
+  name: string;
+  founderName: string;
+  sector: string;
+  batch: string;
+  description: string;
+  status: string;
+};
 
 const sectorColors: Record<string, string> = {
   Logistik: "bg-blue-500",
@@ -40,28 +47,30 @@ export default function DashboardPage() {
   const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data?.user) {
-          setUser(data.user);
-          // Filter startups based on role
-          let roleStartups = startupsData;
-          if (data.user.role === "founder") {
-            const myIds = founderStartupMap[data.user.userId] || [];
-            roleStartups = startupsData.filter((s) => myIds.includes(s.id));
-          } else if (data.user.role === "synergy") {
-            const mySectors = synergySectorMap[data.user.userId] || [];
-            roleStartups = startupsData.filter((s) => mySectors.includes(s.sector));
-          }
-          setStartups(roleStartups);
-          setFilteredStartups(roleStartups);
+    Promise.all([
+      fetch("/api/auth/me").then(res => res.ok ? res.json() : null),
+      fetch("/api/startups").then(res => res.ok ? res.json() : [])
+    ]).then(([userData, startupsData]) => {
+      if (userData?.user) {
+        setUser(userData.user);
+        let roleStartups = startupsData;
+        if (userData.user.role === "founder") {
+          const myIds = founderStartupMap[userData.user.userId] || [];
+          roleStartups = startupsData.filter((s: Startup) => myIds.includes(s.id));
+        } else if (userData.user.role === "synergy") {
+          const mySectors = synergySectorMap[userData.user.userId] || [];
+          roleStartups = startupsData.filter((s: Startup) => mySectors.includes(s.sector));
         }
-      })
-      .catch(() => {
+        setStartups(roleStartups);
+        setFilteredStartups(roleStartups);
+      } else {
         setStartups(startupsData);
         setFilteredStartups(startupsData);
-      });
+      }
+    }).catch(() => {
+      setStartups([]);
+      setFilteredStartups([]);
+    });
   }, []);
 
   useEffect(() => {

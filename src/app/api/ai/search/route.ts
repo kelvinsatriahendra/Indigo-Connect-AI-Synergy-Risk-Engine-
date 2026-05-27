@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchByNaturalLanguage } from "@/lib/openrouter";
-import startupsData from "@/data/startups.json";
+import { prisma } from "@/lib/prisma";
 
-function mockSearch(query: string) {
+async function mockSearch(query: string) {
   const q = query.toLowerCase();
-  const results = startupsData.filter((s) => {
+  const startups = await prisma.startup.findMany();
+  const results = startups.filter((s) => {
     const searchText = `${s.name} ${s.sector} ${s.description} ${s.batch} ${s.founderName} ${s.status}`.toLowerCase();
     const terms = q.split(/\s+/);
     return terms.some((t) => searchText.includes(t));
@@ -21,18 +22,19 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      const startups = startupsData.map((s) => ({
-        id: s.id,
-        name: s.name,
-        sector: s.sector,
-        description: s.description,
-        batch: s.batch,
+      const rawStartups = await prisma.startup.findMany({
+        select: { id: true, name: true, sector: true, description: true, batch: true },
+      });
+
+      const dbStartups = rawStartups.map(s => ({
+        ...s,
+        description: s.description || ""
       }));
 
-      const result = await searchByNaturalLanguage(query, startups);
+      const result = await searchByNaturalLanguage(query, dbStartups);
       return NextResponse.json(result);
     } catch {
-      const mockResult = mockSearch(query);
+      const mockResult = await mockSearch(query);
       return NextResponse.json({ ...mockResult, _source: "mock" });
     }
   } catch (error) {

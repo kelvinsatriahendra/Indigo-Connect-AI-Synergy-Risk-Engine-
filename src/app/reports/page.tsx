@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { HealthScoreCard } from "@/components/health-score-card";
-import startupsData from "@/data/startups.json";
-import telkomBusData from "@/data/telkom-bus.json";
 import { FileText, Send, RefreshCw, Download } from "lucide-react";
 import { exportToPdf } from "@/lib/pdf-export";
 
 export default function ReportsPage() {
   const reportRef = useRef<HTMLDivElement>(null);
+  
+  const [startupsData, setStartupsData] = useState<any[]>([]);
+  const [telkomBusData, setTelkomBusData] = useState<any[]>([]);
+  
+  useEffect(() => {
+    fetch("/api/startups").then(res => res.json()).then(setStartupsData);
+    fetch("/api/telkom-bu").then(res => res.json()).then(setTelkomBusData);
+  }, []);
+
   const [selectedStartup, setSelectedStartup] = useState<string>("");
   const [narrativeText, setNarrativeText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -115,10 +122,40 @@ export default function ReportsPage() {
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-[#344054]">Narrative Report</label>
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="block text-sm font-medium text-[#344054]">Narrative Report</label>
+                  <label className="cursor-pointer text-sm font-medium text-[#ED1C24] hover:underline">
+                    Upload PDF
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      className="hidden"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        
+                        setLoading(true);
+                        setError("");
+                        try {
+                          const formData = new FormData();
+                          formData.append("file", file);
+                          const res = await fetch("/api/upload", { method: "POST", body: formData });
+                          const data = await res.json();
+                          if (!res.ok) throw new Error(data.error || "Gagal ekstrak PDF");
+                          setNarrativeText(data.text);
+                        } catch (err: any) {
+                          setError(err.message);
+                        } finally {
+                          setLoading(false);
+                          e.target.value = "";
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
                 <textarea
                   className="w-full min-h-[200px] rounded-lg border border-[#e0e0e0] bg-white px-4 py-3 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] resize-y"
-                  placeholder="Tulis laporan bulanan startup di sini. Contoh: Startup kami berhasil meningkatkan pendapatan 25% bulan ini dengan total 5.000 pengguna aktif..."
+                  placeholder="Tulis laporan bulanan startup di sini, atau upload file PDF untuk mengekstrak teks otomatis..."
                   value={narrativeText}
                   onChange={(e) => setNarrativeText(e.target.value)}
                 />

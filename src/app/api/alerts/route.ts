@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { prisma } from "@/lib/prisma";
+import { AlertType } from "@prisma/client";
 
-const DATA_FILE = path.join(process.cwd(), "src/data/alerts.json");
-
-function readAlerts() {
-  const raw = fs.readFileSync(DATA_FILE, "utf-8");
-  return JSON.parse(raw);
-}
-
-function writeAlerts(data: unknown) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+function mapAlert(a: any) {
+  return {
+    id: a.id,
+    startupId: a.startupId,
+    type: a.alertType,
+    message: a.aiSummary || "",
+    date: a.sentAt.toISOString(),
+    read: a.readAt !== null,
+    severity: a.severity,
+  };
 }
 
 export async function GET(req: NextRequest) {
@@ -18,16 +19,20 @@ export async function GET(req: NextRequest) {
   const unreadOnly = searchParams.get("unread") === "true";
   const type = searchParams.get("type");
 
-  let alerts = readAlerts();
+  let where: any = {};
 
   if (unreadOnly) {
-    alerts = alerts.filter((a: { read: boolean }) => !a.read);
+    where.readAt = null;
   }
+  
   if (type) {
-    alerts = alerts.filter((a: { type: string }) => a.type === type);
+    where.alertType = type as AlertType;
   }
 
-  const unreadCount = readAlerts().filter((a: { read: boolean }) => !a.read).length;
+  const rawAlerts = await prisma.alertLog.findMany({ where, orderBy: { sentAt: "desc" } });
+  const alerts = rawAlerts.map(mapAlert);
+
+  const unreadCount = await prisma.alertLog.count({ where: { readAt: null } });
 
   return NextResponse.json({ alerts, unreadCount });
 }
@@ -41,19 +46,23 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "id is required" }, { status: 400 });
     }
 
-    const alerts = readAlerts();
-    const index = alerts.findIndex((a: { id: string }) => a.id === id);
+    const alert = await prisma.alertLog.findUnique({ where: { id } });
 
-    if (index === -1) {
+    if (!alert) {
       return NextResponse.json({ error: "Alert not found" }, { status: 404 });
     }
 
+    let updateData: any = {};
     if (read !== undefined) {
-      alerts[index].read = read;
+      updateData.readAt = read ? new Date() : null;
     }
 
-    writeAlerts(alerts);
-    return NextResponse.json(alerts[index]);
+    const updatedAlert = await prisma.alertLog.update({
+      where: { id },
+      data: updateData,
+    });
+
+    return NextResponse.json(mapAlert(updatedAlert));
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ error: message }, { status: 500 });

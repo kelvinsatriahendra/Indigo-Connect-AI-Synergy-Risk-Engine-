@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import startupsData from "@/data/startups.json";
 import { Building2, Sparkles } from "lucide-react";
 
-type Startup = (typeof startupsData)[number];
+type Startup = {
+  id: string;
+  name: string;
+  founderName: string;
+  sector: string;
+  batch: string;
+  description: string;
+  status: string;
+};
 
 export default function StartupsPage() {
+  const [startupsData, setStartupsData] = useState<Startup[]>([]);
   const [selectedStartup, setSelectedStartup] = useState<Startup | null>(null);
   const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/startups").then(res => res.json()).then(setStartupsData);
+  }, []);
 
   const handleAIAnalysis = async (startup: Startup) => {
     setSelectedStartup(startup);

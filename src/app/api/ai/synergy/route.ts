@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { matchSynergy } from "@/lib/openrouter";
-import telkomBusData from "@/data/telkom-bus.json";
+import { prisma } from "@/lib/prisma";
 
 function mockSynergy(narrativeText: string) {
   const text = narrativeText.toLowerCase();
@@ -50,11 +50,15 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      const telkomBus = telkomBusData.map((bu) => ({
+      const dbTelkomBus = await prisma.telkomBU.findMany({
+        select: { id: true, name: true, description: true, keywords: true }
+      });
+
+      const telkomBus = dbTelkomBus.map((bu) => ({
         id: bu.id,
         name: bu.name,
-        description: bu.description,
-        keywords: bu.keywords as string[],
+        description: bu.description || "",
+        keywords: (bu.keywords as unknown as string[]) || [],
       }));
 
       const result = await matchSynergy(narrativeText, telkomBus);
