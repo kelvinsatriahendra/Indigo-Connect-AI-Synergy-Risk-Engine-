@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import startupsData from "@/data/startups.json";
 import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X } from "lucide-react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis, AreaChart, Area, ReferenceArea } from "recharts";
 import { exportToPdf } from "@/lib/pdf-export";
 
 type Startup = (typeof startupsData)[number];
@@ -40,6 +40,11 @@ const sectorColorMap: Record<string, string> = {
   Energy: "#c2410c",
   Travel: "#be123c",
 };
+
+// Mock data for sparklines
+const sparklineHighGrowth = [ { val: 2 }, { val: 4 }, { val: 3 }, { val: 6 }, { val: 5 }, { val: 8 }, { val: 7 } ];
+const sparklineAtRisk = [ { val: 5 }, { val: 4 }, { val: 6 }, { val: 5 }, { val: 7 }, { val: 6 }, { val: 8 } ];
+const sparklineBatch = [ { val: 2 }, { val: 2 }, { val: 3 }, { val: 2 }, { val: 4 }, { val: 3 }, { val: 4 } ];
 
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
@@ -232,75 +237,110 @@ export default function DashboardPage() {
             {/* Card 1: Total Startup (Main Highlight) */}
             <div 
               className="rounded-[20px] p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-[#ED1C24]/20"
-              style={{ background: 'linear-gradient(135deg, #ED1C24 0%, #8b0000 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #ff0a16 0%, #b30000 100%)' }}
             >
-              <svg className="absolute left-0 bottom-0 h-full w-auto pointer-events-none opacity-20 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor">
-                <path d="M-20,120 C40,100 60,30 20,-20" strokeWidth="1.2" strokeDasharray="3 3" />
-              </svg>
+              <div className="absolute right-[-20px] bottom-[-20px] w-40 h-40 opacity-90 pointer-events-none">
+                <img src="/images/red-cubes.png" alt="3D Cubes" className="w-full h-full object-contain" />
+              </div>
               <div className="relative z-10">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-white/80">Total Startup</p>
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white shadow-sm backdrop-blur-sm">
-                    <Building2 className="h-4 w-4" />
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-white/90 mb-1">Total Startup</p>
+                    <p className="text-[40px] leading-none font-extrabold text-white tracking-wide">{totalStartups}</p>
+                    <p className="text-xs font-medium text-white/80 mt-1">Portfolio Active</p>
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm">
+                    <Building2 className="h-5 w-5" />
                   </div>
                 </div>
-                <p className="mt-4 text-3xl font-extrabold text-white tracking-wide">{totalStartups}</p>
               </div>
             </div>
 
             {/* Card 2: High Growth */}
             <div 
-              className="rounded-[20px] bg-white p-6 relative overflow-hidden shadow-soft hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
             >
-              <div className="relative z-10">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-bold text-[#8c8f93]">High Growth</p>
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                    <TrendingUp className="h-4 w-4" />
+              <div className="relative z-10 flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                      <TrendingUp className="h-3.5 w-3.5" />
+                    </div>
+                    <p className="text-sm font-bold text-[#161616]">High Growth</p>
                   </div>
                 </div>
-                <p className="mt-4 text-3xl font-extrabold text-[#161616] tracking-wide">{highGrowth}</p>
+                <div className="flex items-end justify-between">
+                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{highGrowth}</p>
+                </div>
+                <p className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari total</p>
               </div>
-              {/* Soft decorative line */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-transparent opacity-50" />
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={sparklineHighGrowth}>
+                    <Area type="monotone" dataKey="val" stroke="#10b981" strokeWidth={2} fill="#10b981" fillOpacity={0.2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Card 3: At Risk */}
             <div 
-              className="rounded-[20px] bg-white p-6 relative overflow-hidden shadow-soft hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
             >
-              <div className="relative z-10">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-bold text-[#8c8f93]">At Risk</p>
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-50 text-rose-600">
-                    <AlertTriangle className="h-4 w-4" />
+              <div className="relative z-10 flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600">
+                      <AlertTriangle className="h-3.5 w-3.5" />
+                    </div>
+                    <p className="text-sm font-bold text-[#161616]">At Risk</p>
                   </div>
                 </div>
-                <p className="mt-4 text-3xl font-extrabold text-[#161616] tracking-wide">{atRisk}</p>
+                <div className="flex items-end justify-between">
+                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{atRisk}</p>
+                </div>
+                <p className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari total</p>
               </div>
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-rose-400 to-transparent opacity-50" />
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={sparklineAtRisk}>
+                    <Area type="monotone" dataKey="val" stroke="#ef4444" strokeWidth={2} fill="#ef4444" fillOpacity={0.2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
             {/* Card 4: Sektor / Batch */}
             <div 
-              className="rounded-[20px] bg-white p-6 relative overflow-hidden shadow-soft hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
             >
-              <div className="relative z-10">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-bold text-[#8c8f93]">
-                    {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
-                  </p>
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                    {user?.role === "synergy" ? <GitBranch className="h-4 w-4" /> : <Layers className="h-4 w-4" />}
+              <div className="relative z-10 flex-1">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                      {user?.role === "synergy" ? <GitBranch className="h-3.5 w-3.5" /> : <Layers className="h-3.5 w-3.5" />}
+                    </div>
+                    <p className="text-sm font-bold text-[#161616]">
+                      {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
+                    </p>
                   </div>
                 </div>
-                <p className="mt-4 text-3xl font-extrabold text-[#161616] tracking-wide">
-                  {user?.role === "synergy"
-                    ? synergySectorMap["demo-synergy-id"]?.length || 0
-                    : uniqueBatches.length}
-                </p>
+                <div className="flex items-end justify-between">
+                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">
+                    {user?.role === "synergy"
+                      ? synergySectorMap["demo-synergy-id"]?.length || 0
+                      : uniqueBatches.length}
+                  </p>
+                </div>
+                <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded inline-block mt-2">Active batch</p>
               </div>
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-transparent opacity-50" />
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={sparklineBatch}>
+                    <Area type="monotone" dataKey="val" stroke="#3b82f6" strokeWidth={2} fill="#3b82f6" fillOpacity={0.2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         )}
@@ -311,14 +351,19 @@ export default function DashboardPage() {
             {/* Health Score Distribution - Sleek Progress Cards */}
             <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
-              <div className="flex items-center gap-3 mb-1 relative z-10">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 flex items-center justify-center text-[#ED1C24] shadow-sm">
-                  <Activity className="h-5 w-5" />
+              <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 flex items-center justify-center text-[#ED1C24] shadow-sm">
+                    <Activity className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Health Score Distribution</h3>
+                    <p className="text-xs font-medium text-[#8c8f93]">Perbandingan status performa portofolio</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Health Score Distribution</h3>
-                  <p className="text-xs font-medium text-[#8c8f93]">Perbandingan status performa portofolio</p>
-                </div>
+                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                  View detail <span className="text-[10px]">›</span>
+                </button>
               </div>
               <div className="mt-8 space-y-7 relative z-10">
                 {healthDistribution.map((item) => (
@@ -346,14 +391,19 @@ export default function DashboardPage() {
             {/* Sektor Distribution - Recharts Premium Donut Chart */}
             <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
-              <div className="flex items-center gap-3 mb-1 relative z-10">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                  <Layers className="h-5 w-5" />
+              <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
+                    <Layers className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Sector Distribution</h3>
+                    <p className="text-xs font-medium text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Sector Distribution</h3>
-                  <p className="text-xs font-medium text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
-                </div>
+                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                  View detail <span className="text-[10px]">›</span>
+                </button>
               </div>
               <div className="mt-4 h-[240px] w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
@@ -398,22 +448,54 @@ export default function DashboardPage() {
             {user?.role === "admin" && (
               <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-bl-[200px] z-0 opacity-50 transition-all group-hover:scale-110" />
-                <div className="flex items-center gap-3 mb-4 relative z-10">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
-                    <TrendingUp className="h-5 w-5" />
+                <div className="flex items-center justify-between gap-3 mb-4 relative z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                      <TrendingUp className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Executive Risk Matrix</h3>
+                      <p className="text-xs font-medium text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Executive Risk Matrix</h3>
-                    <p className="text-xs font-medium text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className="flex items-center gap-3 text-[10px] font-bold">
+                      <span className="flex items-center gap-1.5 text-[#10b981]"><span className="h-2 w-2 rounded-full bg-[#10b981]" /> Low Risk</span>
+                      <span className="flex items-center gap-1.5 text-[#f59e0b]"><span className="h-2 w-2 rounded-full bg-[#f59e0b]" /> Medium Risk</span>
+                      <span className="flex items-center gap-1.5 text-[#ef4444]"><span className="h-2 w-2 rounded-full bg-[#ef4444]" /> High Risk</span>
+                      <span className="flex items-center gap-1.5 text-[#3b82f6]"><span className="h-2 w-2 rounded-full bg-[#3b82f6]" /> Monitor</span>
+                    </div>
+                    <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors">
+                      [ ] Full Screen
+                    </button>
                   </div>
                 </div>
                 <div className="mt-2 h-[350px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
-                      <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -10, fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
-                      <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
+                      <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -10, fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
+                      <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', fontSize: 11, fill: '#cbd5e1', fontWeight: 'bold' }} />
                       <ZAxis type="number" dataKey="z" range={[100, 600]} name="Valuasi" />
+                      
+                      <ReferenceArea x1={0} x2={50} y1={50} y2={100} fill="#fce8e8" fillOpacity={0.6} />
+                      <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill="#fef3c7" fillOpacity={0.6} />
+                      <ReferenceArea x1={0} x2={50} y1={0} y2={50} fill="#e0f2fe" fillOpacity={0.6} />
+                      <ReferenceArea x1={50} x2={100} y1={0} y2={50} fill="#dcfce7" fillOpacity={0.6} />
+
+                      {/* Labels for Quadrants */}
+                      <ReferenceArea x1={10} x2={10} y1={85} y2={85} label={{ value: "High Risk", position: "inside", fill: "#ef4444", fontSize: 10, fontWeight: "bold" }} />
+                      <ReferenceArea x1={10} x2={10} y1={80} y2={80} label={{ value: "Low Synergy", position: "inside", fill: "#ef4444", fontSize: 10, fontWeight: "bold" }} />
+                      
+                      <ReferenceArea x1={90} x2={90} y1={85} y2={85} label={{ value: "High Synergy", position: "inside", fill: "#f59e0b", fontSize: 10, fontWeight: "bold" }} />
+                      <ReferenceArea x1={90} x2={90} y1={80} y2={80} label={{ value: "High Risk", position: "inside", fill: "#f59e0b", fontSize: 10, fontWeight: "bold" }} />
+                      
+                      <ReferenceArea x1={10} x2={10} y1={20} y2={20} label={{ value: "Low Synergy", position: "inside", fill: "#3b82f6", fontSize: 10, fontWeight: "bold" }} />
+                      <ReferenceArea x1={10} x2={10} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#3b82f6", fontSize: 10, fontWeight: "bold" }} />
+                      
+                      <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
+                      <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
+
                       <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)' }} />
                       <Scatter name="Startups" data={[
                         { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
@@ -436,6 +518,34 @@ export default function DashboardPage() {
                       </Scatter>
                     </ScatterChart>
                   </ResponsiveContainer>
+                </div>
+                <div className="mt-6 flex flex-col md:flex-row items-center gap-3 bg-[#f8fafc] p-3 rounded-xl border border-slate-200/60 relative z-10">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm border border-slate-100 text-slate-400">
+                    <Filter className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
+                      <option>Semua Sektor</option>
+                      {uniqueSectors.map(s => <option key={s}>{s}</option>)}
+                    </select>
+                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
+                      <option>Semua Batch</option>
+                      {uniqueBatches.map(b => <option key={b}>{b}</option>)}
+                    </select>
+                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
+                      <option>Semua Status</option>
+                      <option>High Growth</option>
+                      <option>Stable</option>
+                      <option>At Risk</option>
+                    </select>
+                  </div>
+                  <div className="flex-1 w-full flex items-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white shadow-inner focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+                    <Search className="h-4 w-4 text-slate-400" />
+                    <input type="text" placeholder="Cari startup..." className="flex-1 bg-transparent text-xs font-medium outline-none" />
+                  </div>
+                  <button className="h-10 px-5 rounded-lg bg-indigo-50 text-indigo-700 font-bold text-xs hover:bg-indigo-100 transition-colors flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-sm">
+                    <Sparkles className="h-3.5 w-3.5" /> AI Search
+                  </button>
                 </div>
               </div>
             )}
