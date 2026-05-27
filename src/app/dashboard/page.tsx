@@ -1067,16 +1067,16 @@ export default function DashboardPage() {
                     <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
                       <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
                       <div className="flex items-end gap-2">
-                        <p className="text-3xl font-extrabold text-[#161616]">{analysisModal.healthScore}</p>
+                        <p className="text-3xl font-extrabold text-[#161616]">{analysisModal.healthScore ?? "—"}</p>
                         <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
                       </div>
                     </div>
                     <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
                       <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className={`h-3 w-3 rounded-full ${analysisModal.riskLabel === "LOW_RISK" ? "bg-emerald-500" : analysisModal.riskLabel === "MEDIUM_RISK" ? "bg-amber-500" : "bg-red-500"}`} />
-                        <p className={`text-base font-bold ${analysisModal.riskLabel === "LOW_RISK" ? "text-emerald-700" : analysisModal.riskLabel === "MEDIUM_RISK" ? "text-amber-700" : "text-red-700"}`}>
-                          {analysisModal.riskLabel.replace("_", " ")}
+                        <div className={`h-3 w-3 rounded-full ${analysisModal.riskLabel === "HIGH_GROWTH" ? "bg-emerald-500" : analysisModal.riskLabel === "STABLE" ? "bg-amber-500" : analysisModal.riskLabel === "AT_RISK" ? "bg-red-500" : "bg-slate-400"}`} />
+                        <p className={`text-base font-bold ${analysisModal.riskLabel === "HIGH_GROWTH" ? "text-emerald-700" : analysisModal.riskLabel === "STABLE" ? "text-amber-700" : analysisModal.riskLabel === "AT_RISK" ? "text-red-700" : "text-slate-500"}`}>
+                          {analysisModal.riskLabel ? analysisModal.riskLabel.replace("_", " ") : "Belum Dievaluasi"}
                         </p>
                       </div>
                     </div>
