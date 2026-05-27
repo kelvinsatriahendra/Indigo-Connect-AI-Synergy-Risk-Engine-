@@ -133,11 +133,11 @@ export default function AlertsPage() {
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
 
         {loading ? (
-          <div className="card-legion flex items-center justify-center py-20">
+          <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
           </div>
         ) : alerts.length === 0 ? (
-          <div className="card-legion flex flex-col items-center justify-center py-20">
+          <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-20">
             <Bell className="mb-3 h-12 w-12 text-[#d0d5dd]" />
             <p className="text-sm font-medium text-[#667085]">Tidak ada alert</p>
             <p className="mt-1 text-xs text-[#8c8f93]">Semua notifikasi sudah dibaca</p>
@@ -150,9 +150,10 @@ export default function AlertsPage() {
               return (
                 <div
                   key={alert.id}
-                  className={`card-legion border-l-4 ${severityStyles[alert.severity]} ${alert.read ? "opacity-70" : ""}`}
+                  className={`rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] border-l-4 ${severityStyles[alert.severity]} ${alert.read ? "opacity-70" : ""} hover:shadow-xl hover:-translate-x-1 transition-all duration-300 relative overflow-hidden group`}
                 >
-                  <div className="flex items-start gap-4 p-5">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                  <div className="flex items-start gap-4 p-5 relative z-10">
                     <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${typeColors[alert.type]}`}>
                       <Icon className="h-5 w-5" />
                     </div>

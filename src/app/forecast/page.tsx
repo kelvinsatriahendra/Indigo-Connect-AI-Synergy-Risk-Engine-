@@ -7,7 +7,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   Area, AreaChart,
 } from "recharts";
-import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap } from "lucide-react";
+import { TrendingUp, BarChart3, Shield, Lightbulb, RefreshCw, Zap, Sparkles } from "lucide-react";
 
 type Startup = (typeof startupsData)[number];
 type UserInfo = { name: string; email: string; role: string; userId?: string };
@@ -148,8 +148,9 @@ export default function ForecastPage() {
             <div className="w-full min-w-0">
               {/* Controls */}
               {(user?.role !== "founder" || availableStartups.length > 1) && (
-                <div className="card-legion mb-6 p-6">
-                  <div className="flex items-center gap-4">
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] mb-6 p-6 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[100px] z-0 opacity-50" />
+                  <div className="flex items-center gap-4 relative z-10">
                     <div className="flex-1">
                       {availableStartups.length > 1 ? (
                         <>
@@ -191,13 +192,13 @@ export default function ForecastPage() {
               )}
 
           {error && (
-            <div className="card-legion mb-6 border-red-200 bg-red-50 p-6">
+            <div className="rounded-[20px] bg-red-50 shadow-soft border border-red-200 mb-6 p-6">
               <p className="text-sm text-red-700">{error}</p>
             </div>
           )}
 
           {loading && (
-            <div className="card-legion flex flex-col items-center justify-center py-20">
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-20">
               <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
               <p className="text-sm font-medium text-[#344054]">AI sedang memproyeksikan data...</p>
               <p className="mt-1 text-xs text-[#8c8f93]">Menganalisis tren historis 6 bulan terakhir</p>
@@ -208,38 +209,41 @@ export default function ForecastPage() {
             <>
               {/* Prediction Cards */}
               <div className="mb-6 grid gap-5 sm:grid-cols-3">
-                <div className="card-legion p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                      <TrendingUp className="h-4 w-4" />
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 text-emerald-600 shadow-sm">
+                      <TrendingUp className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-medium text-[#667085]">Predicted Growth</p>
-                      <p className="text-xl font-bold text-[#161616]">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
+                      <p className="text-xs font-medium text-[#8c8f93]">Predicted Growth</p>
+                      <p className="text-xl font-extrabold text-[#161616]">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="card-legion p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                      <Shield className="h-4 w-4" />
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 text-blue-600 shadow-sm">
+                      <Shield className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-medium text-[#667085]">Runway Estimate</p>
-                      <p className="text-xl font-bold text-[#161616]">{data.prediction.predictedRunwayMonths} bulan</p>
+                      <p className="text-xs font-medium text-[#8c8f93]">Runway Estimate</p>
+                      <p className="text-xl font-extrabold text-[#161616]">{data.prediction.predictedRunwayMonths} bulan</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="card-legion p-5">
-                  <div className="flex items-center gap-3">
-                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${getConfidenceColor(data.prediction.confidenceScore)}`}>
-                      <Lightbulb className="h-4 w-4" />
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-sm border ${getConfidenceColor(data.prediction.confidenceScore)}`}>
+                      <Lightbulb className="h-5 w-5" />
                     </div>
                     <div>
-                      <p className="text-xs font-medium text-[#667085]">Confidence</p>
-                      <p className="text-xl font-bold text-[#161616]">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
+                      <p className="text-xs font-medium text-[#8c8f93]">Confidence</p>
+                      <p className="text-xl font-extrabold text-[#161616]">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
                     </div>
                   </div>
                 </div>
@@ -249,7 +253,7 @@ export default function ForecastPage() {
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
                 
                 {/* Revenue & Users Chart */}
-                <div className="card-legion p-6 flex flex-col">
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   <h3 className="text-base font-bold text-[#161616] mb-1">Revenue & Users — Historical + Projected</h3>
                   <p className="text-xs text-[#667085] mb-6">6 bulan historis + 3 bulan prediksi AI</p>
                   <ResponsiveContainer width="100%" height={350}>
@@ -296,7 +300,7 @@ export default function ForecastPage() {
                 </div>
 
                 {/* Growth Rate Chart */}
-                <div className="card-legion p-6 flex flex-col">
+                <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   <h3 className="text-base font-bold text-[#161616] mb-1">Growth Rate Trend</h3>
                   <p className="text-xs text-[#667085] mb-6">Persentase pertumbuhan bulanan</p>
                   <ResponsiveContainer width="100%" height={350}>
@@ -327,15 +331,18 @@ export default function ForecastPage() {
               </div>
 
               {/* AI Notes */}
-              <div className="card-legion p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FEF2F2] text-[#ED1C24]">
+              <div className="rounded-[20px] bg-gradient-to-r from-red-50/50 to-orange-50/50 shadow-soft border border-red-100 p-6 relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                <div className="absolute -right-10 -top-10 text-red-100 opacity-50 transform rotate-12 group-hover:rotate-45 transition-transform duration-1000">
+                  <Sparkles className="h-40 w-40" />
+                </div>
+                <div className="flex items-start gap-4 relative z-10">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm border border-red-100">
                     <Lightbulb className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-[#161616]">AI Analysis</h3>
+                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Analysis</h3>
                     <p className="mt-2 text-sm text-[#525252] leading-relaxed">{data.prediction.notes}</p>
-                    <p className="mt-3 text-xs text-[#8c8f93]">Generated by AI · Google Gemini 2.0 Flash via OpenRouter</p>
+                    <p className="mt-3 text-[11px] font-semibold text-[#8c8f93] tracking-wider uppercase">Generated by AI · Google Gemini 2.0 Flash</p>
                   </div>
                 </div>
               </div>
@@ -343,7 +350,7 @@ export default function ForecastPage() {
           )}
 
           {!data && !loading && (
-            <div className="card-legion flex flex-col items-center justify-center py-20 w-full">
+            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] flex flex-col items-center justify-center py-20 w-full">
               <BarChart3 className="mb-3 h-12 w-12 text-[#d0d5dd]" />
               <p className="text-sm font-medium text-[#667085]">Pilih startup dan klik &quot;Generate Forecast&quot;</p>
               <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
@@ -354,7 +361,7 @@ export default function ForecastPage() {
           {/* Bottom Section: Detailed Projections */}
           {data && (
             <div className="w-full mt-2">
-              <div className="card-legion p-6">
+              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6">
                 <div className="mb-6 flex items-center justify-between">
                   <div>
                     <h3 className="text-base font-bold text-[#161616]">Detailed Projections</h3>
