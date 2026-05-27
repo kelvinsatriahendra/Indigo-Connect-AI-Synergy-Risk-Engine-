@@ -194,21 +194,33 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
               <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
             </div>
-            {user?.role === "admin" && (
-              <button 
-                onClick={handleExportReport}
-                disabled={isExporting}
-                className={`print:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
-              >
-                {isExporting ? (
-                  <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
-                ) : exportSuccess ? (
-                  <><CheckCircle2 className="h-4 w-4" /> Downloaded</>
-                ) : (
-                  <><Download className="h-4 w-4" /> Export Executive Report</>
-                )}
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              {user?.role === "admin" && (
+                <button 
+                  onClick={handleExportReport}
+                  disabled={isExporting}
+                  className={`print:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${exportSuccess ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'btn-primary-solid cursor-pointer'}`}
+                >
+                  {isExporting ? (
+                    <><RefreshCw className="h-4 w-4 animate-spin" /> Generating PDF...</>
+                  ) : exportSuccess ? (
+                    <><CheckCircle2 className="h-4 w-4" /> Downloaded</>
+                  ) : (
+                    <><Download className="h-4 w-4" /> Export Executive Report</>
+                  )}
+                </button>
+              )}
+              {user?.role === "founder" && (
+                <>
+                  <a href="/forecast" className="btn-primary-outline border-[#e0e0e0] text-[#344054] px-4 py-2 text-sm bg-white hover:bg-slate-50 flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4" /> Lihat Forecast
+                  </a>
+                  <a href="/reports" className="btn-primary-solid px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
+                    <FileText className="h-4 w-4" /> Submit Laporan Baru
+                  </a>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
