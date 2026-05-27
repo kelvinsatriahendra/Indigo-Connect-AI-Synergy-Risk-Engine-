@@ -4,7 +4,8 @@
     "name": "Telkomsel",
     "description": "Operator telekomunikasi seluler terbesar di Indonesia",
     "sector": "Telekomunikasi",
-    "keywords": ["telekomunikasi", "mobile", "data", "digital", "seluler"]
+    "keywords": ["telekomunikasi", "mobile", "data", "digital", "seluler"],
+    "logo": "/startups/telkomsel.png"
   },
   {
     "id": "bu2",
@@ -25,7 +26,8 @@
     "name": "Logee",
     "description": "Platform logistik dan rantai pasok digital",
     "sector": "Logistik",
-    "keywords": ["logistik", "rantai pasok", "pengiriman", "gudang", "distribusi"]
+    "keywords": ["logistik", "rantai pasok", "pengiriman", "gudang", "distribusi"],
+    "logo": "/startups/logee.jpg"
   },
   {
     "id": "bu5",
@@ -53,6 +55,7 @@
     "name": "Telkom Regional",
     "description": "Layanan telekomunikasi untuk wilayah regional Indonesia",
     "sector": "Telekomunikasi",
-    "keywords": ["regional", "daerah", "pedesaan", "konektivitas", "broadband"]
+    "keywords": ["regional", "daerah", "pedesaan", "konektivitas", "broadband"],
+    "logo": "/startups/indigo-red.png"
   }
 ]

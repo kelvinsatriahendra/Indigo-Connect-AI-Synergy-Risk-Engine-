@@ -167,10 +167,10 @@ export default function SynergyPage() {
         const scoreInput = formRef.current.elements.namedItem("matchScore") as HTMLInputElement;
         const reasonInput = formRef.current.elements.namedItem("reason") as HTMLTextAreaElement;
 
-        if (startupInput) startupInput.value = "s5"; // FinAccess
-        if (buInput) buInput.value = "b2"; // Telkomsel
+        if (startupInput) startupInput.value = "s3"; // Verihubs
+        if (buInput) buInput.value = "bu1"; // Telkomsel
         if (scoreInput) scoreInput.value = "92";
-        if (reasonInput) reasonInput.value = "AI Recommendation: Model bisnis B2B SaaS dari FinAccess memiliki tingkat kecocokan strategis yang sangat tinggi dengan ekosistem pelanggan enterprise Telkomsel. Direkomendasikan untuk bundling layanan enterprise.";
+        if (reasonInput) reasonInput.value = "AI Recommendation: Model bisnis B2B Identity Verification dari Verihubs memiliki tingkat kecocokan strategis yang sangat tinggi dengan ekosistem pelanggan enterprise Telkomsel. Direkomendasikan untuk integrasi API keamanan.";
       }
     }, 1500);
   };
@@ -326,9 +326,15 @@ export default function SynergyPage() {
                                 {/* Telkom BU */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#ED1C24] text-[11px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
-                                      BU
-                                    </span>
+                                    {bu && (bu as any).logo ? (
+                                      <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
+                                        <img src={(bu as any).logo} alt={bu.name} className="h-full w-full object-contain p-0.5" />
+                                      </div>
+                                    ) : (
+                                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#ED1C24] text-[11px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
+                                        BU
+                                      </span>
+                                    )}
                                     <span className="text-[13px] font-bold text-[#344054] truncate">
                                       {bu?.name || getBuName(item.telkomBuId)}
                                     </span>
@@ -416,9 +422,15 @@ export default function SynergyPage() {
                 <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 to-transparent my-3"></div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center text-[#ED1C24] font-bold text-lg shadow-sm">
-                      BU
-                    </div>
+                    {getBu(activeCRMItem.telkomBuId) && (getBu(activeCRMItem.telkomBuId) as any).logo ? (
+                      <div className="h-10 w-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shadow-sm overflow-hidden p-1">
+                        <img src={(getBu(activeCRMItem.telkomBuId) as any).logo} alt="BU Logo" className="h-full w-full object-contain" />
+                      </div>
+                    ) : (
+                      <div className="h-10 w-10 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center text-[#ED1C24] font-bold text-lg shadow-sm">
+                        BU
+                      </div>
+                    )}
                     <div>
                       <p className="font-bold text-[#161616]">{getBuName(activeCRMItem.telkomBuId)}</p>
                       <p className="text-[10px] text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
