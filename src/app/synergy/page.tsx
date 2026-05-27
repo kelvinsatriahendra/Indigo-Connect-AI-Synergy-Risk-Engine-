@@ -504,7 +504,7 @@ export default function SynergyPage() {
           <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="bg-slate-50 px-6 py-5 border-b border-slate-100 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white border border-slate-200 shadow-sm text-[#161616]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 border border-red-100 shadow-sm text-[#ED1C24]">
                   <Target className="h-5 w-5" />
                 </div>
                 <div>
@@ -520,9 +520,9 @@ export default function SynergyPage() {
             <form ref={formRef} onSubmit={createPipeline} className="p-6 space-y-5">
               
               {/* AI MATCHMAKING BUTTON */}
-              <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-100/50 shadow-inner">
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-4 border border-red-100/50 shadow-inner">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-indigo-800">
+                  <div className="flex items-center gap-2 text-red-800">
                     <BrainCircuit className="h-4 w-4" />
                     <span className="text-xs font-bold">Bingung mencari kecocokan?</span>
                   </div>
@@ -530,7 +530,7 @@ export default function SynergyPage() {
                     type="button" 
                     onClick={handleAIMatchmaking}
                     disabled={isSimulatingAI}
-                    className="flex items-center gap-1.5 bg-indigo-600 text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-indigo-700 transition-colors disabled:opacity-50 shadow-md shadow-indigo-600/20"
+                    className="flex items-center gap-1.5 bg-[#ED1C24] text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-red-700 transition-colors disabled:opacity-50 shadow-md shadow-red-600/20"
                   >
                     {isSimulatingAI ? (
                       <><div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" /> Analyzing...</>
