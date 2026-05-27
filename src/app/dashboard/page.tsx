@@ -245,7 +245,7 @@ export default function DashboardPage() {
         {user?.role !== "founder" && (
           <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: Total Startup (Main Highlight) */}
-            <div className="card-legion p-6 bg-gradient-to-br from-[#ED1C24] to-[#991217] flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]">
+            <div className="card-legion p-6 flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]" style={{ background: 'linear-gradient(to bottom right, #ED1C24, #991217)' }}>
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-sm font-bold text-white/90">Total Startup</p>
