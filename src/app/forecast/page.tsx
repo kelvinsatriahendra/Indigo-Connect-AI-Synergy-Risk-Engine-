@@ -333,7 +333,7 @@ export default function ForecastPage() {
                   <AreaChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                     <XAxis dataKey="period" tick={{ fontSize: 12, fill: "#667085" }} />
-                    <YAxis tick={{ fontSize: 12, fill: "#667085" }} domain={[0, 'auto']} />
+                    <YAxis tick={{ fontSize: 12, fill: "#667085" }} domain={['auto', 'auto']} />
                     <Tooltip
                       contentStyle={{ borderRadius: "12px", border: "1px solid #e0e0e0", fontSize: "13px" }}
                       formatter={(value) => [`${value}%`, "Growth"]}
@@ -341,14 +341,14 @@ export default function ForecastPage() {
                     <Area
                       type="monotone"
                       dataKey="Growth"
-                      stroke="#10b981"
+                      stroke={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"}
                       strokeWidth={2}
                       fill="url(#growthGradient)"
                     />
                     <defs>
                       <linearGradient id="growthGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                        <stop offset="5%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0.2} />
+                        <stop offset="95%" stopColor={data.prediction.predictedGrowthRate < 0 ? "#ef4444" : "#10b981"} stopOpacity={0} />
                       </linearGradient>
                     </defs>
                   </AreaChart>
