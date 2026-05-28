@@ -29,6 +29,17 @@ export default function LoginPage() {
       className="flex min-h-screen items-center justify-center px-4 relative overflow-hidden"
       style={{ background: 'radial-gradient(circle at 50% 30%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
     >
+      {/* Background Hero Image with low opacity and brightness for elegant dark theme blending */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+        <img
+          src="/hero-section.png"
+          alt="Login Background Graphic"
+          className="w-full h-full object-cover object-center opacity-15 brightness-[0.4]"
+        />
+        {/* Subtle fade to blend smoothly with radial gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0d0a1b]/40 to-[#06040f]/80" />
+      </div>
+
       {/* Glow ambient spots */}
       <div className="absolute top-[20%] left-[20%] w-[250px] h-[250px] rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.06)' }} />
       <div className="absolute bottom-[20%] right-[20%] w-[250px] h-[250px] rounded-full blur-[100px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.06)' }} />
