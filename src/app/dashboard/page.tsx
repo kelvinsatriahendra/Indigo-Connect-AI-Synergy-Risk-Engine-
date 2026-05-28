@@ -1193,9 +1193,12 @@ export default function DashboardPage() {
       {/* 3. Matrix Fullscreen Modal */}
       {isMatrixFullscreen && (
         <div className="fixed inset-0 z-[100] flex flex-col bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-200">
-          <div className="p-6 flex items-center justify-between border-b border-white/10 bg-slate-900/50">
+          <div 
+            className="p-6 flex items-center justify-between border-b border-white/5"
+            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+          >
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-sm">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] flex items-center justify-center text-white shadow-sm">
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
