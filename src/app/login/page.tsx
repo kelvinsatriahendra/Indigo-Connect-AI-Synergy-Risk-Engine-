@@ -54,22 +54,16 @@ export default function LoginPage() {
                   id: "admin" as const,
                   label: "Executive",
                   icon: Briefcase,
-                  color: "text-[#ED1C24] bg-[#ED1C24]/10",
-                  activeColor: "border-[#ED1C24]/80 shadow-[#ED1C24]/10 bg-[#ED1C24]/5 text-[#ED1C24]",
                 },
                 {
                   id: "synergy" as const,
                   label: "Synergy",
                   icon: GitBranch,
-                  color: "text-[#d97706] bg-[#d97706]/10",
-                  activeColor: "border-[#d97706]/80 shadow-[#d97706]/10 bg-[#d97706]/5 text-[#d97706]",
                 },
                 {
                   id: "founder" as const,
                   label: "Founder",
                   icon: Rocket,
-                  color: "text-[#2563eb] bg-[#2563eb]/10",
-                  activeColor: "border-[#2563eb]/80 shadow-[#2563eb]/10 bg-[#2563eb]/5 text-[#2563eb]",
                 },
               ].map((roleItem) => {
                 const isActive = selectedRole === roleItem.id;
@@ -81,11 +75,13 @@ export default function LoginPage() {
                     onClick={() => handleRoleSelect(roleItem.id)}
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border cursor-pointer transition-all duration-300 ${
                       isActive 
-                        ? `${roleItem.activeColor} border-2 scale-[1.03] font-bold` 
-                        : "border-[#e0e0e0] text-[#525252] hover:bg-slate-50 hover:border-slate-300"
+                        ? "bg-[#ED1C24] border-[#ED1C24] text-white shadow-md shadow-[#ED1C24]/20 scale-[1.03] font-bold" 
+                        : "border-[#e0e0e0] text-[#525252] hover:bg-slate-50 hover:border-slate-300 bg-white"
                     }`}
                   >
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold mb-1.5 ${isActive ? roleItem.color : "bg-slate-100 text-slate-500"}`}>
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold mb-1.5 transition-colors duration-300 ${
+                      isActive ? "bg-white text-[#ED1C24]" : "bg-slate-100 text-slate-500"
+                    }`}>
                       <RoleIcon className="h-4 w-4" />
                     </span>
                     <span className="text-[11px] tracking-wide">{roleItem.label}</span>
