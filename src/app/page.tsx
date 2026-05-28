@@ -20,26 +20,26 @@ export default async function Home() {
           <img
             src="/danantara-logo.svg"
             alt="Danantara Logo"
-            className="h-9 w-auto object-contain"
+            className="h-6 md:h-9 w-auto object-contain"
           />
         </Link>
-        <div className="flex items-center gap-4 md:gap-5">
+        <div className="flex items-center gap-2 md:gap-5">
           <img
             src="/ai-connect.png"
             alt="AI Connect Logo"
-            className="h-5 w-auto object-contain"
+            className="h-3.5 md:h-5 w-auto object-contain"
           />
-          <span className="h-5 w-px bg-slate-200" />
+          <span className="h-4 md:h-5 w-px bg-slate-200" />
           <img
             src="/telkom.png"
             alt="Telkom Logo"
-            className="h-10 w-auto object-contain"
+            className="h-6 md:h-10 w-auto object-contain"
           />
-          <span className="h-5 w-px bg-slate-200" />
+          <span className="h-4 md:h-5 w-px bg-slate-200" />
           <img
             src="/indigo-red.png"
             alt="Indigo Logo"
-            className="h-8 w-auto object-contain"
+            className="h-5 md:h-8 w-auto object-contain"
           />
         </div>
       </header>
