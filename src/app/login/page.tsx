@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { login } from "@/app/actions/auth";
+import { Briefcase, GitBranch, Rocket } from "lucide-react";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
@@ -52,26 +53,27 @@ export default function LoginPage() {
                 {
                   id: "admin" as const,
                   label: "Executive",
-                  letter: "E",
-                  color: "bg-[#ED1C24]",
+                  icon: Briefcase,
+                  color: "text-[#ED1C24] bg-[#ED1C24]/10",
                   activeColor: "border-[#ED1C24]/80 shadow-[#ED1C24]/10 bg-[#ED1C24]/5 text-[#ED1C24]",
                 },
                 {
                   id: "synergy" as const,
                   label: "Synergy",
-                  letter: "S",
-                  color: "bg-[#d97706]",
+                  icon: GitBranch,
+                  color: "text-[#d97706] bg-[#d97706]/10",
                   activeColor: "border-[#d97706]/80 shadow-[#d97706]/10 bg-[#d97706]/5 text-[#d97706]",
                 },
                 {
                   id: "founder" as const,
                   label: "Founder",
-                  letter: "F",
-                  color: "bg-[#2563eb]",
+                  icon: Rocket,
+                  color: "text-[#2563eb] bg-[#2563eb]/10",
                   activeColor: "border-[#2563eb]/80 shadow-[#2563eb]/10 bg-[#2563eb]/5 text-[#2563eb]",
                 },
               ].map((roleItem) => {
                 const isActive = selectedRole === roleItem.id;
+                const RoleIcon = roleItem.icon;
                 return (
                   <button
                     key={roleItem.id}
@@ -83,8 +85,8 @@ export default function LoginPage() {
                         : "border-[#e0e0e0] text-[#525252] hover:bg-slate-50 hover:border-slate-300"
                     }`}
                   >
-                    <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-white mb-1.5 ${roleItem.color}`}>
-                      {roleItem.letter}
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold mb-1.5 ${isActive ? roleItem.color : "bg-slate-100 text-slate-500"}`}>
+                      <RoleIcon className="h-4 w-4" />
                     </span>
                     <span className="text-[11px] tracking-wide">{roleItem.label}</span>
                   </button>
