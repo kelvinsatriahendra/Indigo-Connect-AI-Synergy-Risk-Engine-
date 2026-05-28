@@ -210,24 +210,24 @@ export default async function Home() {
                 step: "01",
                 title: "Founder Submit Laporan",
                 desc: "Founder mengunggah laporan bulanan (PDF) secara berkala ke dalam platform.",
-                icon: <FileText className="h-6 w-6 text-[#ED1C24]" />
+                icon: <FileText className="h-6 w-6 text-white" />
               },
               {
                 step: "02",
                 title: "AI Menganalisis Risiko",
                 desc: "Engine AI mengekstraksi data, menilai kesehatan finansial, dan mendeteksi risiko dini.",
-                icon: <Activity className="h-6 w-6 text-[#ED1C24]" />
+                icon: <Activity className="h-6 w-6 text-white" />
               },
               {
                 step: "03",
                 title: "Rekomendasi Sinergi",
                 desc: "Eksekutif menerima Executive Summary dan rekomendasi unit bisnis Telkom yang pas.",
-                icon: <GitBranch className="h-6 w-6 text-[#ED1C24]" />
+                icon: <GitBranch className="h-6 w-6 text-white" />
               }
             ].map((s) => (
               <div key={s.step} className="relative z-10 flex flex-col items-center text-center group">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white border-4 border-slate-50 shadow-xl shadow-slate-200/50 mb-6 group-hover:-translate-y-2 transition-transform duration-300">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ED1C24] shadow-md shadow-[#ED1C24]/20">
                     {s.icon}
                   </div>
                 </div>
