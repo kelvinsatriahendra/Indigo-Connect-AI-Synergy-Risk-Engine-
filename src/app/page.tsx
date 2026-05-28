@@ -168,7 +168,7 @@ export default async function Home() {
               },
             ].map((item) => {
               return (
-                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 shadow-xl group hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col h-[350px]">
+                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 hover:border-[#ED1C24] shadow-xl group hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#ED1C24]/15 transition-all duration-300 flex flex-col h-[350px]">
                   {/* Top Image with Gradient Transition */}
                   <div className="relative h-[180px] w-full overflow-hidden">
                     <img 
