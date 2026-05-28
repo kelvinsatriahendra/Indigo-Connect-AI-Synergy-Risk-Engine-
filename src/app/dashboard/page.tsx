@@ -65,6 +65,9 @@ export default function DashboardPage() {
   const [aiSearchActive, setAiSearchActive] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
   const [analysisModal, setAnalysisModal] = useState<any | null>(null);
+  const [isHealthModalOpen, setIsHealthModalOpen] = useState(false);
+  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false);
+  const [isMatrixFullscreen, setIsMatrixFullscreen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -153,7 +156,7 @@ export default function DashboardPage() {
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && aiSearch) {
+    if (e.key === "Enter" && search.trim() !== "") {
       handleAiSearch();
     }
   };
@@ -373,7 +376,7 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
-                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                <button onClick={() => setIsHealthModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-[10px]">›</span>
                 </button>
               </div>
@@ -434,7 +437,7 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-3">
                   <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
-                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                <button onClick={() => setIsSectorModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-[10px]">›</span>
                 </button>
               </div>
@@ -507,7 +510,7 @@ export default function DashboardPage() {
                       <span className="flex items-center gap-1.5 text-[#ef4444]"><span className="h-2 w-2 rounded-full bg-[#ef4444]" /> High Risk</span>
                       <span className="flex items-center gap-1.5 text-[#3b82f6]"><span className="h-2 w-2 rounded-full bg-[#3b82f6]" /> Monitor</span>
                     </div>
-                    <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors">
+                    <button onClick={() => setIsMatrixFullscreen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors">
                       [ ] Full Screen
                     </button>
                   </div>
@@ -581,12 +584,40 @@ export default function DashboardPage() {
                       <option>At Risk</option>
                     </select>
                   </div>
-                  <div className="flex-1 w-full flex items-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white shadow-inner focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
-                    <Search className="h-4 w-4 text-slate-400" />
-                    <input type="text" placeholder="Cari startup..." className="flex-1 bg-transparent text-xs font-medium outline-none" />
+                  <div className={`flex-1 w-full flex items-center gap-2 h-10 px-3 rounded-lg border ${aiSearchActive ? "border-[#7C3AED] ring-1 ring-[#7C3AED]" : "border-slate-200 focus-within:border-[#7C3AED] focus-within:ring-1 focus-within:ring-[#7C3AED]"} bg-white shadow-inner`}>
+                    <Search className={`h-4 w-4 ${aiSearchActive ? "text-[#7C3AED]" : "text-slate-400"}`} />
+                    <input 
+                      type="text" 
+                      placeholder="Cari menggunakan AI (contoh: startup profit di logistik)..." 
+                      className="flex-1 bg-transparent text-xs font-medium outline-none" 
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      onKeyDown={handleSearchKeyDown}
+                      disabled={aiSearchLoading}
+                    />
+                    {search && (
+                      <button onClick={clearAiSearch} className="text-slate-400 hover:text-slate-600 outline-none">
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
-                  <button className="h-10 px-5 rounded-lg bg-indigo-50 text-indigo-700 font-bold text-xs hover:bg-indigo-100 transition-colors flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-sm">
-                    <Sparkles className="h-3.5 w-3.5" /> AI Search
+                  <button 
+                    onClick={aiSearchActive ? clearAiSearch : handleAiSearch}
+                    disabled={aiSearchLoading || !search.trim()}
+                    className={`h-10 px-5 rounded-lg font-bold text-xs transition-colors flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-sm disabled:opacity-50 ${
+                      aiSearchActive 
+                        ? "bg-[#7C3AED] text-white hover:bg-[#6d28d9]" 
+                        : "bg-[#f3e8ff] text-[#7C3AED] hover:bg-[#e9d5ff]"
+                    }`}
+                  >
+                    {aiSearchLoading ? (
+                      <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                    ) : aiSearchActive ? (
+                      <X className="h-3.5 w-3.5" />
+                    ) : (
+                      <Sparkles className="h-3.5 w-3.5" />
+                    )}
+                    {aiSearchLoading ? "Mencari..." : aiSearchActive ? "Clear AI" : "AI Search"}
                   </button>
                 </div>
               </div>
@@ -1120,6 +1151,152 @@ export default function DashboardPage() {
         );
       })()}
 
+      {/* 1. Health Modal */}
+      {isHealthModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">Detail Health Score</h3>
+              <button onClick={() => setIsHealthModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-5 max-h-[60vh] overflow-y-auto space-y-4">
+              {healthDistribution.map((item, idx) => (
+                <div key={idx} className="border border-slate-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${item.color}`} />
+                      {item.label}
+                    </h4>
+                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{item.count} Startup</span>
+                  </div>
+                  <div className="space-y-2">
+                    {filteredStartups.filter(s => (item.label === "High Growth" && s.status === "ACTIVE") || (item.label === "At Risk" && s.status === "AT_RISK") || (item.label === "Stable" && s.status === "STABLE")).map(s => (
+                      <div key={s.id} className="text-sm text-slate-600 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 flex justify-between">
+                        <span className="font-medium text-slate-700">{s.name}</span>
+                        <span className="text-xs text-slate-400">{s.sector}</span>
+                      </div>
+                    ))}
+                    {filteredStartups.filter(s => (item.label === "High Growth" && s.status === "ACTIVE") || (item.label === "At Risk" && s.status === "AT_RISK") || (item.label === "Stable" && s.status === "STABLE")).length === 0 && (
+                      <p className="text-xs text-slate-400 italic">Tidak ada data di kategori ini.</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setIsHealthModalOpen(false)} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">Tutup</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Sector Modal */}
+      {isSectorModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">Detail Sector Distribution</h3>
+              <button onClick={() => setIsSectorModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-5 max-h-[60vh] overflow-y-auto space-y-4">
+              {sectorData.map((item, idx) => (
+                <div key={idx} className="border border-slate-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: sectorColorMap[item.name] || '#64748b' }} />
+                      {item.name}
+                    </h4>
+                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{item.value} Startup</span>
+                  </div>
+                  <div className="space-y-2">
+                    {filteredStartups.filter(s => s.sector === item.name).map(s => (
+                      <div key={s.id} className="text-sm text-slate-600 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 flex justify-between">
+                        <span className="font-medium text-slate-700">{s.name}</span>
+                        <span className={`text-xs ${s.status === 'ACTIVE' ? 'text-emerald-500' : 'text-red-500'}`}>{s.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setIsSectorModalOpen(false)} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">Tutup</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Matrix Fullscreen Modal */}
+      {isMatrixFullscreen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="p-6 flex items-center justify-between border-b border-white/10 bg-slate-900/50">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-sm">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-xl font-extrabold text-white tracking-wide">Executive Risk Matrix (Full Screen)</h3>
+                <p className="text-sm font-medium text-slate-400">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+              </div>
+            </div>
+            <button onClick={() => setIsMatrixFullscreen(false)} className="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="flex-1 p-8 w-full h-full min-h-0 bg-white">
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart margin={{ top: 20, right: 40, bottom: 40, left: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
+                <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -20, fontSize: 14, fill: '#94a3b8', fontWeight: 'bold' }} />
+                <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', offset: 10, fontSize: 14, fill: '#94a3b8', fontWeight: 'bold' }} />
+                <ZAxis type="number" dataKey="z" range={[200, 1000]} name="Valuasi" />
+                
+                <ReferenceArea x1={0} x2={50} y1={50} y2={100} fill="#fce8e8" fillOpacity={0.6} />
+                <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill="#fef3c7" fillOpacity={0.6} />
+                <ReferenceArea x1={0} x2={50} y1={0} y2={50} fill="#e0f2fe" fillOpacity={0.6} />
+                <ReferenceArea x1={50} x2={100} y1={0} y2={50} fill="#dcfce7" fillOpacity={0.6} />
+
+                <ReferenceArea x1={10} x2={10} y1={85} y2={85} label={{ value: "High Risk", position: "inside", fill: "#ef4444", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={10} x2={10} y1={80} y2={80} label={{ value: "Low Synergy", position: "inside", fill: "#ef4444", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={90} x2={90} y1={85} y2={85} label={{ value: "High Synergy", position: "inside", fill: "#f59e0b", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={90} x2={90} y1={80} y2={80} label={{ value: "High Risk", position: "inside", fill: "#f59e0b", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={10} x2={10} y1={20} y2={20} label={{ value: "Low Synergy", position: "inside", fill: "#3b82f6", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={10} x2={10} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#3b82f6", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
+
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', padding: '12px' }} />
+                <Scatter name="Startups" data={[
+                  { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                  { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                  { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                  { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                  { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                ]} fill="#8884d8" opacity={0.85}>
+                  {
+                    [
+                      { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                      { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                      { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                      { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                      { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                    ].map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} stroke="#ffffff" strokeWidth={2} />
+                    ))
+                  }
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
