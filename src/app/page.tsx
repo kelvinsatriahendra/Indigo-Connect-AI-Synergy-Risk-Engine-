@@ -18,21 +18,29 @@ export default async function Home() {
       <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
         <Link href="/" className="flex items-center gap-3">
           <img
-            src="/indigo-red.png"
-            alt="Indigo Logo"
-            className="h-8 w-auto object-contain"
+            src="/danantara-logo.svg"
+            alt="Danantara Logo"
+            className="h-9 w-auto object-contain"
           />
         </Link>
-        <div className="flex items-center gap-4">
-          {session?.userId ? (
-            <Link href="/dashboard" className="btn-primary-solid text-sm px-5 py-2">
-              Buka Dashboard
-            </Link>
-          ) : (
-            <Link href="/login" className="btn-primary-solid text-sm px-5 py-2">
-              Masuk
-            </Link>
-          )}
+        <div className="flex items-center gap-4 md:gap-5">
+          <img
+            src="/ai-connect.png"
+            alt="AI Connect Logo"
+            className="h-7 w-auto object-contain"
+          />
+          <span className="h-5 w-px bg-slate-200" />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/3/38/TelkomGroup_2013.svg"
+            alt="Telkom Logo"
+            className="h-6 w-auto object-contain"
+          />
+          <span className="h-5 w-px bg-slate-200" />
+          <img
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            className="h-6 w-auto object-contain"
+          />
         </div>
       </header>
 
