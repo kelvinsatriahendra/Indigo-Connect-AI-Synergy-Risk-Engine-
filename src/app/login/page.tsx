@@ -122,9 +122,7 @@ export default function LoginPage() {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="Masukkan NIK Anda"
-                className={`w-full rounded-lg border px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all ${
-                  identifier ? "border-[#ED1C24]/50 bg-[#FEF2F2]/10" : "border-[#e0e0e0] bg-white"
-                }`}
+                className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
               />
               {state?.errors?.identifier && <p className="mt-1 text-xs text-red-500">{state.errors.identifier[0]}</p>}
             </div>
@@ -140,9 +138,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`w-full rounded-lg border px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all ${
-                  password ? "border-[#ED1C24]/50 bg-[#FEF2F2]/10" : "border-[#e0e0e0] bg-white"
-                }`}
+                className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
               />
               {state?.errors?.password && <p className="mt-1 text-xs text-red-500">{state.errors.password[0]}</p>}
             </div>
