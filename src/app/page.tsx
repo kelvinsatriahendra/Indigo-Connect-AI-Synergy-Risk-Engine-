@@ -77,10 +77,10 @@ export default async function Home() {
             <span className="h-1.5 w-1.5 rounded-full bg-[#ED1C24] animate-pulse" />
             Indigo by Telkom Indonesia
           </div>
-          <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <h1 className="text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl">
             Indigo Connect
           </h1>
-          <p className="mt-4 text-3xl font-bold text-[#ED1C24] sm:text-4xl tracking-wide drop-shadow-sm">
+          <p className="mt-4 text-4xl font-bold text-[#ED1C24] sm:text-5xl tracking-wide drop-shadow-sm">
             AI Synergy & Risk Engine
           </p>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 leading-relaxed">
