@@ -27,7 +27,7 @@ export default async function Home() {
           <img
             src="/ai-connect.png"
             alt="AI Connect Logo"
-            className="h-8 w-auto object-contain"
+            className="h-5 w-auto object-contain"
           />
           <span className="h-5 w-px bg-slate-200" />
           <img
