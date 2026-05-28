@@ -31,7 +31,7 @@ export default async function Home() {
           />
           <span className="h-5 w-px bg-slate-200" />
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/3/38/TelkomGroup_2013.svg"
+            src="/telkom.png"
             alt="Telkom Logo"
             className="h-6 w-auto object-contain"
           />
