@@ -268,14 +268,9 @@ export default async function Home() {
                 </Link>
               </>
             ) : (
-              <>
-                <Link href="/login" className="w-full sm:w-auto text-center border border-white hover:bg-white/10 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
-                  Buka Demo
-                </Link>
-                <Link href="/login" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
-                  Masuk ke Platform
-                </Link>
-              </>
+              <Link href="/login" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
+                Masuk ke Platform
+              </Link>
             )}
           </div>
         </div>
