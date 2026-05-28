@@ -54,6 +54,20 @@ const sparklineHighGrowth = [ { val: 2 }, { val: 4 }, { val: 3 }, { val: 6 }, { 
 const sparklineAtRisk = [ { val: 5 }, { val: 4 }, { val: 6 }, { val: 5 }, { val: 7 }, { val: 6 }, { val: 8 } ];
 const sparklineBatch = [ { val: 2 }, { val: 2 }, { val: 3 }, { val: 2 }, { val: 4 }, { val: 3 }, { val: 4 } ];
 
+const MatrixTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 rounded-xl border border-[#f2f4f7] shadow-lg">
+        <p className="font-bold text-sm text-slate-800 mb-1">{data.name}</p>
+        <p className="text-xs text-slate-600">Sinergi: <span className="font-bold text-emerald-600">{data.synergy}%</span></p>
+        <p className="text-xs text-slate-600">Risiko AI: <span className="font-bold text-rose-600">{data.risk}%</span></p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
   const [startups, setStartups] = useState<Startup[]>([]);
@@ -266,78 +280,7 @@ export default function DashboardPage() {
 
         {user?.role !== "founder" && (
           <>
-            <div className="mb-6 flex flex-col md:flex-row items-center gap-3 bg-[#f8fafc] p-3 rounded-xl border border-slate-200/60 shadow-sm relative z-10">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm border border-slate-100 text-slate-400">
-                <Filter className="h-4 w-4" />
-              </div>
-              <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select 
-                  className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none"
-                  value={filters.sector === "all" ? "Semua Sektor" : filters.sector}
-                  onChange={(e) => setFilters({...filters, sector: e.target.value === "Semua Sektor" ? "all" : e.target.value})}
-                >
-                  <option>Semua Sektor</option>
-                  {uniqueSectors.map(s => <option key={s}>{s}</option>)}
-                </select>
-                <select 
-                  className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none"
-                  value={filters.batch === "all" ? "Semua Batch" : filters.batch}
-                  onChange={(e) => setFilters({...filters, batch: e.target.value === "Semua Batch" ? "all" : e.target.value})}
-                >
-                  <option>Semua Batch</option>
-                  {uniqueBatches.map(b => <option key={b}>{b}</option>)}
-                </select>
-                <select 
-                  className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none"
-                  value={filters.risk === "all" ? "Semua Status" : filters.risk === "ACTIVE" ? "High Growth" : filters.risk === "STABLE" ? "Stable" : "At Risk"}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    const riskVal = val === "Semua Status" ? "all" : val === "High Growth" ? "ACTIVE" : val === "Stable" ? "STABLE" : "AT_RISK";
-                    setFilters({...filters, risk: riskVal});
-                  }}
-                >
-                  <option>Semua Status</option>
-                  <option>High Growth</option>
-                  <option>Stable</option>
-                  <option>At Risk</option>
-                </select>
-              </div>
-              <div className={`flex-1 w-full flex items-center gap-2 h-10 px-3 rounded-lg border ${aiSearchActive ? "border-[#7C3AED] ring-1 ring-[#7C3AED]" : "border-slate-200 focus-within:border-[#7C3AED] focus-within:ring-1 focus-within:ring-[#7C3AED]"} bg-white shadow-inner`}>
-                <Search className={`h-4 w-4 ${aiSearchActive ? "text-[#7C3AED]" : "text-slate-400"}`} />
-                <input 
-                  type="text" 
-                  placeholder="Cari menggunakan AI (contoh: startup profit di logistik)..." 
-                  className="flex-1 bg-transparent text-xs font-medium outline-none" 
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  onKeyDown={handleSearchKeyDown}
-                  disabled={aiSearchLoading}
-                />
-                {search && (
-                  <button onClick={clearAiSearch} className="text-slate-400 hover:text-slate-600 outline-none">
-                    <X className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-              <button 
-                onClick={aiSearchActive ? clearAiSearch : handleAiSearch}
-                disabled={aiSearchLoading || !search.trim()}
-                className={`h-10 px-5 rounded-lg font-bold text-xs transition-colors flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-sm disabled:opacity-50 ${
-                  aiSearchActive 
-                    ? "bg-[#7C3AED] text-white hover:bg-[#6d28d9]" 
-                    : "bg-[#f3e8ff] text-[#7C3AED] hover:bg-[#e9d5ff]"
-                }`}
-              >
-                {aiSearchLoading ? (
-                  <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                ) : aiSearchActive ? (
-                  <X className="h-3.5 w-3.5" />
-                ) : (
-                  <Sparkles className="h-3.5 w-3.5" />
-                )}
-                {aiSearchLoading ? "Mencari..." : aiSearchActive ? "Clear AI" : "AI Search"}
-              </button>
-            </div>
+
             
           <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: Total Startup (Main Highlight) */}
@@ -616,7 +559,7 @@ export default function DashboardPage() {
                       <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
                       <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
 
-                      <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)' }} />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<MatrixTooltip />} />
                       <Scatter name="Startups" data={[
                         { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
                         { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
@@ -1291,7 +1234,7 @@ export default function DashboardPage() {
                 <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
                 <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
 
-                <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', padding: '12px' }} />
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<MatrixTooltip />} />
                 <Scatter name="Startups" data={[
                   { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
                   { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
