@@ -87,21 +87,10 @@ export default async function Home() {
             Executive Analytics Dashboard untuk evaluasi kesehatan bisnis startup,
             deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            {session?.userId ? (
-              <>
-                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
-                  Buka Dashboard
-                </Link>
-                <Link href="/reports" className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-sm px-8 py-3 transition-all hover:scale-[1.02]">
-                  AI Evaluation
-                </Link>
-              </>
-            ) : (
-              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
-                Masuk ke Platform
-              </Link>
-            )}
+          <div className="mt-10 flex items-center justify-center">
+            <Link href="/login" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
+              Masuk ke Platform
+            </Link>
           </div>
         </div>
 
