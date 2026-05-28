@@ -42,15 +42,15 @@ export default async function Home() {
           <img
             src="/hero-section.png"
             alt="Hero Background Graphic"
-            className="w-full h-full object-cover object-center opacity-90 brightness-[0.48]"
+            className="w-full h-full object-cover object-center opacity-95 brightness-[0.58]"
           />
           {/* Subtle bottom fade to merge smoothly with the dark themed section separation */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0a1b]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0a1b]/60" />
         </div>
 
         {/* Glow ambient spots */}
-        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.08)' }} />
-        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.08)' }} />
+        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.04)' }} />
+        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.04)' }} />
 
         {/* Decorative Swooping Vector Lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
