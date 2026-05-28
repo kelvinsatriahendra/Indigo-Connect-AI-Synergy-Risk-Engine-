@@ -27,19 +27,19 @@ export default async function Home() {
           <img
             src="/ai-connect.png"
             alt="AI Connect Logo"
-            className="h-7 w-auto object-contain"
+            className="h-8 w-auto object-contain"
           />
           <span className="h-5 w-px bg-slate-200" />
           <img
             src="/telkom.png"
             alt="Telkom Logo"
-            className="h-6 w-auto object-contain"
+            className="h-10 w-auto object-contain"
           />
           <span className="h-5 w-px bg-slate-200" />
           <img
             src="/indigo-red.png"
             alt="Indigo Logo"
-            className="h-6 w-auto object-contain"
+            className="h-8 w-auto object-contain"
           />
         </div>
       </header>
