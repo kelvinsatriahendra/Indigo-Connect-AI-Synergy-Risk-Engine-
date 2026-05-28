@@ -507,8 +507,7 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Risk Matrix & Synergy Potential Heatmap (Admin Only) */}
-            {user?.role === "admin" && (
+            {/* Risk Matrix & Synergy Potential Heatmap (Admin & Synergy) */}
               <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-bl-[200px] z-0 opacity-50 transition-all group-hover:scale-110" />
                 <div className="flex items-center justify-between gap-3 mb-4 relative z-10">
@@ -583,7 +582,6 @@ export default function DashboardPage() {
                   </ResponsiveContainer>
                 </div>
               </div>
-            )}
           </div>
         )}
 
