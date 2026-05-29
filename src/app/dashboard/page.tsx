@@ -941,7 +941,7 @@ export default function DashboardPage() {
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-3 shadow-sm shadow-[#f2f4f7]">
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
-                            <span className="text-xs font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
+                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">AI Match</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 pr-2 truncate">
@@ -976,7 +976,7 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-xs font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
+                            <p className="text-xs font-bold text-foreground uppercase tracking-wider">AI Match</p>
                             <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
                           </div>
                         </div>
