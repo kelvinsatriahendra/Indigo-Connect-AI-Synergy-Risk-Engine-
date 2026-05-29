@@ -294,9 +294,9 @@ export default function DashboardPage() {
                     <Building2 className="h-4.5 w-4.5" />
                   </div>
                 </div>
-                <div>
+                <div className="flex items-baseline gap-2 mt-2">
                   <p className="text-5xl font-extrabold text-white tracking-tight leading-none">{totalStartups}</p>
-                  <p className="mt-1.5 text-sm font-semibold text-white/70">startup</p>
+                  <p className="text-sm font-semibold text-white/70">startup</p>
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 w-fit">
                   <ArrowUpRight className="h-3 w-3 text-white" />
@@ -318,8 +318,10 @@ export default function DashboardPage() {
                     <TrendingUp className="h-5 w-5" />
                   </div>
                 </div>
-                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">{highGrowth}</p>
-                <p className="mt-2 text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</p>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{highGrowth}</p>
+                  <p className="text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</p>
+                </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
@@ -341,8 +343,10 @@ export default function DashboardPage() {
                     <AlertTriangle className="h-5 w-5" />
                   </div>
                 </div>
-                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">{atRisk}</p>
-                <p className="mt-2 text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</p>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{atRisk}</p>
+                  <p className="text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</p>
+                </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
@@ -367,12 +371,14 @@ export default function DashboardPage() {
                     {user?.role === "synergy" ? <GitBranch className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
                   </div>
                 </div>
-                <p className="text-4xl font-extrabold text-[#161616] tracking-tight">
-                  {user?.role === "synergy"
-                    ? synergySectorMap["demo-synergy-id"]?.length || 0
-                    : uniqueBatches.length}
-                </p>
-                <p className="mt-2 text-xs font-bold text-[#667085]">Menjalankan evaluasi AI</p>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">
+                    {user?.role === "synergy"
+                      ? synergySectorMap["demo-synergy-id"]?.length || 0
+                      : uniqueBatches.length}
+                  </p>
+                  <p className="text-xs font-bold text-[#667085]">Menjalankan evaluasi AI</p>
+                </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-30">
                 <ResponsiveContainer width="100%" height="100%">
