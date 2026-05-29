@@ -220,7 +220,7 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-background print:h-auto print:overflow-visible" ref={dashboardRef}>
+      <div className="flex h-full flex-col overflow-hidden bg-background print:h-auto print:overflow-visible" ref={dashboardRef}>
         {/* Fixed Header Bar */}
         <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10 print:hidden">
           <div className="flex items-center justify-between flex-wrap gap-4">

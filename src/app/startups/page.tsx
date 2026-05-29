@@ -249,7 +249,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Fixed Header Bar */}

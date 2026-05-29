@@ -40,7 +40,7 @@ const roleBadgeColors: Record<string, string> = {
   founder: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
 };
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
@@ -72,10 +72,22 @@ export function Sidebar() {
     : allNavItems;
 
   return (
-    <aside
-      className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 text-white"
-      style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
-    >
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-slate-900/40 lg:hidden backdrop-blur-sm transition-opacity" 
+          onClick={onClose}
+        />
+      )}
+      
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r border-white/5 text-white transition-transform duration-300 lg:translate-x-0 shadow-2xl lg:shadow-none",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+        style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+      >
       <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6 relative">
         <div className="h-8 w-24 relative">
           <Image
@@ -143,5 +155,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }
