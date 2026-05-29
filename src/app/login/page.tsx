@@ -87,7 +87,7 @@ export default function LoginPage() {
                     className={`flex flex-col items-center justify-center p-3 rounded-xl border cursor-pointer transition-all duration-300 group ${
                       isActive 
                         ? "bg-[#ED1C24] border-[#ED1C24] text-white shadow-md shadow-[#ED1C24]/20 scale-[1.03] font-bold" 
-                        : "border-[#e0e0e0] text-[#525252] hover:bg-[#FEF2F2]/30 hover:border-[#ED1C24] hover:text-[#ED1C24] bg-white"
+                        : "border-border text-[#525252] hover:bg-[#FEF2F2]/30 hover:border-[#ED1C24] hover:text-[#ED1C24] bg-white"
                     }`}
                   >
                     <span className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold mb-1.5 transition-colors duration-300 ${
@@ -122,7 +122,7 @@ export default function LoginPage() {
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
                 placeholder="Masukkan NIK Anda"
-                className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-foreground placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
               />
               {state?.errors?.identifier && <p className="mt-1 text-xs text-red-500">{state.errors.identifier[0]}</p>}
             </div>
@@ -138,7 +138,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-[#e0e0e0] bg-white px-3 py-2.5 text-sm text-[#161616] placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
+                className="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-foreground placeholder:text-[#8c8f93] focus:border-[#ED1C24] focus:ring-2 focus:ring-[#ED1C24]/20 focus:outline-none transition-all"
               />
               {state?.errors?.password && <p className="mt-1 text-xs text-red-500">{state.errors.password[0]}</p>}
             </div>

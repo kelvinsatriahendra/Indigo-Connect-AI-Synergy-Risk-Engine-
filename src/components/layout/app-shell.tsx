@@ -7,7 +7,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-full flex-col lg:flex-row bg-[#f4f4f4] print:bg-white overflow-hidden">
+    <div className="flex h-screen w-full flex-col lg:flex-row bg-background print:bg-white overflow-hidden">
       
       {/* Mobile Top Bar */}
       <div className="lg:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 shrink-0 relative z-20 shadow-sm print:hidden">

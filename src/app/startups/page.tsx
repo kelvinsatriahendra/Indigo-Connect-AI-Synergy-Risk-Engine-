@@ -249,11 +249,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Fixed Header Bar */}
-        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
@@ -261,7 +261,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
               </div>
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">Startup</h1>
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Startup</h1>
                   {/* AI Startup Monitor Live Badge */}
                   <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
                     <span className="relative flex h-2 w-2">
@@ -308,7 +308,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   className={`w-full text-left rounded-xl border p-4 transition-all ${
                     selectedStartup?.id === startup.id
                       ? "border-[#ED1C24] bg-[#FEF2F2]"
-                      : "border-[#e0e0e0] bg-white hover:border-[#ED1C24] hover:shadow-sm"
+                      : "border-border bg-white hover:border-[#ED1C24] hover:shadow-sm"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -320,7 +320,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           <span className="text-xs font-bold text-slate-400">{startup.name.charAt(0)}</span>
                         )}
                       </div>
-                      <span className="font-semibold text-[#161616]">{startup.name}</span>
+                      <span className="font-semibold text-foreground">{startup.name}</span>
                     </div>
                     <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
                       {startup.status === "ACTIVE" ? "Aktif" : "At Risk"}
@@ -342,7 +342,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         <div className="h-14 w-14 rounded-xl bg-white border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center shrink-0">
                           <img src={(selectedStartup as any).logo} alt={selectedStartup.name} className="h-full w-full object-contain p-2" />
                         </div>
-                        <h2 className="text-2xl font-bold text-[#161616]">{selectedStartup.name}</h2>
+                        <h2 className="text-2xl font-bold text-foreground">{selectedStartup.name}</h2>
                         <span className={selectedStartup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
                           {selectedStartup.status === "ACTIVE" ? "High Growth" : "At Risk"}
                         </span>
@@ -364,11 +364,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
 
                     return (
                       <div className="mt-8 border-t border-[#f2f4f7] pt-6 animate-fade-in">
-                        <h3 className="text-xs font-bold text-[#161616] mb-4 uppercase tracking-wider">Metrik Operasional & Kinerja</h3>
+                        <h3 className="text-xs font-bold text-foreground mb-4 uppercase tracking-wider">Metrik Operasional & Kinerja</h3>
                         
                         <div className="grid gap-4 sm:grid-cols-2">
                           {/* Card 1: Financial Health */}
-                          <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
+                          <div className="rounded-xl border border-border bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Financial Health</span>
                               <Coins className="h-4 w-4 text-[#ED1C24]" />
@@ -376,14 +376,14 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Sisa Kas (Cash)</span>
-                                <span className="text-xs font-extrabold text-[#161616]">{metrics.cashBalance}</span>
+                                <span className="text-xs font-extrabold text-foreground">{metrics.cashBalance}</span>
                               </div>
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Burn Rate</span>
                                 <span className="text-xs font-bold text-[#525252]">{metrics.burnRate}</span>
                               </div>
-                              <div className="flex items-center justify-between pt-1.5 border-t border-[#e0e0e0]/50">
-                                <span className="text-xs font-extrabold text-[#161616]">Runway Kas</span>
+                              <div className="flex items-center justify-between pt-1.5 border-t border-border/50">
+                                <span className="text-xs font-extrabold text-foreground">Runway Kas</span>
                                 <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.runwayColor}`}>
                                   {metrics.runway} ({metrics.runwayStatus})
                                 </span>
@@ -392,7 +392,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           </div>
 
                           {/* Card 2: Growth & Traction */}
-                          <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
+                          <div className="rounded-xl border border-border bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Growth & Traction</span>
                               <TrendingUp className="h-4 w-4 text-emerald-600" />
@@ -400,7 +400,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Pendapatan (MoM)</span>
-                                <span className="text-xs font-extrabold text-[#161616]">{metrics.monthlyRevenue}</span>
+                                <span className="text-xs font-extrabold text-foreground">{metrics.monthlyRevenue}</span>
                               </div>
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Pertumbuhan</span>
@@ -408,15 +408,15 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                                   {metrics.revenueGrowth}
                                 </span>
                               </div>
-                              <div className="flex items-center justify-between pt-1.5 border-t border-[#e0e0e0]/50">
-                                <span className="text-xs font-extrabold text-[#161616]">Pengguna Aktif</span>
+                              <div className="flex items-center justify-between pt-1.5 border-t border-border/50">
+                                <span className="text-xs font-extrabold text-foreground">Pengguna Aktif</span>
                                 <span className="text-xs font-extrabold text-emerald-600">{metrics.mau}</span>
                               </div>
                             </div>
                           </div>
 
                           {/* Card 3: Telkom Synergy Pipeline */}
-                          <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
+                          <div className="rounded-xl border border-border bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Telkom Synergy Pipeline</span>
                               <Handshake className="h-4 w-4 text-blue-600" />
@@ -424,12 +424,12 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Unit Sinergi</span>
-                                <span className="text-xs font-extrabold text-[#161616] truncate max-w-[140px]" title={metrics.synergyMitra}>
+                                <span className="text-xs font-extrabold text-foreground truncate max-w-[140px]" title={metrics.synergyMitra}>
                                   {metrics.synergyMitra}
                                 </span>
                               </div>
-                              <div className="flex items-center justify-between pt-2.5 border-t border-[#e0e0e0]/50">
-                                <span className="text-xs font-extrabold text-[#161616]">Status Kolaborasi</span>
+                              <div className="flex items-center justify-between pt-2.5 border-t border-border/50">
+                                <span className="text-xs font-extrabold text-foreground">Status Kolaborasi</span>
                                 <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.synergyColor}`}>
                                   {metrics.synergyStatus}
                                 </span>
@@ -438,7 +438,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           </div>
 
                           {/* Card 4: AI Risk & Sentiment */}
-                          <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
+                          <div className="rounded-xl border border-border bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">AI Risk & Sentiment</span>
                               <Activity className="h-4 w-4 text-[#ED1C24]" />
@@ -450,8 +450,8 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                                   {metrics.sentiment} ({metrics.sentimentLabel})
                                 </span>
                               </div>
-                              <div className="flex items-center justify-between pt-2.5 border-t border-[#e0e0e0]/50">
-                                <span className="text-xs font-extrabold text-[#161616]">Label Risiko AI</span>
+                              <div className="flex items-center justify-between pt-2.5 border-t border-border/50">
+                                <span className="text-xs font-extrabold text-foreground">Label Risiko AI</span>
                                 <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.riskColor}`}>
                                   {metrics.riskLabel}
                                 </span>
@@ -467,7 +467,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <Sparkles className="h-4 w-4 text-[#ED1C24]" />
-                        <h3 className="text-sm font-semibold text-[#161616]">AI Executive Summary</h3>
+                        <h3 className="text-sm font-semibold text-foreground">AI Executive Summary</h3>
                       </div>
                       <button
                         onClick={() => handleAIAnalysis(selectedStartup)}
@@ -491,7 +491,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         {aiSummary.split("\n\n").map((point, i) => (
                           <p key={i} className="text-sm text-[#344054] leading-relaxed">{point}</p>
                         ))}
-                        <p className="pt-3 border-t border-[#e0e0e0] text-xs text-[#8c8f93]">
+                        <p className="pt-3 border-t border-border text-xs text-[#8c8f93]">
                           Dihasilkan oleh AI · Google Gemini 2.0 Flash via OpenRouter
                         </p>
                       </div>
@@ -519,19 +519,19 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
       {isCompareModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in backdrop-blur-sm">
           <div className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between border-b border-[#e0e0e0] bg-[#f8fafc] px-6 py-4">
+            <div className="flex items-center justify-between border-b border-border bg-[#f8fafc] px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
                   <Scale className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[#161616]">Side-by-Side Comparison</h2>
+                  <h2 className="text-lg font-bold text-foreground">Side-by-Side Comparison</h2>
                   <p className="text-xs text-[#667085]">Bandingkan metrik dua startup secara berdampingan</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsCompareModalOpen(false)}
-                className="rounded-full p-2 text-[#8c8f93] hover:bg-[#f2f4f7] hover:text-[#161616] transition-colors cursor-pointer"
+                className="rounded-full p-2 text-[#8c8f93] hover:bg-[#f2f4f7] hover:text-foreground transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -541,7 +541,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
                 
                 {/* VS Badge in the middle */}
-                <div className="hidden md:flex absolute left-1/2 top-4 -translate-x-1/2 z-10 h-10 w-10 bg-white rounded-full border border-[#e0e0e0] items-center justify-center shadow-sm">
+                <div className="hidden md:flex absolute left-1/2 top-4 -translate-x-1/2 z-10 h-10 w-10 bg-white rounded-full border border-border items-center justify-center shadow-sm">
                   <span className="text-xs font-extrabold text-[#ED1C24]">VS</span>
                 </div>
 
@@ -550,7 +550,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   <div>
                     <label className="text-xs font-bold text-[#344054] mb-2 block uppercase tracking-wider">Startup A</label>
                     <select 
-                      className="w-full rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-sm font-bold text-[#161616] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
+                      className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm font-bold text-foreground focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
                       value={compareStartupA}
                       onChange={(e) => setCompareStartupA(e.target.value)}
                     >
@@ -566,7 +566,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                       <div className="card-legion p-5 space-y-4 bg-white">
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Sektor & Batch</span>
-                          <span className="text-xs font-bold text-[#161616]">{data.sector} · {data.batch}</span>
+                          <span className="text-xs font-bold text-foreground">{data.sector} · {data.batch}</span>
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Monthly Revenue</span>
@@ -598,7 +598,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   <div>
                     <label className="text-xs font-bold text-[#344054] mb-2 block uppercase tracking-wider">Startup B</label>
                     <select 
-                      className="w-full rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-sm font-bold text-[#161616] focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
+                      className="w-full rounded-xl border border-border bg-white px-4 py-3 text-sm font-bold text-foreground focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 shadow-sm"
                       value={compareStartupB}
                       onChange={(e) => setCompareStartupB(e.target.value)}
                     >
@@ -614,7 +614,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                       <div className="card-legion p-5 space-y-4 bg-white">
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Sektor & Batch</span>
-                          <span className="text-xs font-bold text-[#161616]">{data.sector} · {data.batch}</span>
+                          <span className="text-xs font-bold text-foreground">{data.sector} · {data.batch}</span>
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Monthly Revenue</span>

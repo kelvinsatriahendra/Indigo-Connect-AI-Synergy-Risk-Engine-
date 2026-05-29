@@ -121,11 +121,11 @@ export default function MentorPage() {
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Fixed Header Bar */}
-        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
@@ -133,7 +133,7 @@ export default function MentorPage() {
               </div>
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">AI Mentor</h1>
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">AI Mentor</h1>
                   {/* AI Analysis Live Badge */}
                   <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
                     <span className="relative flex h-2 w-2">
@@ -183,12 +183,12 @@ export default function MentorPage() {
                       className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed max-w-[85%] whitespace-pre-line ${
                         msg.role === "user"
                           ? "bg-[#ED1C24] text-white rounded-tr-sm shadow-md shadow-red-500/15"
-                          : "bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-sm shadow-sm"
+                          : "bg-white border border-border text-[#344054] rounded-tl-sm shadow-sm"
                       }`}
                     >
                       {msg.content.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
                         part.startsWith("**") && part.endsWith("**") ? (
-                          <strong key={j} className={msg.role === "user" ? "text-white" : "text-[#161616]"}>
+                          <strong key={j} className={msg.role === "user" ? "text-white" : "text-foreground"}>
                             {part.slice(2, -2)}
                           </strong>
                         ) : (
@@ -204,7 +204,7 @@ export default function MentorPage() {
                     <div className="h-9 w-9 shrink-0 rounded-full bg-[#161616] text-white flex items-center justify-center shadow-sm">
                       <Bot className="h-4 w-4" />
                     </div>
-                    <div className="rounded-2xl px-5 py-4 bg-white border border-[#e0e0e0] rounded-tl-sm shadow-sm flex items-center gap-1.5">
+                    <div className="rounded-2xl px-5 py-4 bg-white border border-border rounded-tl-sm shadow-sm flex items-center gap-1.5">
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" />
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -227,7 +227,7 @@ export default function MentorPage() {
                         <button
                           key={i}
                           onClick={() => handleSendMessage(qp.prompt)}
-                          className="flex items-center gap-3 rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-left transition-all hover:border-red-300 hover:shadow-sm hover:bg-red-50/30 group cursor-pointer"
+                          className="flex items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 text-left transition-all hover:border-red-300 hover:shadow-sm hover:bg-red-50/30 group cursor-pointer"
                         >
                           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-50 text-[#ED1C24] group-hover:bg-red-100 transition-colors">
                             <Icon className="h-4 w-4" />
@@ -242,9 +242,9 @@ export default function MentorPage() {
             )}
 
             {/* Input Bar */}
-            <div className="border-t border-[#e0e0e0] bg-white px-6 py-4">
+            <div className="border-t border-border bg-white px-6 py-4">
               <form onSubmit={handleSubmit} className="mx-auto max-w-3xl flex items-center gap-3">
-                <div className="flex-1 flex items-center gap-2 rounded-xl border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2.5 focus-within:border-[#ED1C24] focus-within:ring-2 focus-within:ring-red-100 transition-all">
+                <div className="flex-1 flex items-center gap-2 rounded-xl border border-border bg-[#f8fafc] px-4 py-2.5 focus-within:border-[#ED1C24] focus-within:ring-2 focus-within:ring-red-100 transition-all">
                   <Sparkles className="h-4 w-4 text-red-400 shrink-0" />
                   <input
                     type="text"

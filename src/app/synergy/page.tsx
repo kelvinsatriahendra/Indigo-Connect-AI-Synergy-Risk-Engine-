@@ -225,11 +225,11 @@ export default function SynergyPage() {
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Header */}
-        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
@@ -237,7 +237,7 @@ export default function SynergyPage() {
               </div>
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">Synergy Pipeline</h1>
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Synergy Pipeline</h1>
                   {/* AI Matchmaker Live Badge */}
                   <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
                     <span className="relative flex h-2 w-2">
@@ -267,7 +267,7 @@ export default function SynergyPage() {
           </div>
           
           <div className="mt-4 flex gap-6 text-sm border-t border-slate-50 pt-3">
-            <span className="text-[#667085] font-medium">Total: <strong className="text-[#161616] font-bold">{totalCount}</strong></span>
+            <span className="text-[#667085] font-medium">Total: <strong className="text-foreground font-bold">{totalCount}</strong></span>
             <span className="text-[#667085] font-medium">Pipeline: <strong className="text-[#ED1C24] font-bold">{pipelineCount}</strong></span>
             <span className="text-[#667085] font-medium">On Going: <strong className="text-[#f59e0b] font-bold">{ongoingCount}</strong></span>
             <span className="text-[#667085] font-medium">Success: <strong className="text-[#10b981] font-bold">{successCount}</strong></span>
@@ -309,7 +309,7 @@ export default function SynergyPage() {
                 >
                   {/* Column Header */}
                   <div className={`mb-4 flex items-center justify-between rounded-xl border-t-4 bg-white px-5 py-3.5 shadow-sm ${col.color}`}>
-                    <h3 className="text-[15px] font-bold text-[#161616] uppercase tracking-wide">{col.label}</h3>
+                    <h3 className="text-[15px] font-bold text-foreground uppercase tracking-wide">{col.label}</h3>
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 shadow-inner">
                       {col.items.length}
                     </span>
@@ -369,7 +369,7 @@ export default function SynergyPage() {
                                         {startup?.name.charAt(0) || "S"}
                                       </span>
                                     )}
-                                    <span className="text-[13px] font-bold text-[#161616] truncate">
+                                    <span className="text-[13px] font-bold text-foreground truncate">
                                       {startup?.name || getStartupName(item.startupId)}
                                     </span>
                                   </div>
@@ -452,7 +452,7 @@ export default function SynergyPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Activity className="h-5 w-5 text-indigo-600" />
-                  <h2 className="text-lg font-bold text-[#161616]">CRM & Activity Log</h2>
+                  <h2 className="text-lg font-bold text-foreground">CRM & Activity Log</h2>
                 </div>
                 <p className="text-xs text-slate-500">Manage pipeline progression notes and tasks.</p>
               </div>
@@ -473,7 +473,7 @@ export default function SynergyPage() {
                       {getStartupName(activeCRMItem.startupId).charAt(0)}
                     </div>
                     <div>
-                      <p className="font-bold text-[#161616]">{getStartupName(activeCRMItem.startupId)}</p>
+                      <p className="font-bold text-foreground">{getStartupName(activeCRMItem.startupId)}</p>
                       <p className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
                     </div>
                   </div>
@@ -491,7 +491,7 @@ export default function SynergyPage() {
                       </div>
                     )}
                     <div>
-                      <p className="font-bold text-[#161616]">{getBuName(activeCRMItem.telkomBuId)}</p>
+                      <p className="font-bold text-foreground">{getBuName(activeCRMItem.telkomBuId)}</p>
                       <p className="text-xs text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
                     </div>
                   </div>
@@ -539,11 +539,11 @@ export default function SynergyPage() {
                   <Target className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[#161616]">Create Pipeline</h2>
+                  <h2 className="text-lg font-bold text-foreground">Create Pipeline</h2>
                   <p className="text-[11px] text-slate-500">Tambahkan inisiasi sinergi baru ke Kanban</p>
                 </div>
               </div>
-              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-[#161616] p-2 hover:bg-slate-200 rounded-full transition-colors">
+              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-foreground p-2 hover:bg-slate-200 rounded-full transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -574,7 +574,7 @@ export default function SynergyPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Startup Partner</label>
-                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                <select name="startupId" required className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
                   <option value="">-- Pilih Startup --</option>
                   {startupsData.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} — {s.sector}</option>
@@ -584,7 +584,7 @@ export default function SynergyPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Telkom Business Unit</label>
-                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                <select name="telkomBuId" required className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
                   <option value="">-- Pilih Divisi Telkom --</option>
                   {telkomBusData.map((bu) => (
                     <option key={bu.id} value={bu.id}>{bu.name} — {bu.sector}</option>
@@ -598,14 +598,14 @@ export default function SynergyPage() {
                   <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
                 </div>
                 <input type="number" name="matchScore" min="0" max="100" defaultValue={75}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#161616] font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"
+                  className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-foreground font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"
                 />
               </div>
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Alasan Strategis</label>
                 <textarea name="reason" rows={3} placeholder="Deskripsi alasan mengapa kolaborasi ini menguntungkan..."
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all resize-none shadow-sm"
+                  className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all resize-none shadow-sm"
                 />
               </div>
 

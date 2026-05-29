@@ -229,7 +229,7 @@ export default function DashboardPage() {
                 <LayoutDashboard className="h-5 w-5" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
+                <h1 className="text-2xl font-bold text-foreground">{config.title}</h1>
                 <p className="mt-0.5 text-sm text-[#667085]">{config.subtitle}</p>
               </div>
             </div>
@@ -265,7 +265,7 @@ export default function DashboardPage() {
               )}
               {user?.role === "founder" && (
                 <>
-                  <a href="/forecast" className="btn-primary-outline border-[#e0e0e0] text-[#344054] px-4 py-2 text-sm bg-white hover:bg-slate-50 flex items-center gap-2">
+                  <a href="/forecast" className="btn-primary-outline border-border text-[#344054] px-4 py-2 text-sm bg-white hover:bg-slate-50 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" /> Lihat Forecast
                   </a>
                   <a href="/reports" className="btn-primary-solid px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
@@ -313,13 +313,13 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-bold text-[#161616]">High Growth</p>
+                  <p className="text-sm font-bold text-foreground">High Growth</p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 group-hover:scale-110 transition-transform">
                     <TrendingUp className="h-5 w-5" />
                   </div>
                 </div>
                 <div className="mt-2">
-                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{highGrowth}</p>
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">{highGrowth}</p>
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-emerald-50 rounded-full px-3 py-1 w-fit border border-emerald-100">
                   <TrendingUp className="h-3 w-3 text-emerald-600" />
@@ -341,13 +341,13 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-bold text-[#161616]">At Risk</p>
+                  <p className="text-sm font-bold text-foreground">At Risk</p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-500 group-hover:scale-110 transition-transform">
                     <AlertTriangle className="h-5 w-5" />
                   </div>
                 </div>
                 <div className="mt-2">
-                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{atRisk}</p>
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">{atRisk}</p>
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-orange-50 rounded-full px-3 py-1 w-fit border border-orange-100">
                   <AlertTriangle className="h-3 w-3 text-orange-600" />
@@ -370,7 +370,7 @@ export default function DashboardPage() {
             >
               <div className="relative z-10 flex-1">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-bold text-[#161616]">
+                  <p className="text-sm font-bold text-foreground">
                     {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
                   </p>
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-emerald-500 group-hover:scale-110 transition-transform">
@@ -378,7 +378,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 <div className="mt-2">
-                  <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">
                     {user?.role === "synergy"
                       ? synergySectorMap["demo-synergy-id"]?.length || 0
                       : uniqueBatches.length}
@@ -405,11 +405,11 @@ export default function DashboardPage() {
         {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
             {/* Health Score Distribution */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+            <div className="card-legion p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
+                  <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button onClick={() => setIsHealthModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-xs">›</span>
@@ -426,7 +426,7 @@ export default function DashboardPage() {
                       </div>
                       High Growth
                     </span>
-                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[0].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[0].count / totalStartups) * 100) : 0}%)</span></span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[0].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[0].count / totalStartups) * 100) : 0}%)</span></span>
                   </div>
                   <div className="h-3 rounded-full bg-[#f0fdf4] overflow-hidden">
                     <div className="h-full rounded-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[0].count / totalStartups) * 100 : 0}%` }} />
@@ -441,7 +441,7 @@ export default function DashboardPage() {
                       </div>
                       Stable
                     </span>
-                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[1].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[1].count / totalStartups) * 100) : 0}%)</span></span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[1].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[1].count / totalStartups) * 100) : 0}%)</span></span>
                   </div>
                   <div className="h-3 rounded-full bg-[#eff6ff] overflow-hidden">
                     <div className="h-full rounded-full bg-blue-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[1].count / totalStartups) * 100 : 0}%` }} />
@@ -456,7 +456,7 @@ export default function DashboardPage() {
                       </div>
                       At Risk
                     </span>
-                    <span className="font-extrabold text-[#161616] text-lg">{healthDistribution[2].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[2].count / totalStartups) * 100) : 0}%)</span></span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[2].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[2].count / totalStartups) * 100) : 0}%)</span></span>
                   </div>
                   <div className="h-3 rounded-full bg-[#fef2f2] overflow-hidden">
                     <div className="h-full rounded-full bg-red-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[2].count / totalStartups) * 100 : 0}%` }} />
@@ -466,11 +466,11 @@ export default function DashboardPage() {
             </div>
 
             {/* Sektor Distribution - Donut with Center Label & Right Legend */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+            <div className="card-legion p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
+                  <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button onClick={() => setIsSectorModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
                   View detail <span className="text-xs">›</span>
@@ -505,7 +505,7 @@ export default function DashboardPage() {
                   </ResponsiveContainer>
                   {/* Center Label */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="text-3xl font-extrabold text-[#161616]">{totalStartups}</span>
+                    <span className="text-3xl font-extrabold text-foreground">{totalStartups}</span>
                     <span className="text-xs font-semibold text-[#8c8f93] leading-tight text-center">Startup<br/>Portfolio</span>
                   </div>
                 </div>
@@ -517,7 +517,7 @@ export default function DashboardPage() {
                         <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: sectorColorMap[entry.name] || '#64748b' }} />
                         <span className="font-semibold text-[#344054] truncate">{entry.name}</span>
                       </div>
-                      <span className="font-bold text-[#161616] shrink-0 tabular-nums">{totalStartups > 0 ? Math.round((entry.value / totalStartups) * 100) : 0}% <span className="text-[#8c8f93] font-medium">({entry.value})</span></span>
+                      <span className="font-bold text-foreground shrink-0 tabular-nums">{totalStartups > 0 ? Math.round((entry.value / totalStartups) * 100) : 0}% <span className="text-[#8c8f93] font-medium">({entry.value})</span></span>
                     </div>
                   ))}
                 </div>
@@ -525,7 +525,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Risk Matrix & Synergy Potential Heatmap (Admin & Synergy) */}
-              <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+              <div className="lg:col-span-2 card-legion p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-bl-[200px] z-0 opacity-50 transition-all group-hover:scale-110" />
                 <div className="flex items-center justify-between gap-3 mb-4 relative z-10">
                   <div className="flex items-center gap-3">
@@ -533,7 +533,7 @@ export default function DashboardPage() {
                       <TrendingUp className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Executive Risk Matrix</h3>
+                      <h3 className="text-base font-extrabold text-foreground tracking-wide">Executive Risk Matrix</h3>
                       <p className="text-xs font-medium text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
                     </div>
                   </div>
@@ -628,7 +628,7 @@ export default function DashboardPage() {
                       )}
                       <div>
                         <div className="flex items-center gap-3">
-                          <h2 className="text-2xl font-extrabold text-[#161616] tracking-tight">{startup.name}</h2>
+                          <h2 className="text-2xl font-extrabold text-foreground tracking-tight">{startup.name}</h2>
                           <span className={isHigh ? "badge-high-growth shadow-sm" : "badge-at-risk shadow-sm"}>
                             {isHigh ? "High Growth" : "At Risk"}
                           </span>
@@ -678,11 +678,11 @@ export default function DashboardPage() {
             <div className="grid gap-6 lg:grid-cols-2">
               
               {/* Peer Benchmarking (Anonim) */}
-              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
+              <div className="card-legion p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Peer Benchmarking</h3>
+                    <h3 className="text-base font-extrabold text-foreground tracking-wide">Peer Benchmarking</h3>
                   </div>
                   <p className="text-xs text-[#8c8f93]">Perbandingan performa (anonim) terhadap ekosistem Indigo</p>
                 </div>
@@ -725,11 +725,11 @@ export default function DashboardPage() {
               </div>
 
               {/* AI Action Items (Replaced Resource Hub) */}
-              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
+              <div className="card-legion p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Sparkles className="h-4 w-4 text-[#ED1C24]" />
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Action Items</h3>
+                    <h3 className="text-base font-extrabold text-foreground tracking-wide">AI Action Items</h3>
                   </div>
                   <p className="text-xs text-[#8c8f93]">Fokus perbaikan berdasarkan evaluasi laporan bulan lalu</p>
                 </div>
@@ -740,7 +740,7 @@ export default function DashboardPage() {
                       <AlertTriangle className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Optimalkan Margin Mitra</p>
+                      <p className="text-sm font-bold text-foreground">Optimalkan Margin Mitra</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">AI mendeteksi sentimen peringatan pada penurunan retensi aktif bulan lalu. Rancang strategi insentif baru bulan ini.</p>
                     </div>
                   </div>
@@ -750,7 +750,7 @@ export default function DashboardPage() {
                       <CheckCircle2 className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Follow-up Sinergi Telkom</p>
+                      <p className="text-sm font-bold text-foreground">Follow-up Sinergi Telkom</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">Peluang sinergi dengan LinkAja & PADI UMKM (Match: 95%). Siapkan ringkasan teknis API untuk diajukan ke manajer Sinergi.</p>
                     </div>
                   </div>
@@ -760,7 +760,7 @@ export default function DashboardPage() {
                       <RefreshCw className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Persiapan Laporan Selanjutnya</p>
+                      <p className="text-sm font-bold text-foreground">Persiapan Laporan Selanjutnya</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">Laporan berikutnya dijadwalkan dalam 8 hari. Pastikan Anda menyertakan data burn-rate (pengeluaran) terbaru.</p>
                     </div>
                   </div>
@@ -904,7 +904,7 @@ export default function DashboardPage() {
                           </div>
                         )}
                         <div>
-                          <h3 className="text-base font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
+                          <h3 className="text-base font-extrabold text-foreground group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
                           <p className="mt-1 text-xs font-semibold text-[#8c8f93] tracking-wide uppercase">{startup.sector} · {startup.batch}</p>
                         </div>
                       </div>
@@ -1051,7 +1051,7 @@ export default function DashboardPage() {
                     <img src={logo} alt={analysisModal.name} className="h-full w-full object-contain" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-extrabold text-[#161616]">
+                    <h2 className="text-lg font-extrabold text-foreground">
                       {user?.role === "synergy" ? "Analisis Potensi Sinergi" : user?.role === "founder" ? "Update Laporan Kinerja" : "AI Risk Analysis"}
                     </h2>
                     <p className="text-sm font-medium text-[#667085]">{analysisModal.name} — {analysisModal.sector}</p>
@@ -1085,7 +1085,7 @@ export default function DashboardPage() {
                 ) : user?.role === "founder" ? (
                   <div className="space-y-4 text-center py-6">
                     <FileText className="h-12 w-12 text-[#d0d5dd] mx-auto mb-3" />
-                    <h3 className="text-base font-bold text-[#161616]">Upload Laporan Bulanan</h3>
+                    <h3 className="text-base font-bold text-foreground">Upload Laporan Bulanan</h3>
                     <p className="text-sm text-[#667085] max-w-md mx-auto">AI Synergy Risk Engine akan secara otomatis mengekstrak metrik kunci (Revenue, User, Burn Rate) dari dokumen PDF laporan Anda.</p>
                     <div className="mt-6">
                       <a href="/reports" className="btn-primary-solid px-6 py-2.5 shadow-md hover:shadow-lg transition-all">Buka Modul Reports</a>
@@ -1094,14 +1094,14 @@ export default function DashboardPage() {
                 ) : (
                   <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
+                      <div className="rounded-xl border border-border p-4 bg-[#f8fafc]">
                         <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
                         <div className="flex items-end gap-2">
-                          <p className="text-3xl font-extrabold text-[#161616]">{healthScore}</p>
+                          <p className="text-3xl font-extrabold text-foreground">{healthScore}</p>
                           <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
                         </div>
                       </div>
-                      <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
+                      <div className="rounded-xl border border-border p-4 bg-[#f8fafc]">
                         <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
                         <div className="flex items-center gap-2 mt-2">
                           <div className={`h-3 w-3 rounded-full ${riskLabel === "LOW_RISK" ? "bg-emerald-500" : riskLabel === "MEDIUM_RISK" ? "bg-amber-500" : "bg-red-500"}`} />
@@ -1121,7 +1121,7 @@ export default function DashboardPage() {
                       </p>
                     </div>
                     <div className="flex justify-end mt-2">
-                      <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-[#e0e0e0] text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
+                      <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-border text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
                     </div>
                   </div>
                 )}

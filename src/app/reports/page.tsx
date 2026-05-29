@@ -346,10 +346,10 @@ export default function ReportsPage() {
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
-        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
@@ -384,7 +384,7 @@ export default function ReportsPage() {
                 <div className="flex items-center gap-3">
                   {availableStartups.length > 1 ? (
                     <select
-                      className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                      className="rounded-lg border border-border bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
                       value={selectedStartup}
                       onChange={(e) => setSelectedStartup(e.target.value)}
                     >
@@ -425,7 +425,7 @@ export default function ReportsPage() {
               <div className="flex-1 min-w-0 space-y-6">
                 {user?.role === "founder" ? (
                   <div className="card-legion p-6 lg:p-8">
-                    <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
+                    <h2 className="text-lg font-bold text-foreground">Form Laporan Bulanan</h2>
                     <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
 
                     <div className="mt-8 space-y-6">
@@ -485,7 +485,7 @@ export default function ReportsPage() {
                   <div className="card-legion p-6 lg:p-8 animate-fade-in">
                     <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
                       <div>
-                        <h2 className="text-lg font-bold text-[#161616]">Daftar Laporan Masuk</h2>
+                        <h2 className="text-lg font-bold text-foreground">Daftar Laporan Masuk</h2>
                         <p className="mt-1 text-sm text-[#667085]">Pilih laporan startup untuk melihat analisis AI mendalam di panel kanan</p>
                       </div>
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FEF2F2] px-3.5 py-1.5 text-xs font-bold text-[#ED1C24] border border-red-100/50">
@@ -556,7 +556,7 @@ export default function ReportsPage() {
                 {user?.role === "founder" && loading && (
                   <div className="card-legion flex flex-col items-center justify-center py-16">
                     <div className="mb-5 h-12 w-12 animate-spin rounded-full border-[3px] border-[#ED1C24] border-t-transparent" />
-                    <p className="text-base font-bold text-[#161616]">AI sedang memproses laporan...</p>
+                    <p className="text-base font-bold text-foreground">AI sedang memproses laporan...</p>
                     <p className="mt-2 text-sm text-[#667085] text-center max-w-sm">Mengekstrak konteks finansial, menganalisis profil risiko, dan mencari potensi sinergi dengan Telkom Group.</p>
                   </div>
                 )}
@@ -569,17 +569,17 @@ export default function ReportsPage() {
                         <History className="h-5 w-5 text-[#ED1C24]" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
+                        <h3 className="text-base font-bold text-foreground">Riwayat Laporan</h3>
                         <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
                       </div>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {reportHistory.map((hist, i) => (
-                        <div key={i} onClick={() => alert("Fitur riwayat historis masih dalam tahap pengembangan.")} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
+                        <div key={i} onClick={() => alert("Fitur riwayat historis masih dalam tahap pengembangan.")} className="group cursor-pointer rounded-xl border border-border bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
                           <div className="flex items-center justify-between mb-3">
                             <div>
-                              <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
+                              <p className="text-sm font-extrabold text-foreground group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
                               <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
                             </div>
                             <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
@@ -596,7 +596,7 @@ export default function ReportsPage() {
                       ))}
                     </div>
 
-                    <button onClick={() => alert("Halaman daftar riwayat lengkap akan segera hadir!")} className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
+                    <button onClick={() => alert("Halaman daftar riwayat lengkap akan segera hadir!")} className="mt-6 w-full rounded-xl border border-border py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-foreground transition-all active:scale-[0.98]">
                       Lihat Semua Riwayat
                     </button>
                   </div>
@@ -607,7 +607,7 @@ export default function ReportsPage() {
                 <div className="w-full shrink-0">
                   <div className="sticky top-6">
                     <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
-                      <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
+                      <h3 className="text-base font-bold text-foreground">Hasil Evaluasi AI</h3>
                       <button 
                         onClick={handleDownloadPdf}
                         className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,45,85,0.3)] active:translate-y-0"

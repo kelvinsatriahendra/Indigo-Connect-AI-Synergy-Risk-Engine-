@@ -116,7 +116,7 @@ export function HealthScoreCard({
 
       {/* Executive Summary Insight Cards */}
       {summaryPoints && summaryPoints.length > 0 ? (
-        <div className="rounded-[20px] bg-[#FCFBFF] border border-[#f1f1f5] shadow-md p-6 flex flex-col h-full">
+        <div className="rounded-[20px] bg-[#FCFBFF] border border-border shadow-md p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-50 to-orange-50 text-[#ED1C24] shadow-sm">
               <Lightbulb className="h-5 w-5" />
@@ -158,7 +158,7 @@ export function HealthScoreCard({
 
       {/* Synergy Recommendations */}
       {synergyMatches && synergyMatches.length > 0 && (
-        <div className="rounded-[20px] bg-white border border-[#f1f1f5] shadow-md p-6">
+        <div className="rounded-[20px] bg-white border border-border shadow-md p-6">
           <div className="flex items-center gap-3 mb-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#fffbeb] to-[#fef3c7] text-[#d97706] shadow-sm">
               <Lightbulb className="h-5 w-5" />
@@ -170,7 +170,7 @@ export function HealthScoreCard({
           </div>
           <div className="space-y-3">
             {synergyMatches.map((match, i) => (
-              <div key={i} className="rounded-xl border border-slate-100 bg-[#FAFAFD] p-5 hover:border-amber-200 transition-colors">
+              <div key={i} className="rounded-xl border border-slate-100 bg-background p-5 hover:border-amber-200 transition-colors">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     {(match.logo || getLogoForName(match.name)) && (

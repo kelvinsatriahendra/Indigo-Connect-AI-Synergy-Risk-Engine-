@@ -130,7 +130,7 @@ export default async function Home() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16">
             <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Features</span>
-            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">What is Indigo Connect?</h2>
+            <h2 className="text-3xl font-extrabold text-foreground mt-2">What is Indigo Connect?</h2>
             <p className="mt-3 text-slate-500 max-w-lg mx-auto">AI-powered platform untuk monitoring, deteksi risiko, dan sinergi portofolio startup</p>
           </div>
 
@@ -197,7 +197,7 @@ export default async function Home() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16">
             <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Alur Kerja</span>
-            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">Bagaimana Indigo Connect Bekerja?</h2>
+            <h2 className="text-3xl font-extrabold text-foreground mt-2">Bagaimana Indigo Connect Bekerja?</h2>
             <p className="mt-3 text-slate-500 max-w-lg mx-auto">Tiga langkah sederhana menuju sinergi startup dan korporasi yang digerakkan oleh AI.</p>
           </div>
 
@@ -232,7 +232,7 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className="text-xs font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
-                <h3 className="text-lg font-bold text-[#161616] mb-2">{s.title}</h3>
+                <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed max-w-[250px]">{s.desc}</p>
               </div>
             ))}

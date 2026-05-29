@@ -171,18 +171,18 @@ export default function ForecastPage() {
 
   return (
     <AppShell>
-      <div className="flex h-full flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
         {/* Fixed Header Bar */}
-        <div className="border-b border-[#f1f1f5] bg-white px-8 py-5 shadow-sm relative z-10 flex items-center justify-between flex-wrap gap-4">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
               <BarChart3 className="h-5 w-5" />
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-extrabold text-[#161616] tracking-tight">Forecasting</h1>
+                <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Forecasting</h1>
                 {/* AI Analysis Live Badge */}
                 <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
                   <span className="relative flex h-2 w-2">
@@ -212,7 +212,7 @@ export default function ForecastPage() {
                   <select
                     value={selectedStartup}
                     onChange={(e) => setSelectedStartup(e.target.value)}
-                    className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                    className="rounded-lg border border-border bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
                   >
                     <option value="">-- Pilih Startup --</option>
                     {availableStartups.map((s) => (
@@ -256,7 +256,7 @@ export default function ForecastPage() {
                 )}
 
                 {loading && (
-                  <div className="rounded-2xl bg-white border border-[#f1f1f5] shadow-sm flex flex-col items-center justify-center py-20">
+                  <div className="rounded-2xl bg-white border border-border shadow-sm flex flex-col items-center justify-center py-20">
                     <div className="mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
                     <p className="text-sm font-bold text-[#344054]">AI sedang memproyeksikan data...</p>
                     <p className="mt-1 text-xs text-[#8c8f93]">Menganalisis tren historis 6 bulan terakhir</p>
@@ -275,7 +275,7 @@ export default function ForecastPage() {
                           </div>
                           <div>
                             <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Predicted Growth</p>
-                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
+                            <p className="text-2xl font-extrabold text-foreground mt-0.5">{data.prediction.predictedGrowthRate.toFixed(1)}%</p>
                             <p className="text-xs font-medium text-emerald-600 mt-0.5">Proyeksi rata-rata 3 bulan</p>
                           </div>
                         </div>
@@ -289,7 +289,7 @@ export default function ForecastPage() {
                           </div>
                           <div>
                             <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Runway Estimate</p>
-                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{data.prediction.predictedRunwayMonths} bulan</p>
+                            <p className="text-2xl font-extrabold text-foreground mt-0.5">{data.prediction.predictedRunwayMonths} bulan</p>
                             <p className="text-xs font-medium text-blue-600 mt-0.5">Berdasarkan sisa kas & burn rate</p>
                           </div>
                         </div>
@@ -303,7 +303,7 @@ export default function ForecastPage() {
                           </div>
                           <div>
                             <p className="text-xs font-semibold text-[#8c8f93] uppercase tracking-wider">Confidence Score</p>
-                            <p className="text-2xl font-extrabold text-[#161616] mt-0.5">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
+                            <p className="text-2xl font-extrabold text-foreground mt-0.5">{(data.prediction.confidenceScore * 100).toFixed(0)}%</p>
                             <p className="text-xs font-medium text-slate-500 mt-0.5">Ketepatan analisis data AI</p>
                           </div>
                         </div>
@@ -315,7 +315,7 @@ export default function ForecastPage() {
                       
                       {/* Revenue & Users Chart */}
                       <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 flex flex-col hover:shadow-md transition-all duration-300">
-                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Revenue & Users — Historical + Projected</h3>
+                        <h3 className="text-base font-extrabold text-foreground tracking-tight">Revenue & Users — Historical + Projected</h3>
                         <p className="text-xs text-[#667085] mt-1 mb-6">6 bulan historis + 3 bulan prediksi AI</p>
                         <ResponsiveContainer width="100%" height={350}>
                           <LineChart data={chartData}>
@@ -384,7 +384,7 @@ export default function ForecastPage() {
 
                       {/* Growth Rate Chart */}
                       <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6 flex flex-col hover:shadow-md transition-all duration-300">
-                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Growth Rate Trend</h3>
+                        <h3 className="text-base font-extrabold text-foreground tracking-tight">Growth Rate Trend</h3>
                         <p className="text-xs text-[#667085] mt-1 mb-6">Persentase pertumbuhan bulanan</p>
                         <ResponsiveContainer width="100%" height={350}>
                           <AreaChart data={chartData}>
@@ -420,7 +420,7 @@ export default function ForecastPage() {
                           <Lightbulb className="h-6 w-6" />
                         </div>
                         <div>
-                          <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Recommendation & Analysis</h3>
+                          <h3 className="text-base font-extrabold text-foreground tracking-wide">AI Recommendation & Analysis</h3>
                           <p className="mt-2 text-sm text-[#525252] leading-relaxed">{data.prediction.notes}</p>
                           <p className="mt-3 text-xs font-bold text-[#8c8f93] tracking-wider uppercase">Generated by AI · Google Gemini 2.0 Flash</p>
                         </div>
@@ -430,7 +430,7 @@ export default function ForecastPage() {
                 )}
 
                 {!data && !loading && (
-                  <div className="rounded-2xl bg-white border border-[#f1f1f5] shadow-sm flex flex-col items-center justify-center py-20 w-full">
+                  <div className="rounded-2xl bg-white border border-border shadow-sm flex flex-col items-center justify-center py-20 w-full">
                     <BarChart3 className="mb-3 h-12 w-12 text-[#d0d5dd]" />
                     <p className="text-sm font-bold text-[#667085]">Pilih startup dan klik &quot;Generate Forecast&quot;</p>
                     <p className="mt-1 text-xs text-[#8c8f93]">AI akan menganalisis data historis 6 bulan dan memproyeksikan 3 bulan ke depan</p>
@@ -444,7 +444,7 @@ export default function ForecastPage() {
                   <div className="rounded-2xl bg-white border border-slate-100 shadow-sm p-6">
                     <div className="mb-6 flex items-center justify-between">
                       <div>
-                        <h3 className="text-base font-extrabold text-[#161616] tracking-tight">Detailed Projections</h3>
+                        <h3 className="text-base font-extrabold text-foreground tracking-tight">Detailed Projections</h3>
                         <p className="text-xs text-[#667085] mt-1">Estimasi periodik AI</p>
                       </div>
                       <span className="text-xs font-bold text-[#ED1C24] bg-[#FEF2F2] px-2.5 py-1 rounded-md border border-[#ED1C24]/20 uppercase tracking-wider">
@@ -458,11 +458,11 @@ export default function ForecastPage() {
                         return (
                           <div 
                             key={i} 
-                            className={`rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${isProj ? 'border-white/10 text-white hover:border-[#ED1C24]/30 hover:shadow-purple-500/5' : 'border-[#e0e0e0] bg-white text-[#161616]'}`}
+                            className={`rounded-xl border p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-md ${isProj ? 'border-white/10 text-white hover:border-[#ED1C24]/30 hover:shadow-purple-500/5' : 'border-border bg-white text-foreground'}`}
                             style={isProj ? { background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' } : undefined}
                           >
                             <div className="mb-3 flex items-center justify-between">
-                              <span className={`text-sm font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.period}</span>
+                              <span className={`text-sm font-bold ${isProj ? 'text-white' : 'text-foreground'}`}>{p.period}</span>
                               <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${isProj ? "bg-[#ED1C24] text-white shadow-sm shadow-red-200" : "bg-[#f2f4f7] text-[#667085]"}`}>
                                 {isProj ? "Projected" : "Historical"}
                               </span>
@@ -471,11 +471,11 @@ export default function ForecastPage() {
                             <div className="grid grid-cols-2 gap-y-4 gap-x-3 text-sm">
                               <div>
                                 <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Revenue</p>
-                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.revenue}jt</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-foreground'}`}>Rp{p.revenue}jt</p>
                               </div>
                               <div>
                                 <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Users</p>
-                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>{p.users.toLocaleString()}</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-foreground'}`}>{p.users.toLocaleString()}</p>
                               </div>
                               <div>
                                 <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Growth</p>
@@ -485,7 +485,7 @@ export default function ForecastPage() {
                               </div>
                               <div>
                                 <p className={`text-[11px] font-medium uppercase tracking-wider mb-0.5 ${isProj ? 'text-slate-400' : 'text-[#8c8f93]'}`}>Burn Rate</p>
-                                <p className={`font-bold ${isProj ? 'text-white' : 'text-[#161616]'}`}>Rp{p.burnRate}jt</p>
+                                <p className={`font-bold ${isProj ? 'text-white' : 'text-foreground'}`}>Rp{p.burnRate}jt</p>
                               </div>
                             </div>
                           </div>
