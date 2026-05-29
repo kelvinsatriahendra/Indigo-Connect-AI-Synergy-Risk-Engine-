@@ -41,14 +41,7 @@ export function HealthScoreCard({
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Health Score Card (Hero) */}
-        <div 
-          className="rounded-[24px] overflow-hidden relative flex flex-col h-full"
-          style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,1), rgba(248,248,252,1))',
-          border: '1px solid rgba(255,0,60,0.06)',
-          boxShadow: '0 10px 40px rgba(15,0,40,0.08)'
-        }}
-      >
+        <div className="card-legion overflow-hidden relative flex flex-col h-full border-t border-t-[#ED1C24]">
         {/* Subtle AI Pattern Overlay */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
         
@@ -116,7 +109,7 @@ export function HealthScoreCard({
 
       {/* Executive Summary Insight Cards */}
       {summaryPoints && summaryPoints.length > 0 ? (
-        <div className="rounded-[20px] bg-[#FCFBFF] border border-border shadow-md p-6 flex flex-col h-full">
+        <div className="card-legion bg-slate-50 border-slate-200 p-8 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-50 to-orange-50 text-[#ED1C24] shadow-sm">
               <Lightbulb className="h-5 w-5" />

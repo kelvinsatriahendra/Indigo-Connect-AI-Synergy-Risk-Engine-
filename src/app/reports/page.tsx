@@ -610,13 +610,12 @@ export default function ReportsPage() {
                       <h3 className="text-base font-bold text-foreground">Hasil Evaluasi AI</h3>
                       <button 
                         onClick={handleDownloadPdf}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,45,85,0.3)] active:translate-y-0"
-                        style={{ background: 'linear-gradient(135deg, #ff2d55 0%, #ff4d6d 100%)', boxShadow: '0 4px 14px rgba(255,45,85,0.2)' }}
+                        className="btn-primary-outline gap-2 px-4 py-2 bg-white"
                       >
                         <Download className="h-4 w-4" /> Export Report PDF
                       </button>
                     </div>
-                    <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
+                    <div ref={reportRef} className="card-legion">
                       <HealthScoreCard
                         healthScore={result.healthScore}
                         riskLabel={result.riskLabel}
