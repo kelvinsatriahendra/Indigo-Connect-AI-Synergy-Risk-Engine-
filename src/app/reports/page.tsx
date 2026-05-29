@@ -536,10 +536,10 @@ export default function ReportsPage() {
                                   e.stopPropagation();
                                   setShowOriginalReportId(report.id);
                                 }}
-                                className={`flex-1 text-xs font-bold py-2.5 rounded-xl transition-all ${
+                                className={`flex-1 text-xs font-bold py-2.5 rounded-xl transition-all shadow-sm ${
                                   isActive 
-                                    ? "bg-white text-[#ED1C24] hover:bg-white/90 shadow-sm" 
-                                    : "text-[#ED1C24] bg-red-50 hover:bg-red-100 border border-red-100"
+                                    ? "bg-[#06040f] text-white hover:bg-[#1e1136] border border-white/10" 
+                                    : "bg-[#ED1C24] text-white hover:bg-[#c9181f]"
                                 }`}
                               >
                                 View Report
