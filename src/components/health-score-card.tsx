@@ -174,8 +174,11 @@ export function HealthScoreCard({
                     <p className="font-bold text-[#0f172a]">{match.name}</p>
                   </div>
                   <div className="flex flex-col items-end gap-0.5 shrink-0">
-                    <p className={`text-xl font-extrabold ${match.score >= 0.8 ? 'text-emerald-600' : match.score >= 0.6 ? 'text-amber-600' : 'text-red-600'}`}>
-                      {Math.round(match.score * 100)}%
+                    <p className={`text-3xl font-black tracking-tighter ${
+                      (match.score > 1 ? match.score : match.score * 100) >= 80 ? 'text-emerald-600' : 
+                      (match.score > 1 ? match.score : match.score * 100) >= 60 ? 'text-amber-600' : 'text-red-600'
+                    }`}>
+                      {Math.round(match.score > 1 ? match.score : match.score * 100)}%
                     </p>
                     <p className="text-[10px] font-bold text-[#94a3b8] uppercase tracking-wider">Synergy Score</p>
                   </div>
