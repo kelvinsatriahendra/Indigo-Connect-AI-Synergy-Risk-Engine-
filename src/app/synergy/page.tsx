@@ -43,11 +43,11 @@ const columns: { status: PipelineStatus; label: string; color: string }[] = [
   { status: "CANCELLED", label: "Cancelled", color: "border-t-[#ef4444]" },
 ];
 
-const statusStyles: Record<PipelineStatus, string> = {
-  PIPELINE: "border-l-4 border-l-[#ED1C24] !bg-red-50",
-  ON_GOING: "border-l-4 border-l-[#f59e0b] !bg-amber-50",
-  SUCCESS: "border-l-4 border-l-[#10b981] !bg-emerald-50",
-  CANCELLED: "border-l-4 border-l-[#ef4444] !bg-rose-50",
+const statusBorders: Record<PipelineStatus, string> = {
+  PIPELINE: "border-l-4 border-l-[#ED1C24]",
+  ON_GOING: "border-l-4 border-l-[#f59e0b]",
+  SUCCESS: "border-l-4 border-l-[#10b981]",
+  CANCELLED: "border-l-4 border-l-[#ef4444]",
 };
 
 const getScoreBadge = (score: number) => {
@@ -338,7 +338,7 @@ export default function SynergyPage() {
                             onDragStart={(e) => {
                               e.dataTransfer.setData("pipelineId", item.id);
                             }}
-                            className={`card-legion overflow-hidden cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-[#ED1C24]/30 hover:-translate-y-1 transition-all duration-200 ${statusStyles[item.status]}`}
+                            className={`card-legion overflow-hidden cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-[#ED1C24]/30 hover:-translate-y-1 transition-all duration-200 bg-white ${statusBorders[item.status]}`}
                           >
                             <div className="p-4">
                               {/* Header & Match Score */}
