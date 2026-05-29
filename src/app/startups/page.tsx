@@ -307,8 +307,8 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   onClick={() => handleAIAnalysis(startup)}
                   className={`w-full text-left rounded-xl border p-4 transition-all ${
                     selectedStartup?.id === startup.id
-                      ? "border-[#ED1C24] bg-[#FEF2F2]"
-                      : "border-border bg-white hover:border-[#ED1C24] hover:shadow-sm"
+                      ? "bg-[#ED1C24] border-[#ED1C24] shadow-lg shadow-red-500/30 -translate-y-0.5"
+                      : "border-slate-200 bg-white hover:border-[#ED1C24]/50 hover:shadow-sm hover:-translate-y-0.5"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -320,13 +320,13 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           <span className="text-xs font-bold text-slate-400">{startup.name.charAt(0)}</span>
                         )}
                       </div>
-                      <span className="font-semibold text-foreground">{startup.name}</span>
+                      <span className={`font-semibold ${selectedStartup?.id === startup.id ? 'text-white' : 'text-foreground'}`}>{startup.name}</span>
                     </div>
-                    <span className={startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
+                    <span className={selectedStartup?.id === startup.id ? "bg-white/20 text-white px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow-sm border border-white/10" : (startup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk")}>
                       {startup.status === "ACTIVE" ? "Aktif" : "At Risk"}
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-[#667085]">{startup.sector} · {startup.batch}</p>
+                  <p className={`mt-2 text-xs font-medium ${selectedStartup?.id === startup.id ? 'text-white/80' : 'text-[#667085]'}`}>{startup.sector} · {startup.batch}</p>
                 </button>
               ))}
             </div>
