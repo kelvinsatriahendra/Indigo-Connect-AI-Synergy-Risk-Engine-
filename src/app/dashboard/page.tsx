@@ -762,10 +762,13 @@ export default function DashboardPage() {
 
         {/* Filters & search — hidden for founder with few startups */}
         {(user?.role !== "founder" || startups.length > 3) && (
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <Filter className="h-4 w-4 text-[#667085]" />
+          <div 
+            className="mb-8 flex flex-wrap items-center gap-4 rounded-[20px] p-5 shadow-lg border border-white/5"
+            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+          >
+            <Filter className="h-4 w-4 text-slate-300" />
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.sector}
               onChange={(e) => setFilters({ ...filters, sector: e.target.value })}
             >
@@ -775,7 +778,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.batch}
               onChange={(e) => setFilters({ ...filters, batch: e.target.value })}
             >
@@ -785,7 +788,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.risk}
               onChange={(e) => setFilters({ ...filters, risk: e.target.value })}
             >
@@ -795,34 +798,34 @@ export default function DashboardPage() {
             </select>
 
             <div className="relative flex flex-1 min-w-[300px]">
-              <div className="flex w-full items-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-1 focus-within:border-[#ED1C24] focus-within:ring-1 focus-within:ring-[#ED1C24]">
+              <div className="flex w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 focus-within:border-[#ED1C24] focus-within:ring-1 focus-within:ring-[#ED1C24] shadow-inner">
                 {aiSearch ? (
                   <Sparkles className="h-4 w-4 text-[#ED1C24]" />
                 ) : (
-                  <Search className="h-4 w-4 text-[#667085]" />
+                  <Search className="h-4 w-4 text-slate-400" />
                 )}
                 <input
-                  className="flex-1 border-0 bg-transparent py-2 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:outline-none"
+                  className="flex-1 border-0 bg-transparent py-2 text-sm text-white placeholder:text-slate-400 focus:outline-none"
                   placeholder={aiSearch ? 'Contoh: "cari startup fintech at risk" atau "perusahaan logistik batch 6"' : "Cari startup..."}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                 />
                 {aiSearch && search && (
-                  <button onClick={handleAiSearch} disabled={aiSearchLoading} className="btn-primary-solid rounded-md px-3 py-1.5 text-xs disabled:opacity-50">
+                  <button onClick={handleAiSearch} disabled={aiSearchLoading} className="btn-primary-solid rounded-md px-3 py-1.5 text-xs disabled:opacity-50 border-0">
                     {aiSearchLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : "Cari"}
                   </button>
                 )}
                 {aiSearchActive && (
-                  <button onClick={clearAiSearch} className="text-[#8c8f93] hover:text-[#161616] text-xs">✕</button>
+                  <button onClick={clearAiSearch} className="text-slate-400 hover:text-white text-xs">✕</button>
                 )}
               </div>
               <button
                 onClick={() => { setAiSearch(!aiSearch); if (aiSearchActive) clearAiSearch(); }}
-                className={`ml-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap ${
+                className={`ml-3 flex items-center gap-1.5 rounded-lg border px-4 py-2 text-xs font-bold transition-all whitespace-nowrap shadow-sm ${
                   aiSearch
-                    ? "border-[#ED1C24] bg-[#FEF2F2] text-[#ED1C24]"
-                    : "border-[#e0e0e0] text-[#667085] hover:border-[#ED1C24]"
+                    ? "border-[#ED1C24] bg-gradient-to-r from-[#ED1C24] to-[#B91217] text-white hover:brightness-110"
+                    : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 <Sparkles className="h-3.5 w-3.5" />
