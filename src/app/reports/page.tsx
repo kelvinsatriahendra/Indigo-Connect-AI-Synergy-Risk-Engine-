@@ -539,7 +539,7 @@ export default function ReportsPage() {
                                 className={`flex-1 text-xs font-bold py-2.5 rounded-xl transition-all shadow-sm ${
                                   isActive 
                                     ? "bg-[#06040f] text-white hover:bg-[#1e1136] border border-white/10" 
-                                    : "bg-[#ED1C24] text-white hover:bg-[#c9181f]"
+                                    : "text-slate-600 bg-slate-50 hover:bg-[#ED1C24] hover:text-white"
                                 }`}
                               >
                                 View Report
@@ -618,7 +618,7 @@ export default function ReportsPage() {
                       <h3 className="text-base font-bold text-foreground">Hasil Evaluasi AI</h3>
                       <button 
                         onClick={handleDownloadPdf}
-                        className="btn-primary-outline gap-2 px-4 py-2 bg-white"
+                        className="btn-primary-solid gap-2 px-4 py-2"
                       >
                         <Download className="h-4 w-4" /> Export Report PDF
                       </button>
