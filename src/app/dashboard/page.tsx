@@ -1011,7 +1011,7 @@ export default function DashboardPage() {
                     {/* Right Action Button */}
                     <button 
                       onClick={() => setAnalysisModal(startup)}
-                      className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1 group/btn transition-colors cursor-pointer"
+                      className="bg-red-50 border border-red-100 text-[#ED1C24] hover:bg-[#ED1C24] hover:text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 group/btn transition-all shadow-sm cursor-pointer"
                     >
                       {user?.role === "synergy" ? (
                         <span>Potensi Sinergi</span>
