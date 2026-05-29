@@ -42,13 +42,13 @@ interface Prediction {
   notes: string;
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label }: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) => {
   if (active && payload && payload.length) {
     return (
       <div className="rounded-xl border border-slate-100 bg-white/95 backdrop-blur-md p-4 shadow-lg text-xs">
         <p className="font-bold text-slate-800 mb-2">{label}</p>
         <div className="space-y-1.5">
-          {payload.map((entry: any, index: number) => {
+          {payload.map((entry: any /* eslint-disable-line @typescript-eslint/no-explicit-any */, index: number) => {
             if (entry.value === null || entry.value === undefined) return null;
             return (
               <div key={index} className="flex items-center gap-2">

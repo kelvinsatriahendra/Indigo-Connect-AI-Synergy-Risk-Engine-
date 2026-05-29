@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -75,12 +76,15 @@ export function Sidebar() {
       className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 text-white"
       style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6">
-        <img
-          src="/indigo-red.png"
-          alt="Indigo Logo"
-          className="h-8 w-auto object-contain brightness-110"
-        />
+      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6 relative">
+        <div className="h-8 w-24 relative">
+          <Image
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            fill
+            className="object-contain brightness-110"
+          />
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">

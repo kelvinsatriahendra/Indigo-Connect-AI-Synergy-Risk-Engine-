@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
   const risk = searchParams.get("risk");
   const search = searchParams.get("search");
 
-  let where: any = {};
+  let where: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ = {};
 
   if (sector && sector !== "all") {
     where.sector = sector;

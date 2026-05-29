@@ -41,7 +41,7 @@ export async function GET(request: Request) {
         telkomBusUpdated: busUpdated,
       },
     });
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     console.error("Sync Error:", error);
     return NextResponse.json(
       { success: false, error: error.message },

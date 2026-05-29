@@ -85,7 +85,7 @@ export default function MentorPage() {
           setUser(userData.user);
           if (userData.user.role === "founder" && userData.user.userId) {
             const myIds = founderStartupMap[userData.user.userId] || ["s3"];
-            const startup = fetchedStartups.find((s: any) => myIds.includes(s.id));
+            const startup = fetchedStartups.find((s: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) => myIds.includes(s.id));
             if (startup) setStartupName(startup.name);
           }
         }

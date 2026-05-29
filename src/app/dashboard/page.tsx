@@ -54,6 +54,7 @@ const sparklineHighGrowth = [ { val: 2 }, { val: 4 }, { val: 3 }, { val: 6 }, { 
 const sparklineAtRisk = [ { val: 5 }, { val: 4 }, { val: 6 }, { val: 5 }, { val: 7 }, { val: 6 }, { val: 8 } ];
 const sparklineBatch = [ { val: 2 }, { val: 2 }, { val: 3 }, { val: 2 }, { val: 4 }, { val: 3 }, { val: 4 } ];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const MatrixTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
@@ -78,6 +79,7 @@ export default function DashboardPage() {
   const [aiSearchLoading, setAiSearchLoading] = useState(false);
   const [aiSearchActive, setAiSearchActive] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [analysisModal, setAnalysisModal] = useState<any | null>(null);
   const [isHealthModalOpen, setIsHealthModalOpen] = useState(false);
   const [isSectorModalOpen, setIsSectorModalOpen] = useState(false);
