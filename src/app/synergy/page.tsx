@@ -44,10 +44,10 @@ const columns: { status: PipelineStatus; label: string; color: string }[] = [
 ];
 
 const statusStyles: Record<PipelineStatus, string> = {
-  PIPELINE: "border-l-4 border-l-[#ED1C24] bg-red-50/50",
-  ON_GOING: "border-l-4 border-l-[#f59e0b] bg-amber-50/50",
-  SUCCESS: "border-l-4 border-l-[#10b981] bg-emerald-50/50",
-  CANCELLED: "border-l-4 border-l-[#ef4444] bg-rose-50/50",
+  PIPELINE: "border-l-4 border-l-[#ED1C24] !bg-red-50",
+  ON_GOING: "border-l-4 border-l-[#f59e0b] !bg-amber-50",
+  SUCCESS: "border-l-4 border-l-[#10b981] !bg-emerald-50",
+  CANCELLED: "border-l-4 border-l-[#ef4444] !bg-rose-50",
 };
 
 const getScoreBadge = (score: number) => {
