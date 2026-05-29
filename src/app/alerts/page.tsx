@@ -126,7 +126,7 @@ export default function AlertsPage() {
             <div className="flex items-center gap-4">
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
                 <p className="text-xs font-bold text-[#344054]">
                   {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                 </p>
@@ -186,13 +186,13 @@ export default function AlertsPage() {
                         <div>
                           <h3 className="text-sm font-bold text-[#161616]">{alert.title}</h3>
                           {startupName && (
-                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-medium text-[#ED1C24]">
+                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#FEF2F2] px-2 py-0.5 text-xs font-medium text-[#ED1C24]">
                               {startupName}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-[10px] text-[#8c8f93]">
+                          <span className="text-xs text-[#8c8f93]">
                             {new Date(alert.createdAt).toLocaleDateString("id-ID", {
                               day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
                             })}
@@ -200,7 +200,7 @@ export default function AlertsPage() {
                           {!alert.read && (
                             <button
                               onClick={() => markRead(alert.id)}
-                              className="rounded-md px-2 py-1 text-[10px] font-medium text-[#ED1C24] hover:bg-[#FEF2F2] transition-colors"
+                              className="rounded-md px-2 py-1 text-xs font-medium text-[#ED1C24] hover:bg-[#FEF2F2] transition-colors"
                             >
                               Mark read
                             </button>

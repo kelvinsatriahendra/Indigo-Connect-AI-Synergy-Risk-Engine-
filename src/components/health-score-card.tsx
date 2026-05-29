@@ -85,13 +85,13 @@ export function HealthScoreCard({
                 <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`h-2 w-2 rounded-full ${sentimentScore >= 0.7 ? 'bg-emerald-500' : sentimentScore >= 0.4 ? 'bg-amber-500' : 'bg-red-500'}`}></div>
-                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
+                    <p className="text-xs font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
                   </div>
                   <div className="flex flex-col items-end gap-0.5">
                     <p className={`text-xl font-extrabold ${sentimentScore >= 0.7 ? 'text-emerald-600' : sentimentScore >= 0.4 ? 'text-amber-600' : 'text-red-600'}`}>
                       {(sentimentScore * 100).toFixed(0)}%
                     </p>
-                    <p className="text-[10px] font-semibold text-[#94a3b8]">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
+                    <p className="text-xs font-semibold text-[#94a3b8]">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
                   </div>
                 </div>
               )}
@@ -99,7 +99,7 @@ export function HealthScoreCard({
                 <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`h-2 w-2 rounded-full ${operationalStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
+                    <p className="text-xs font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
                   </div>
                   <div>
                     <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-extrabold border ${operationalStatus === 'ACTIVE' ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : 'text-red-700 bg-red-50 border-red-100'}`}>
@@ -125,7 +125,7 @@ export function HealthScoreCard({
               <h3 className="text-lg font-extrabold text-[#0f172a]">AI Insights & Summary</h3>
               <p className="text-xs font-medium text-[#64748b]">Key takeaways extracted by Gemini 2.0</p>
             </div>
-            <span className="ml-auto inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20 uppercase tracking-widest">
+            <span className="ml-auto inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20 uppercase tracking-widest">
               AI Generated
             </span>
           </div>

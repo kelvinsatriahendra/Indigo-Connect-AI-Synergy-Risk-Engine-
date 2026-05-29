@@ -245,7 +245,7 @@ export default function DashboardPage() {
               </div>
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir diperbarui</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir diperbarui</p>
                 <p className="text-xs font-bold text-[#344054]">{new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB</p>
               </div>
               {user?.role === "admin" && (
@@ -300,7 +300,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 w-fit">
                   <ArrowUpRight className="h-3 w-3 text-white" />
-                  <span className="text-[10px] font-bold text-white">↑ 20% vs last month</span>
+                  <span className="text-xs font-bold text-white">↑ 20% vs last month</span>
                 </div>
               </div>
               <div className="absolute right-[-10%] top-[-20%] h-32 w-32 rounded-full bg-white/10 blur-2xl transition-transform group-hover:scale-150 duration-700 ease-in-out"></div>
@@ -323,7 +323,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-emerald-50 rounded-full px-3 py-1 w-fit border border-emerald-100">
                   <TrendingUp className="h-3 w-3 text-emerald-600" />
-                  <span className="text-[10px] font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</span>
+                  <span className="text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
@@ -351,7 +351,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-orange-50 rounded-full px-3 py-1 w-fit border border-orange-100">
                   <AlertTriangle className="h-3 w-3 text-orange-600" />
-                  <span className="text-[10px] font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</span>
+                  <span className="text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
@@ -386,7 +386,7 @@ export default function DashboardPage() {
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 bg-white/60 backdrop-blur-sm rounded-full px-3 py-1 w-fit border border-pink-200">
                   <Activity className="h-3 w-3 text-[#ec4899]" />
-                  <span className="text-[10px] font-bold text-[#ec4899]">Menjalankan evaluasi AI</span>
+                  <span className="text-xs font-bold text-[#ec4899]">Menjalankan evaluasi AI</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-30">
@@ -412,7 +412,7 @@ export default function DashboardPage() {
                   <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button onClick={() => setIsHealthModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                  View detail <span className="text-[10px]">›</span>
+                  View detail <span className="text-xs">›</span>
                 </button>
               </div>
               <p className="text-xs font-medium text-[#8c8f93] relative z-10 mb-2">Perbandingan status performa portofolio startup</p>
@@ -473,7 +473,7 @@ export default function DashboardPage() {
                   <h3 className="text-base font-extrabold text-[#161616] tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
                 <button onClick={() => setIsSectorModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                  View detail <span className="text-[10px]">›</span>
+                  View detail <span className="text-xs">›</span>
                 </button>
               </div>
               <p className="text-xs font-medium text-[#8c8f93] relative z-10">Proporsi startup berdasarkan sektor industri</p>
@@ -506,7 +506,7 @@ export default function DashboardPage() {
                   {/* Center Label */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                     <span className="text-3xl font-extrabold text-[#161616]">{totalStartups}</span>
-                    <span className="text-[10px] font-semibold text-[#8c8f93] leading-tight text-center">Startup<br/>Portfolio</span>
+                    <span className="text-xs font-semibold text-[#8c8f93] leading-tight text-center">Startup<br/>Portfolio</span>
                   </div>
                 </div>
                 {/* Right-side Legend with Percentages */}
@@ -538,7 +538,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <div className="flex items-center gap-3 text-[10px] font-bold">
+                    <div className="flex items-center gap-3 text-xs font-bold">
                       <span className="flex items-center gap-1.5 text-[#10b981]"><span className="h-2 w-2 rounded-full bg-[#10b981]" /> Low Risk</span>
                       <span className="flex items-center gap-1.5 text-[#f59e0b]"><span className="h-2 w-2 rounded-full bg-[#f59e0b]" /> Medium Risk</span>
                       <span className="flex items-center gap-1.5 text-[#ef4444]"><span className="h-2 w-2 rounded-full bg-[#ef4444]" /> High Risk</span>
@@ -646,7 +646,7 @@ export default function DashboardPage() {
                     <div className="w-full lg:w-[320px] shrink-0 bg-[#f8fafc] border border-slate-200 rounded-xl p-5 shadow-inner flex flex-col justify-center">
                       <div className="flex items-center justify-between text-xs mb-2">
                         <span className="font-bold text-[#667085] uppercase tracking-wider">AI Health Index</span>
-                        <span className={`px-2 py-1 rounded text-[10px] font-extrabold border ${healthColor}`}>
+                        <span className={`px-2 py-1 rounded text-xs font-extrabold border ${healthColor}`}>
                           {healthScore}% · {healthLabel}
                         </span>
                       </div>
@@ -923,7 +923,7 @@ export default function DashboardPage() {
                         <div>
                           <div className="flex items-center justify-between text-xs mb-1.5">
                             <span className="font-semibold text-[#667085]">Health Index</span>
-                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${healthColor}`}>
+                            <span className={`px-1.5 py-0.5 rounded text-xs font-bold border ${healthColor}`}>
                               {healthScore}% · {healthLabel}
                             </span>
                           </div>
@@ -940,8 +940,8 @@ export default function DashboardPage() {
                       {user?.role === "synergy" && (
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-3 shadow-sm shadow-[#f2f4f7]">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
-                            <span className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
+                            <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
+                            <span className="text-xs font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 pr-2 truncate">
@@ -963,7 +963,7 @@ export default function DashboardPage() {
                       {(user?.role === "admin" || !user) && (
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
                           <div className="truncate pr-2">
-                            <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Synergy Target</p>
+                            <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Synergy Target</p>
                             <div className="flex items-center gap-1.5">
                               {synergy.logos && synergy.logos.length > 0 && (
                                 <div className="flex -space-x-1 shrink-0">
@@ -976,7 +976,7 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
+                            <p className="text-xs font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
                             <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
                           </div>
                         </div>

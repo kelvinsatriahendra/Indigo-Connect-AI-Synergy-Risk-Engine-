@@ -231,7 +231,7 @@ export default async function Home() {
                     {s.icon}
                   </div>
                 </div>
-                <div className="text-[10px] font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
+                <div className="text-xs font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
                 <h3 className="text-lg font-bold text-[#161616] mb-2">{s.title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed max-w-[250px]">{s.desc}</p>
               </div>

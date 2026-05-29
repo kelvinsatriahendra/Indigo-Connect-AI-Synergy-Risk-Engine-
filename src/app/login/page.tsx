@@ -156,7 +156,7 @@ export default function LoginPage() {
             {pending ? "Memproses Masuk..." : `Masuk sebagai ${selectedRole === "admin" ? "Executive" : selectedRole === "synergy" ? "Synergy Manager" : "Founder"}`}
           </button>
 
-          <p className="text-center text-[10px] text-[#8c8f93]">
+          <p className="text-center text-xs text-[#8c8f93]">
             Akun dikelola oleh sistem. Anda dapat mengubah NIK/Password di atas jika menggunakan akun lain.
           </p>
         </form>

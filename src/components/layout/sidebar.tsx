@@ -119,7 +119,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
               <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#ED1C24]" : "text-slate-400")} />
               <span className="flex-1">{item.label}</span>
               {showBadge && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ED1C24] px-1.5 text-[10px] font-bold text-white">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ED1C24] px-1.5 text-xs font-bold text-white">
                   {unreadCount}
                 </span>
               )}
@@ -142,7 +142,7 @@ export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () =>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{user.name}</p>
-              <p className="text-[10px] text-slate-400">{roleLabels[user.role] || user.role}</p>
+              <p className="text-xs text-slate-400">{roleLabels[user.role] || user.role}</p>
             </div>
           </div>
         )}

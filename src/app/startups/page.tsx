@@ -268,7 +268,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700">Startup Monitor Live</span>
+                    <span className="text-xs font-bold text-emerald-700">Startup Monitor Live</span>
                   </div>
                 </div>
                 <p className="mt-0.5 text-sm text-[#667085]">Daftar startup binaan Indigo</p>
@@ -278,7 +278,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
             <div className="flex items-center gap-4">
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
                 <p className="text-xs font-bold text-[#344054]">
                   {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                 </p>
@@ -317,7 +317,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         {getLogoForName(startup.name) ? (
                           <img src={getLogoForName(startup.name)} alt={startup.name} className="h-full w-full object-contain p-1" />
                         ) : (
-                          <span className="text-[10px] font-bold text-slate-400">{startup.name.charAt(0)}</span>
+                          <span className="text-xs font-bold text-slate-400">{startup.name.charAt(0)}</span>
                         )}
                       </div>
                       <span className="font-semibold text-[#161616]">{startup.name}</span>
@@ -370,7 +370,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           {/* Card 1: Financial Health */}
                           <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Financial Health</span>
+                              <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Financial Health</span>
                               <Coins className="h-4 w-4 text-[#ED1C24]" />
                             </div>
                             <div className="space-y-2">
@@ -384,7 +384,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                               </div>
                               <div className="flex items-center justify-between pt-1.5 border-t border-[#e0e0e0]/50">
                                 <span className="text-xs font-extrabold text-[#161616]">Runway Kas</span>
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.runwayColor}`}>
+                                <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.runwayColor}`}>
                                   {metrics.runway} ({metrics.runwayStatus})
                                 </span>
                               </div>
@@ -394,7 +394,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           {/* Card 2: Growth & Traction */}
                           <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Growth & Traction</span>
+                              <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Growth & Traction</span>
                               <TrendingUp className="h-4 w-4 text-emerald-600" />
                             </div>
                             <div className="space-y-2">
@@ -404,7 +404,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                               </div>
                               <div className="flex items-center justify-between">
                                 <span className="text-xs font-medium text-[#525252]">Pertumbuhan</span>
-                                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${metrics.revenueGrowthColor}`}>
+                                <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${metrics.revenueGrowthColor}`}>
                                   {metrics.revenueGrowth}
                                 </span>
                               </div>
@@ -418,7 +418,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           {/* Card 3: Telkom Synergy Pipeline */}
                           <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Telkom Synergy Pipeline</span>
+                              <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Telkom Synergy Pipeline</span>
                               <Handshake className="h-4 w-4 text-blue-600" />
                             </div>
                             <div className="space-y-2">
@@ -430,7 +430,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                               </div>
                               <div className="flex items-center justify-between pt-2.5 border-t border-[#e0e0e0]/50">
                                 <span className="text-xs font-extrabold text-[#161616]">Status Kolaborasi</span>
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.synergyColor}`}>
+                                <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.synergyColor}`}>
                                   {metrics.synergyStatus}
                                 </span>
                               </div>
@@ -440,7 +440,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                           {/* Card 4: AI Risk & Sentiment */}
                           <div className="rounded-xl border border-[#e0e0e0] bg-[#fcfcfd] p-4 flex flex-col justify-between shadow-sm">
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">AI Risk & Sentiment</span>
+                              <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">AI Risk & Sentiment</span>
                               <Activity className="h-4 w-4 text-[#ED1C24]" />
                             </div>
                             <div className="space-y-2">
@@ -452,7 +452,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                               </div>
                               <div className="flex items-center justify-between pt-2.5 border-t border-[#e0e0e0]/50">
                                 <span className="text-xs font-extrabold text-[#161616]">Label Risiko AI</span>
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.riskColor}`}>
+                                <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.riskColor}`}>
                                   {metrics.riskLabel}
                                 </span>
                               </div>
@@ -479,8 +479,12 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                     </div>
 
                     {loading ? (
-                      <div className="flex items-center justify-center py-12">
-                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#ED1C24] border-t-transparent" />
+                      <div className="space-y-3 p-5 bg-[#f2f4f7] rounded-xl animate-pulse">
+                        <div className="h-4 bg-slate-200 rounded w-full"></div>
+                        <div className="h-4 bg-slate-200 rounded w-5/6"></div>
+                        <div className="h-4 bg-slate-200 rounded w-4/6"></div>
+                        <div className="h-4 bg-slate-200 rounded w-full mt-4"></div>
+                        <div className="h-4 bg-slate-200 rounded w-3/4"></div>
                       </div>
                     ) : aiSummary ? (
                       <div className="space-y-3 rounded-xl bg-[#f2f4f7] p-5">
@@ -570,7 +574,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Growth (MoM)</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Burn Rate</span>
@@ -578,11 +582,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Cash Runway</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
                         </div>
                         <div className="flex justify-between items-center pt-1">
                           <span className="text-xs font-medium text-[#667085]">Risk Level</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
                         </div>
                       </div>
                     )
@@ -618,7 +622,7 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Growth (MoM)</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.revenueGrowthColor}`}>{metrics.revenueGrowth}</span>
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Burn Rate</span>
@@ -626,11 +630,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                         </div>
                         <div className="flex justify-between items-center border-b border-[#f2f4f7] pb-3">
                           <span className="text-xs font-medium text-[#667085]">Cash Runway</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.runwayColor}`}>{metrics.runway}</span>
                         </div>
                         <div className="flex justify-between items-center pt-1">
                           <span className="text-xs font-medium text-[#667085]">Risk Level</span>
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-bold border ${metrics.riskColor}`}>{metrics.riskLabel}</span>
                         </div>
                       </div>
                     )

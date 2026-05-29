@@ -140,7 +140,7 @@ export default function MentorPage() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700">AI Mentor Online</span>
+                    <span className="text-xs font-bold text-emerald-700">AI Mentor Online</span>
                   </div>
                 </div>
                 <p className="mt-0.5 text-sm text-[#667085]">
@@ -152,7 +152,7 @@ export default function MentorPage() {
             <div className="flex items-center gap-4">
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dihubungkan</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dihubungkan</p>
                 <p className="text-xs font-bold text-[#344054]">
                   {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                 </p>
@@ -262,7 +262,7 @@ export default function MentorPage() {
                   <Send className="h-4 w-4 ml-0.5" />
                 </button>
               </form>
-              <p className="mx-auto max-w-3xl mt-2 text-[10px] text-[#a1a1aa] text-center">
+              <p className="mx-auto max-w-3xl mt-2 text-xs text-[#a1a1aa] text-center">
                 AI Mentor menghasilkan rekomendasi berdasarkan data evaluasi {startupName}. Selalu verifikasi dengan tim Anda sebelum mengambil keputusan.
               </p>
             </div>

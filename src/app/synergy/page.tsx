@@ -244,7 +244,7 @@ export default function SynergyPage() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700">AI Matchmaker Active</span>
+                    <span className="text-xs font-bold text-emerald-700">AI Matchmaker Active</span>
                   </div>
                 </div>
                 <p className="mt-0.5 text-sm text-[#667085]">Interactive Kanban pipeline untuk kolaborasi Startup × Telkom Business Unit</p>
@@ -254,7 +254,7 @@ export default function SynergyPage() {
             <div className="flex items-center gap-4">
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
                 <p className="text-xs font-bold text-[#344054]">
                   {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                 </p>
@@ -349,7 +349,7 @@ export default function SynergyPage() {
                                     {item.status.replace("_", " ")}
                                   </span>
                                 </div>
-                                <span className={`inline-flex items-center gap-1 ml-2 shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-2xs ${scoreInfo.bg}`}>
+                                <span className={`inline-flex items-center gap-1 ml-2 shrink-0 rounded-full border px-2 py-0.5 text-xs font-bold shadow-2xs ${scoreInfo.bg}`}>
                                   <ScoreIcon className="h-3 w-3 shrink-0 animate-pulse" />
                                   {Math.round(item.matchScore * 100)}%
                                 </span>
@@ -409,7 +409,7 @@ export default function SynergyPage() {
                               {item.notes && (
                                 <div className="mt-3 rounded-lg border-l-2 border-indigo-500 bg-indigo-50/50 p-2 shadow-xs border border-indigo-100/50 flex items-start gap-2">
                                   <MessageSquare className="h-3 w-3 text-indigo-500 shrink-0 mt-0.5" />
-                                  <p className="text-[10px] text-slate-600 italic leading-relaxed line-clamp-1 flex-1">
+                                  <p className="text-xs text-slate-600 italic leading-relaxed line-clamp-1 flex-1">
                                     {item.notes}
                                   </p>
                                 </div>
@@ -427,7 +427,7 @@ export default function SynergyPage() {
                                 
                                 <span className="flex items-center gap-1.5 text-[#8c8f93] font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-100">
                                   <Calendar className="h-3 w-3 text-slate-400" />
-                                  <span className="text-[10px]">{new Date(item.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })}</span>
+                                  <span className="text-xs">{new Date(item.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })}</span>
                                 </span>
                               </div>
                             </div>
@@ -474,7 +474,7 @@ export default function SynergyPage() {
                     </div>
                     <div>
                       <p className="font-bold text-[#161616]">{getStartupName(activeCRMItem.startupId)}</p>
-                      <p className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
+                      <p className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
                     </div>
                   </div>
                 </div>
@@ -492,7 +492,7 @@ export default function SynergyPage() {
                     )}
                     <div>
                       <p className="font-bold text-[#161616]">{getBuName(activeCRMItem.telkomBuId)}</p>
-                      <p className="text-[10px] text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
+                      <p className="text-xs text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
                     </div>
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function SynergyPage() {
                   <MessageSquare className="h-3.5 w-3.5" /> Pipeline Progress Notes
                 </h3>
                 <div className="rounded-xl border border-indigo-100 bg-white overflow-hidden shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
-                  <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 text-[10px] font-semibold text-slate-500">
+                  <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 text-xs font-semibold text-slate-500">
                     Catat riwayat diskusi, kendala, atau next step di sini.
                   </div>
                   <textarea
@@ -561,7 +561,7 @@ export default function SynergyPage() {
                     type="button" 
                     onClick={handleAIMatchmaking}
                     disabled={isSimulatingAI}
-                    className="flex items-center gap-1.5 bg-[#ED1C24] text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-red-700 transition-colors disabled:opacity-50 shadow-md shadow-red-600/20"
+                    className="flex items-center gap-1.5 bg-[#ED1C24] text-white px-3 py-1.5 rounded-full text-xs font-bold hover:bg-red-700 transition-colors disabled:opacity-50 shadow-md shadow-red-600/20"
                   >
                     {isSimulatingAI ? (
                       <><div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" /> Analyzing...</>
@@ -595,7 +595,7 @@ export default function SynergyPage() {
               <div>
                 <div className="flex justify-between mb-1.5">
                   <label className="block text-xs font-bold text-[#344054] uppercase tracking-wide">Synergy Match Score (0-100)</label>
-                  <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
+                  <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
                 </div>
                 <input type="number" name="matchScore" min="0" max="100" defaultValue={75}
                   className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#161616] font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"

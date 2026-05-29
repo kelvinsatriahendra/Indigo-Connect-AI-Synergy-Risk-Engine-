@@ -364,7 +364,7 @@ export default function ReportsPage() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700">AI Live Evaluation</span>
+                    <span className="text-xs font-bold text-emerald-700">AI Live Evaluation</span>
                   </div>
                 </div>
                 <p className="mt-0.5 text-sm text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
@@ -374,7 +374,7 @@ export default function ReportsPage() {
             <div className="flex items-center gap-4">
               {/* Timestamp */}
               <div className="hidden lg:block text-right">
-                <p className="text-[10px] font-medium text-[#8c8f93]">Terakhir dianalisis</p>
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dianalisis</p>
                 <p className="text-xs font-bold text-[#344054]">
                   {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                 </p>
@@ -519,7 +519,7 @@ export default function ReportsPage() {
                                   </div>
                                 );
                               })()}
-                              <span className="text-[10px] font-bold text-[#64748b] bg-slate-100 px-2 py-1 rounded-lg">
+                              <span className="text-xs font-bold text-[#64748b] bg-slate-100 px-2 py-1 rounded-lg">
                                 {report.batch}
                               </span>
                             </div>
