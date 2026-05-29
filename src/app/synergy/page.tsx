@@ -285,7 +285,7 @@ export default function SynergyPage() {
               grouped.map((col) => (
                 <div 
                   key={col.status} 
-                  className={`flex h-full w-[350px] shrink-0 flex-col rounded-xl transition-all duration-300 p-3 ${
+                  className={`flex h-full flex-1 min-w-[280px] max-w-[400px] flex-col rounded-xl transition-all duration-300 p-3 ${
                     draggedOverCol === col.status 
                       ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
                       : 'bg-slate-100/50 border border-slate-200/60'
