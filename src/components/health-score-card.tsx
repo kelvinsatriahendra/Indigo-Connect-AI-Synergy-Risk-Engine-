@@ -163,27 +163,30 @@ export function HealthScoreCard({
           </div>
           <div className="space-y-3">
             {synergyMatches.map((match, i) => (
-              <div key={i} className="rounded-xl border border-slate-100 bg-background p-5 hover:border-amber-200 transition-colors">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
+              <div key={i} className="rounded-xl border border-slate-100 bg-background p-5 hover:border-amber-200 transition-colors flex items-center gap-6">
+                
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2.5">
                     {(match.logo || getLogoForName(match.name)) && (
-                      <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center relative">
+                      <div className="h-8 w-8 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center relative">
                         <Image src={match.logo || getLogoForName(match.name) || '/startups/indigo-red.png'} alt={match.name} fill className="object-contain p-1" />
                       </div>
                     )}
-                    <p className="font-bold text-[#0f172a]">{match.name}</p>
+                    <p className="font-extrabold text-[#0f172a]">{match.name}</p>
                   </div>
-                  <div className="flex flex-col items-end gap-0.5 shrink-0">
-                    <p className={`text-3xl font-black tracking-tighter ${
-                      (match.score > 1 ? match.score : match.score * 100) >= 80 ? 'text-emerald-600' : 
-                      (match.score > 1 ? match.score : match.score * 100) >= 60 ? 'text-amber-600' : 'text-red-600'
-                    }`}>
-                      {Math.round(match.score > 1 ? match.score : match.score * 100)}%
-                    </p>
-                    <p className="text-[10px] font-bold text-[#94a3b8] uppercase tracking-wider">Synergy Score</p>
-                  </div>
+                  <p className="text-sm font-medium text-[#475569] leading-relaxed">{match.reason}</p>
                 </div>
-                <p className="text-sm font-medium text-[#475569] leading-relaxed">{match.reason}</p>
+
+                <div className="flex flex-col items-end justify-center shrink-0 border-l border-slate-200 pl-6 py-2">
+                  <p className={`text-5xl font-black tracking-tighter ${
+                    (match.score > 1 ? match.score : match.score * 100) >= 80 ? 'text-emerald-600' : 
+                    (match.score > 1 ? match.score : match.score * 100) >= 60 ? 'text-amber-600' : 'text-red-600'
+                  }`}>
+                    {Math.round(match.score > 1 ? match.score : match.score * 100)}%
+                  </p>
+                  <p className="text-[11px] font-bold text-[#94a3b8] uppercase tracking-wider mt-1">Synergy Score</p>
+                </div>
+
               </div>
             ))}
           </div>
