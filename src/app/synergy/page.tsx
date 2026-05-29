@@ -274,9 +274,9 @@ export default function SynergyPage() {
           </div>
         </div>
 
-        {/* Kanban Board (List View) */}
-        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
-          <div className="flex flex-col gap-8">
+        {/* Kanban Board (Board View) */}
+        <div className="flex-1 overflow-x-auto overflow-y-hidden p-8">
+          <div className="flex h-full gap-6 items-start">
             {loading ? (
               <div className="flex w-full h-full items-center justify-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
@@ -285,10 +285,10 @@ export default function SynergyPage() {
               grouped.map((col) => (
                 <div 
                   key={col.status} 
-                  className={`flex w-full flex-col rounded-xl transition-all duration-300 p-4 ${
+                  className={`flex h-full w-[350px] shrink-0 flex-col rounded-xl transition-all duration-300 p-3 ${
                     draggedOverCol === col.status 
                       ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
-                      : 'bg-transparent'
+                      : 'bg-slate-100/50 border border-slate-200/60'
                   }`}
                   onDragOver={(e) => { 
                     e.preventDefault(); 
@@ -316,7 +316,7 @@ export default function SynergyPage() {
                   </div>
 
                   {/* Cards Container */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                  <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden pr-1 pb-4">
                     {col.items.length === 0 ? (
                       <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center bg-white/40 backdrop-blur-sm">
                          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 mb-2">
