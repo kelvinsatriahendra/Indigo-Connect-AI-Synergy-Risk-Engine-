@@ -318,9 +318,12 @@ export default function DashboardPage() {
                     <TrendingUp className="h-5 w-5" />
                   </div>
                 </div>
-                <div className="flex items-baseline gap-2 mt-2">
+                <div className="mt-2">
                   <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{highGrowth}</p>
-                  <p className="text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</p>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 bg-emerald-50 rounded-full px-3 py-1 w-fit border border-emerald-100">
+                  <TrendingUp className="h-3 w-3 text-emerald-600" />
+                  <span className="text-[10px] font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
@@ -343,9 +346,12 @@ export default function DashboardPage() {
                     <AlertTriangle className="h-5 w-5" />
                   </div>
                 </div>
-                <div className="flex items-baseline gap-2 mt-2">
+                <div className="mt-2">
                   <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">{atRisk}</p>
-                  <p className="text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</p>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 bg-orange-50 rounded-full px-3 py-1 w-fit border border-orange-100">
+                  <AlertTriangle className="h-3 w-3 text-orange-600" />
+                  <span className="text-[10px] font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
@@ -371,13 +377,16 @@ export default function DashboardPage() {
                     {user?.role === "synergy" ? <GitBranch className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
                   </div>
                 </div>
-                <div className="flex items-baseline gap-2 mt-2">
+                <div className="mt-2">
                   <p className="text-4xl font-extrabold text-[#161616] tracking-tight leading-none">
                     {user?.role === "synergy"
                       ? synergySectorMap["demo-synergy-id"]?.length || 0
                       : uniqueBatches.length}
                   </p>
-                  <p className="text-xs font-bold text-[#667085]">Menjalankan evaluasi AI</p>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 bg-white/60 backdrop-blur-sm rounded-full px-3 py-1 w-fit border border-pink-200">
+                  <Activity className="h-3 w-3 text-[#ec4899]" />
+                  <span className="text-[10px] font-bold text-[#ec4899]">Menjalankan evaluasi AI</span>
                 </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-30">
