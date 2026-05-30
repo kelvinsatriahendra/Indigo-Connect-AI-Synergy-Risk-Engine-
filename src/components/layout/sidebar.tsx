@@ -42,7 +42,15 @@ const roleBadgeColors: Record<string, string> = {
 export function Sidebar() {
   const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
-  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
+  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(() => {
+    if (typeof window !== "undefined") {
+      const cached = sessionStorage.getItem("user");
+      if (cached) {
+        try { return JSON.parse(cached); } catch (e) {}
+      }
+    }
+    return null;
+  });
 
   useEffect(() => {
     fetch("/api/alerts?unread=true")
@@ -55,12 +63,16 @@ export function Sidebar() {
     fetch("/api/auth/me")
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (data?.user) setUser(data.user);
+        if (data?.user) {
+          setUser(data.user);
+          sessionStorage.setItem("user", JSON.stringify(data.user));
+        }
       })
       .catch(() => { });
   }, [pathname]);
 
   const handleLogout = async () => {
+    sessionStorage.removeItem("user");
     const { logout } = await import("@/app/actions/auth");
     await logout();
   };
