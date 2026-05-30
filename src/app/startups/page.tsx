@@ -12,6 +12,7 @@ type Startup = {
   batch: string;
   description: string;
   status: string;
+  logoUrl: string | null;
 };
 
 // Detailed operational, financial, and synergy metrics mapped by startup ID
@@ -288,7 +289,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-md bg-white border border-slate-100 overflow-hidden flex items-center justify-center shrink-0">
-                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                        {startup.logoUrl ? (
+                          <img src={startup.logoUrl} alt={startup.name} className="h-full w-full object-contain p-1" />
+                        ) : (
+                          <span className="font-bold text-[#ED1C24] text-xs">{startup.name.charAt(0)}</span>
+                        )}
                       </div>
                       <span className="font-semibold text-[#161616]">{startup.name}</span>
                     </div>
@@ -310,7 +315,11 @@ Rencana bulan depan: integrasi dengan payment gateway.`;
                     <div>
                       <div className="flex items-center gap-4">
                         <div className="h-14 w-14 rounded-xl bg-white border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center shrink-0">
-                          <img src={(selectedStartup as any).logo} alt={selectedStartup.name} className="h-full w-full object-contain p-2" />
+                          {selectedStartup.logoUrl ? (
+                            <img src={selectedStartup.logoUrl} alt={selectedStartup.name} className="h-full w-full object-contain p-2" />
+                          ) : (
+                            <span className="font-bold text-[#ED1C24] text-xl">{selectedStartup.name.charAt(0)}</span>
+                          )}
                         </div>
                         <h2 className="text-2xl font-bold text-[#161616]">{selectedStartup.name}</h2>
                         <span className={selectedStartup.status === "ACTIVE" ? "badge-high-growth" : "badge-at-risk"}>
