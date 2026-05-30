@@ -68,7 +68,7 @@ export function Sidebar() {
   // Filter nav items based on user role
   const navItems = user
     ? allNavItems.filter((item) => item.roles.includes(user.role))
-    : allNavItems;
+    : [];
 
   return (
     <aside
