@@ -488,7 +488,7 @@ export default function ReportsPage() {
                           >
                             <div className="flex items-center justify-between mb-4">
                               {(() => {
-                                const logo = (startupsData.find(s => s.id === report.startupId) as any)?.logo;
+                                const logo = startupsData.find(s => s.id === report.startupId)?.logoUrl;
                                 return logo ? (
                                   <div className="h-12 w-12 shrink-0 rounded-2xl bg-white border border-slate-100 p-2 shadow-sm">
                                     <img src={logo} alt={report.startupName} className="h-full w-full object-contain" />
@@ -614,7 +614,7 @@ export default function ReportsPage() {
                               name: bu?.name || m.buId,
                               reason: m.reason,
                               score: m.matchScore,
-                              logo: bu?.logo,
+                              logo: bu?.logoUrl,
                             };
                           }) || undefined
                         }

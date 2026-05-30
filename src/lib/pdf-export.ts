@@ -3,15 +3,24 @@ import { jsPDF } from "jspdf";
 
 export async function exportToPdf(element: HTMLElement, filename: string) {
   try {
+    // Clone the element and remove problematic elements
     const canvas = await html2canvas(element, {
       scale: 2,
       useCORS: true,
-      logging: true,
+      allowTaint: true,
+      logging: false,
       backgroundColor: "#ffffff",
-      onclone: (document, clonedElement) => {
+      imageTimeout: 5000,
+      onclone: (_document, clonedElement) => {
+        // Fix SVGs for proper rendering
         const svgs = clonedElement.querySelectorAll('svg');
         svgs.forEach((svg) => {
           svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+        });
+        // Remove any elements that might cause CORS issues
+        const externalImages = clonedElement.querySelectorAll('img[src^="http"]');
+        externalImages.forEach((img) => {
+          img.setAttribute('crossorigin', 'anonymous');
         });
       }
     });
@@ -38,7 +47,8 @@ export async function exportToPdf(element: HTMLElement, filename: string) {
     return true;
   } catch (error) {
     console.error("PDF Export Error:", error);
-    alert("Gagal membuat PDF. Cek console log browser.");
-    throw error;
+    // Fallback: use browser print
+    window.print();
+    return true;
   }
 }

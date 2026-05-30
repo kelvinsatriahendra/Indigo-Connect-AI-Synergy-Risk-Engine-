@@ -14,6 +14,7 @@ type Startup = {
   batch: string;
   description: string;
   status: string;
+  logoUrl: string | null;
 };
 
 const sectorColors: Record<string, string> = {
@@ -580,9 +581,9 @@ export default function DashboardPage() {
                     
                     {/* Company Info */}
                     <div className="flex-1 min-w-0 flex items-start gap-5">
-                      {startup && (startup as any).logo && (
+                      {startup.logoUrl && (
                         <div className="h-16 w-16 shrink-0 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-sm p-1">
-                          <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain" />
+                          <img src={startup.logoUrl} alt={startup.name} className="h-full w-full object-contain" />
                         </div>
                       )}
                       <div>
@@ -875,9 +876,9 @@ export default function DashboardPage() {
                   <div className="p-6 pl-7 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-3">
-                        {startup && (startup as any).logo && (
+                        {startup.logoUrl && (
                           <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm">
-                            <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-1" />
+                            <img src={startup.logoUrl} alt={startup.name} className="h-full w-full object-contain p-1" />
                           </div>
                         )}
                         <div>
@@ -1018,7 +1019,11 @@ export default function DashboardPage() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50" />
               <div className="flex items-center gap-4 relative z-10">
                 <div className="h-12 w-12 rounded-xl bg-white shadow-sm border border-[#f2f4f7] p-2 flex items-center justify-center shrink-0">
-                  <img src={analysisModal.logo} alt={analysisModal.name} className="h-full w-full object-contain" />
+                  {analysisModal.logoUrl ? (
+                    <img src={analysisModal.logoUrl} alt={analysisModal.name} className="h-full w-full object-contain" />
+                  ) : (
+                    <span className="text-xl font-bold text-[#ED1C24]">{analysisModal.name?.charAt(0)}</span>
+                  )}
                 </div>
                 <div>
                   <h2 className="text-lg font-extrabold text-[#161616]">
