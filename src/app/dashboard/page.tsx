@@ -1281,6 +1281,14 @@ export default function DashboardPage() {
           </div>
         </div>
       )}
+
+      {/* Hidden preloader for all startup logos to ensure instant modal opening */}
+      <div className="hidden" aria-hidden="true">
+        {startups.map((startup) => {
+          const logo = getLogoForName(startup.name);
+          return logo ? <img key={`preload-${startup.id}`} src={logo} alt="preload" /> : null;
+        })}
+      </div>
     </AppShell>
   );
 }
