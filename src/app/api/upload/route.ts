@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     
     const text = await new Promise<string>((resolve, reject) => {
       const pdfParser = new PDFParser(null, true);
-      pdfParser.on("pdfParser_dataError", (errData: any) => reject(errData.parserError));
+      pdfParser.on("pdfParser_dataError", (errData: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) => reject(errData.parserError));
       pdfParser.on("pdfParser_dataReady", () => {
         resolve(pdfParser.getRawTextContent());
       });

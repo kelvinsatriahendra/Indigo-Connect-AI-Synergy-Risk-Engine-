@@ -18,28 +18,47 @@ export default async function Home() {
       <header className="fixed top-0 z-50 flex h-16 w-full items-center justify-between border-b bg-white/80 backdrop-blur-md px-6">
         <Link href="/" className="flex items-center gap-3">
           <img
-            src="/indigo-red.png"
-            alt="Indigo Logo"
-            className="h-8 w-auto object-contain"
+            src="/danantara-logo.svg"
+            alt="Danantara Logo"
+            className="h-[18px] md:h-9 w-auto object-contain"
           />
         </Link>
-        <div className="flex items-center gap-4">
-          {session?.userId ? (
-            <Link href="/dashboard" className="btn-primary-solid text-sm px-5 py-2">
-              Buka Dashboard
-            </Link>
-          ) : (
-            <Link href="/login" className="btn-primary-solid text-sm px-5 py-2">
-              Masuk
-            </Link>
-          )}
+        <div className="flex items-center gap-1.5 md:gap-5">
+          <img
+            src="/ai-connect.png"
+            alt="AI Connect Logo"
+            className="h-[11px] md:h-5 w-auto object-contain"
+          />
+          <span className="h-3 md:h-5 w-px bg-slate-200" />
+          <img
+            src="/telkom.png"
+            alt="Telkom Logo"
+            className="h-[18px] md:h-10 w-auto object-contain"
+          />
+          <span className="h-3 md:h-5 w-px bg-slate-200" />
+          <img
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            className="h-[14px] md:h-8 w-auto object-contain"
+          />
         </div>
       </header>
 
-      <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-[85vh] pt-24 pb-28 px-6 text-white">
+      <section className="gradient-hero relative overflow-hidden flex flex-col justify-center min-h-screen pt-32 pb-36 px-6 text-white">
+        {/* Full Section Background Image with high visibility and brightness filter */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+          <img
+            src="/hero-section.png"
+            alt="Hero Background Graphic"
+            className="w-full h-full object-cover object-center opacity-95 brightness-[0.58]"
+          />
+          {/* Subtle bottom fade to merge smoothly with the dark themed section separation */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0a1b]/60" />
+        </div>
+
         {/* Glow ambient spots */}
-        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.08)' }} />
-        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.08)' }} />
+        <div className="absolute top-[20%] left-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(124, 58, 237, 0.04)' }} />
+        <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] rounded-full blur-[120px] pointer-events-none" style={{ backgroundColor: 'rgba(237, 28, 36, 0.04)' }} />
 
         {/* Decorative Swooping Vector Lines */}
         <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
@@ -53,69 +72,25 @@ export default async function Home() {
           <path d="M1230,280 C1080,380 1130,530 1280,630" stroke="rgba(255,255,255,0.3)" strokeWidth="1.5" fill="none" />
         </svg>
 
-        {/* Circular Startup & Collaboration Images (Matching Mockup) */}
-        {/* Left Side Circles */}
-        <div className="hidden lg:block absolute left-[-40px] top-[22%] w-[180px] h-[180px] rounded-full border border-white/20 overflow-hidden shadow-2xl shadow-indigo-500/10 pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80"
-            alt="Startup Team"
-            className="w-full h-full object-cover animate-fade-in"
-          />
-        </div>
-        <div className="hidden lg:block absolute left-[8%] bottom-[12%] w-[110px] h-[110px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=300&q=80"
-            alt="Pitch Session"
-            className="w-full h-full object-cover animate-fade-in"
-          />
-        </div>
-
-        {/* Right Side Circles */}
-        <div className="hidden lg:block absolute right-[-30px] top-[14%] w-[130px] h-[130px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=300&q=80"
-            alt="Collaboration Space"
-            className="w-full h-full object-cover animate-fade-in"
-          />
-        </div>
-        <div className="hidden lg:block absolute right-[3%] bottom-[10%] w-[190px] h-[190px] rounded-full border border-white/20 overflow-hidden shadow-2xl pointer-events-none">
-          <img
-            src="https://images.unsplash.com/photo-1531538606174-0f90ff5dce83?auto=format&fit=crop&w=400&q=80"
-            alt="Executive Meeting"
-            className="w-full h-full object-cover animate-fade-in"
-          />
-        </div>
-
         <div className="relative z-20 mx-auto max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm text-white/80 backdrop-blur-md mb-6">
             <span className="h-1.5 w-1.5 rounded-full bg-[#ED1C24] animate-pulse" />
             Indigo by Telkom Indonesia
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl">
             Indigo Connect
           </h1>
-          <p className="mt-3 text-2xl font-bold text-[#ED1C24] sm:text-3xl tracking-wide drop-shadow-sm">
+          <p className="mt-4 text-4xl font-bold text-[#ED1C24] sm:text-5xl tracking-wide drop-shadow-sm">
             AI Synergy & Risk Engine
           </p>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 leading-relaxed">
             Executive Analytics Dashboard untuk evaluasi kesehatan bisnis startup,
             deteksi risiko otomatis, dan rekomendasi sinergi dengan unit bisnis Telkom Group.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            {session?.userId ? (
-              <>
-                <Link href="/dashboard" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
-                  Buka Dashboard
-                </Link>
-                <Link href="/reports" className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/5 hover:bg-white/10 text-white font-semibold text-sm px-8 py-3 transition-all hover:scale-[1.02]">
-                  AI Evaluation
-                </Link>
-              </>
-            ) : (
-              <Link href="/login" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
-                Masuk ke Platform
-              </Link>
-            )}
+          <div className="mt-10 flex items-center justify-center">
+            <Link href="/login" className="btn-primary-solid text-sm px-8 py-3 shadow-lg shadow-[#ED1C24]/20 hover:scale-[1.02] transition-transform">
+              Masuk ke Platform
+            </Link>
           </div>
         </div>
 
@@ -155,7 +130,7 @@ export default async function Home() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16">
             <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Features</span>
-            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">What is Indigo Connect?</h2>
+            <h2 className="text-3xl font-extrabold text-foreground mt-2">What is Indigo Connect?</h2>
             <p className="mt-3 text-slate-500 max-w-lg mx-auto">AI-powered platform untuk monitoring, deteksi risiko, dan sinergi portofolio startup</p>
           </div>
 
@@ -193,7 +168,7 @@ export default async function Home() {
               },
             ].map((item) => {
               return (
-                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 shadow-xl group hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col h-[350px]">
+                <div key={item.title} className="relative overflow-hidden rounded-2xl bg-[#131722] border border-white/5 hover:border-[#ED1C24] shadow-xl group hover:scale-[1.02] hover:shadow-2xl hover:shadow-[#ED1C24]/15 transition-all duration-300 flex flex-col h-[350px]">
                   {/* Top Image with Gradient Transition */}
                   <div className="relative h-[180px] w-full overflow-hidden">
                     <img 
@@ -222,7 +197,7 @@ export default async function Home() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-16">
             <span className="text-sm font-bold text-[#ED1C24] uppercase tracking-wider">Alur Kerja</span>
-            <h2 className="text-3xl font-extrabold text-[#161616] mt-2">Bagaimana Indigo Connect Bekerja?</h2>
+            <h2 className="text-3xl font-extrabold text-foreground mt-2">Bagaimana Indigo Connect Bekerja?</h2>
             <p className="mt-3 text-slate-500 max-w-lg mx-auto">Tiga langkah sederhana menuju sinergi startup dan korporasi yang digerakkan oleh AI.</p>
           </div>
 
@@ -235,29 +210,29 @@ export default async function Home() {
                 step: "01",
                 title: "Founder Submit Laporan",
                 desc: "Founder mengunggah laporan bulanan (PDF) secara berkala ke dalam platform.",
-                icon: <FileText className="h-6 w-6 text-[#ED1C24]" />
+                icon: <FileText className="h-6 w-6 text-white" />
               },
               {
                 step: "02",
                 title: "AI Menganalisis Risiko",
                 desc: "Engine AI mengekstraksi data, menilai kesehatan finansial, dan mendeteksi risiko dini.",
-                icon: <Activity className="h-6 w-6 text-[#ED1C24]" />
+                icon: <Activity className="h-6 w-6 text-white" />
               },
               {
                 step: "03",
                 title: "Rekomendasi Sinergi",
                 desc: "Eksekutif menerima Executive Summary dan rekomendasi unit bisnis Telkom yang pas.",
-                icon: <GitBranch className="h-6 w-6 text-[#ED1C24]" />
+                icon: <GitBranch className="h-6 w-6 text-white" />
               }
             ].map((s) => (
               <div key={s.step} className="relative z-10 flex flex-col items-center text-center group">
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white border-4 border-slate-50 shadow-xl shadow-slate-200/50 mb-6 group-hover:-translate-y-2 transition-transform duration-300">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ED1C24] shadow-md shadow-[#ED1C24]/20">
                     {s.icon}
                   </div>
                 </div>
-                <div className="text-[10px] font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
-                <h3 className="text-lg font-bold text-[#161616] mb-2">{s.title}</h3>
+                <div className="text-xs font-black text-slate-300 mb-2 uppercase tracking-widest">Langkah {s.step}</div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{s.title}</h3>
                 <p className="text-sm text-slate-500 leading-relaxed max-w-[250px]">{s.desc}</p>
               </div>
             ))}
@@ -293,14 +268,9 @@ export default async function Home() {
                 </Link>
               </>
             ) : (
-              <>
-                <Link href="/login" className="w-full sm:w-auto text-center border border-white hover:bg-white/10 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
-                  Buka Demo
-                </Link>
-                <Link href="/login" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
-                  Masuk ke Platform
-                </Link>
-              </>
+              <Link href="/login" className="w-full sm:w-auto text-center bg-[#ED1C24] hover:bg-[#ED1C24]/90 text-white font-bold text-xs tracking-wider uppercase px-6 py-3.5 transition-all duration-200">
+                Masuk ke Platform
+              </Link>
             )}
           </div>
         </div>

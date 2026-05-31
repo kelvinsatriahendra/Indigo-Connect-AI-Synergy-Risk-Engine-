@@ -18,11 +18,11 @@ export default function GlobalError({
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col items-center justify-center bg-slate-50 p-6 text-center">
+      <div className="flex h-full flex-col items-center justify-center bg-slate-50 p-6 text-center">
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100 shadow-sm ring-8 ring-red-50">
           <AlertCircle className="h-10 w-10 text-[#ED1C24]" />
         </div>
-        <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-[#161616]">
+        <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-foreground">
           Ups, terjadi kesalahan sistem!
         </h1>
         <p className="mb-8 max-w-md text-sm text-[#667085] leading-relaxed">

@@ -346,25 +346,45 @@ export default function ReportsPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-[#FAFAFD] relative">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         
-        <div className="border-b border-[#f1f1f5] bg-white/80 backdrop-blur-md px-8 py-4 shadow-sm relative z-10">
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <FileText className="h-6 w-6 text-[#ED1C24]" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <FileText className="h-5 w-5" />
+              </div>
               <div>
-                <h1 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">AI Evaluation Reports</h1>
-                <p className="mt-1 text-sm font-medium text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-[#0f172a] tracking-tight">AI Evaluation Reports</h1>
+                  {/* AI Analysis Live Badge */}
+                  <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">AI Live Evaluation</span>
+                  </div>
+                </div>
+                <p className="mt-0.5 text-sm text-[#64748b]">Analisis performa & risiko startup menggunakan AI</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dianalisis</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
+
               {user?.role === "founder" && (
                 <div className="flex items-center gap-3">
                   {availableStartups.length > 1 ? (
                     <select
-                      className="rounded-lg border border-[#e0e0e0] bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
+                      className="rounded-lg border border-border bg-white px-4 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] min-w-[200px]"
                       value={selectedStartup}
                       onChange={(e) => setSelectedStartup(e.target.value)}
                     >
@@ -405,7 +425,7 @@ export default function ReportsPage() {
               <div className="flex-1 min-w-0 space-y-6">
                 {user?.role === "founder" ? (
                   <div className="card-legion p-6 lg:p-8">
-                    <h2 className="text-lg font-bold text-[#161616]">Form Laporan Bulanan</h2>
+                    <h2 className="text-lg font-bold text-foreground">Form Laporan Bulanan</h2>
                     <p className="mt-1 text-sm text-[#667085]">Unggah dokumen PDF atau tulis narasi laporan untuk dievaluasi oleh AI</p>
 
                     <div className="mt-8 space-y-6">
@@ -465,7 +485,7 @@ export default function ReportsPage() {
                   <div className="card-legion p-6 lg:p-8 animate-fade-in">
                     <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
                       <div>
-                        <h2 className="text-lg font-bold text-[#161616]">Daftar Laporan Masuk</h2>
+                        <h2 className="text-lg font-bold text-foreground">Daftar Laporan Masuk</h2>
                         <p className="mt-1 text-sm text-[#667085]">Pilih laporan startup untuk melihat analisis AI mendalam di panel kanan</p>
                       </div>
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-[#FEF2F2] px-3.5 py-1.5 text-xs font-bold text-[#ED1C24] border border-red-100/50">
@@ -484,7 +504,11 @@ export default function ReportsPage() {
                               setSelectedReportId(report.id);
                               setResult(report.evaluation);
                             }}
-                            className={`group relative cursor-pointer overflow-hidden rounded-[24px] border border-slate-200 bg-white p-6 transition-all hover:border-[#ED1C24]/50 hover:shadow-xl ${isActive ? "ring-2 ring-[#ED1C24]" : ""}`}
+                            className={`group relative cursor-pointer overflow-hidden rounded-[24px] border p-6 transition-all hover:shadow-xl ${
+                              isActive 
+                                ? "bg-[#ED1C24] border-[#ED1C24] shadow-lg shadow-red-500/30 -translate-y-1" 
+                                : "bg-white border-slate-200 hover:border-[#ED1C24]/50 hover:-translate-y-0.5"
+                            }`}
                           >
                             <div className="flex items-center justify-between mb-4">
                               {(() => {
@@ -499,20 +523,24 @@ export default function ReportsPage() {
                                   </div>
                                 );
                               })()}
-                              <span className="text-[10px] font-bold text-[#64748b] bg-slate-100 px-2 py-1 rounded-lg">
+                              <span className={`text-xs font-bold px-2 py-1 rounded-lg ${isActive ? "bg-white/20 text-white" : "bg-slate-100 text-[#64748b]"}`}>
                                 {report.batch}
                               </span>
                             </div>
-                            <h3 className="text-lg font-extrabold text-[#0f172a] mb-1">{report.startupName}</h3>
-                            <p className="text-xs font-medium text-slate-500 mb-6">{report.sector}</p>
+                            <h3 className={`text-lg font-extrabold mb-1 ${isActive ? "text-white" : "text-[#0f172a]"}`}>{report.startupName}</h3>
+                            <p className={`text-xs font-medium mb-6 ${isActive ? "text-white/80" : "text-slate-500"}`}>{report.sector}</p>
                             
-                            <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
+                            <div className={`flex items-center gap-2 pt-4 border-t ${isActive ? "border-white/20" : "border-slate-100"}`}>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setShowOriginalReportId(report.id);
                                 }}
-                                className="flex-1 text-xs font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 py-2.5 rounded-xl transition-colors"
+                                className={`flex-1 text-xs font-bold py-2.5 rounded-xl transition-all shadow-sm ${
+                                  isActive 
+                                    ? "bg-[#06040f] text-white hover:bg-[#1e1136] border border-white/10" 
+                                    : "text-[#ED1C24] bg-red-50 border border-red-100 hover:bg-[#ED1C24] hover:text-white"
+                                }`}
                               >
                                 View Report
                               </button>
@@ -536,7 +564,7 @@ export default function ReportsPage() {
                 {user?.role === "founder" && loading && (
                   <div className="card-legion flex flex-col items-center justify-center py-16">
                     <div className="mb-5 h-12 w-12 animate-spin rounded-full border-[3px] border-[#ED1C24] border-t-transparent" />
-                    <p className="text-base font-bold text-[#161616]">AI sedang memproses laporan...</p>
+                    <p className="text-base font-bold text-foreground">AI sedang memproses laporan...</p>
                     <p className="mt-2 text-sm text-[#667085] text-center max-w-sm">Mengekstrak konteks finansial, menganalisis profil risiko, dan mencari potensi sinergi dengan Telkom Group.</p>
                   </div>
                 )}
@@ -549,17 +577,17 @@ export default function ReportsPage() {
                         <History className="h-5 w-5 text-[#ED1C24]" />
                       </div>
                       <div>
-                        <h3 className="text-base font-bold text-[#161616]">Riwayat Laporan</h3>
+                        <h3 className="text-base font-bold text-foreground">Riwayat Laporan</h3>
                         <p className="text-xs text-[#8c8f93] mt-0.5">Histori evaluasi bulanan AI</p>
                       </div>
                     </div>
 
                     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {reportHistory.map((hist, i) => (
-                        <div key={i} onClick={() => alert("Fitur riwayat historis masih dalam tahap pengembangan.")} className="group cursor-pointer rounded-xl border border-[#e0e0e0] bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
+                        <div key={i} onClick={() => alert("Fitur riwayat historis masih dalam tahap pengembangan.")} className="group cursor-pointer rounded-xl border border-border bg-white p-5 transition-all hover:border-[#ED1C24] hover:shadow-md flex flex-col justify-between">
                           <div className="flex items-center justify-between mb-3">
                             <div>
-                              <p className="text-sm font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
+                              <p className="text-sm font-extrabold text-foreground group-hover:text-[#ED1C24] transition-colors">{hist.month}</p>
                               <p className="text-xs font-medium text-[#8c8f93] mt-1">Dikirim: {hist.date}</p>
                             </div>
                             <div className="h-8 w-8 rounded-full bg-[#f8fafc] flex items-center justify-center group-hover:bg-[#fef2f2] transition-colors">
@@ -576,7 +604,7 @@ export default function ReportsPage() {
                       ))}
                     </div>
 
-                    <button onClick={() => alert("Halaman daftar riwayat lengkap akan segera hadir!")} className="mt-6 w-full rounded-xl border border-[#e0e0e0] py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-[#161616] transition-all active:scale-[0.98]">
+                    <button onClick={() => alert("Halaman daftar riwayat lengkap akan segera hadir!")} className="mt-6 w-full rounded-xl border border-border py-3 text-sm font-bold text-[#344054] hover:bg-[#f8fafc] hover:text-foreground transition-all active:scale-[0.98]">
                       Lihat Semua Riwayat
                     </button>
                   </div>
@@ -587,16 +615,15 @@ export default function ReportsPage() {
                 <div className="w-full shrink-0">
                   <div className="sticky top-6">
                     <div className="mb-4 flex items-center justify-between flex-wrap gap-2">
-                      <h3 className="text-base font-bold text-[#161616]">Hasil Evaluasi AI</h3>
+                      <h3 className="text-base font-bold text-foreground">Hasil Evaluasi AI</h3>
                       <button 
                         onClick={handleDownloadPdf}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-white transition-all transform hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(255,45,85,0.3)] active:translate-y-0"
-                        style={{ background: 'linear-gradient(135deg, #ff2d55 0%, #ff4d6d 100%)', boxShadow: '0 4px 14px rgba(255,45,85,0.2)' }}
+                        className="btn-primary-solid gap-2 px-4 py-2"
                       >
                         <Download className="h-4 w-4" /> Export Report PDF
                       </button>
                     </div>
-                    <div ref={reportRef} className="shadow-lg shadow-black/5 rounded-2xl">
+                    <div ref={reportRef} className="card-legion">
                       <HealthScoreCard
                         healthScore={result.healthScore}
                         riskLabel={result.riskLabel}

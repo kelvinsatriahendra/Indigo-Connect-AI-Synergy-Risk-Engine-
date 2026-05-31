@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { getLogoForName } from "@/lib/logos";
 import {
   GitBranch,
   Plus,
@@ -224,32 +225,58 @@ export default function SynergyPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Header */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <GitBranch className="h-6 w-6 text-[#ED1C24]" />
-                <h1 className="text-2xl font-bold text-[#161616]">Synergy Pipeline</h1>
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <GitBranch className="h-5 w-5" />
               </div>
-              <p className="mt-1 text-sm text-[#667085]">Interactive Kanban pipeline untuk kolaborasi Startup × Telkom Business Unit</p>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Synergy Pipeline</h1>
+                  {/* AI Matchmaker Live Badge */}
+                  <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">AI Matchmaker Active</span>
+                  </div>
+                </div>
+                <p className="mt-0.5 text-sm text-[#667085]">Interactive Kanban pipeline untuk kolaborasi Startup × Telkom Business Unit</p>
+              </div>
             </div>
-            <button onClick={() => setShowNewForm(true)} className="btn-primary-solid gap-2 px-5 py-2.5 shadow-md">
-              <Plus className="h-4 w-4" /> New Pipeline
-            </button>
+
+            <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
+              
+              <button onClick={() => setShowNewForm(true)} className="btn-primary-solid gap-2 px-5 py-2.5 shadow-md shadow-[#ED1C24]/10">
+                <Plus className="h-4 w-4" /> New Pipeline
+              </button>
+            </div>
           </div>
-          <div className="mt-4 flex gap-6 text-sm">
-            <span className="text-[#667085]">Total: <strong className="text-[#161616]">{totalCount}</strong></span>
-            <span className="text-[#667085]">Pipeline: <strong className="text-[#ED1C24]">{pipelineCount}</strong></span>
-            <span className="text-[#667085]">On Going: <strong className="text-[#f59e0b]">{ongoingCount}</strong></span>
-            <span className="text-[#667085]">Success: <strong className="text-[#10b981]">{successCount}</strong></span>
+          
+          <div className="mt-4 flex gap-6 text-sm border-t border-slate-50 pt-3">
+            <span className="text-[#667085] font-medium">Total: <strong className="text-foreground font-bold">{totalCount}</strong></span>
+            <span className="text-[#667085] font-medium">Pipeline: <strong className="text-[#ED1C24] font-bold">{pipelineCount}</strong></span>
+            <span className="text-[#667085] font-medium">On Going: <strong className="text-[#f59e0b] font-bold">{ongoingCount}</strong></span>
+            <span className="text-[#667085] font-medium">Success: <strong className="text-[#10b981] font-bold">{successCount}</strong></span>
           </div>
         </div>
 
-        {/* Kanban Board (List View) */}
-        <div className="flex-1 overflow-x-hidden overflow-y-auto p-8">
-          <div className="flex flex-col gap-8">
+        {/* Kanban Board (Board View) */}
+        <div className="flex-1 overflow-x-auto overflow-y-hidden p-8">
+          <div className="flex h-full gap-6 items-start">
             {loading ? (
               <div className="flex w-full h-full items-center justify-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#ED1C24] border-t-transparent shadow-lg" />
@@ -258,10 +285,10 @@ export default function SynergyPage() {
               grouped.map((col) => (
                 <div 
                   key={col.status} 
-                  className={`flex w-full flex-col rounded-xl transition-all duration-300 p-4 ${
+                  className={`flex h-full flex-1 min-w-[280px] max-w-[400px] flex-col rounded-xl transition-all duration-300 p-3 ${
                     draggedOverCol === col.status 
                       ? 'bg-slate-200/60 ring-2 ring-slate-400/30 ring-inset shadow-inner' 
-                      : 'bg-transparent'
+                      : 'bg-slate-100/50 border border-slate-200/60'
                   }`}
                   onDragOver={(e) => { 
                     e.preventDefault(); 
@@ -282,14 +309,14 @@ export default function SynergyPage() {
                 >
                   {/* Column Header */}
                   <div className={`mb-4 flex items-center justify-between rounded-xl border-t-4 bg-white px-5 py-3.5 shadow-sm ${col.color}`}>
-                    <h3 className="text-[15px] font-bold text-[#161616] uppercase tracking-wide">{col.label}</h3>
+                    <h3 className="text-[15px] font-bold text-foreground uppercase tracking-wide">{col.label}</h3>
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-600 shadow-inner">
                       {col.items.length}
                     </span>
                   </div>
 
                   {/* Cards Container */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                  <div className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden pr-1 pb-4">
                     {col.items.length === 0 ? (
                       <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center bg-white/40 backdrop-blur-sm">
                          <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 mb-2">
@@ -322,7 +349,7 @@ export default function SynergyPage() {
                                     {item.status.replace("_", " ")}
                                   </span>
                                 </div>
-                                <span className={`inline-flex items-center gap-1 ml-2 shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold shadow-2xs ${scoreInfo.bg}`}>
+                                <span className={`inline-flex items-center gap-1 ml-2 shrink-0 rounded-full border px-2 py-0.5 text-xs font-bold shadow-2xs ${scoreInfo.bg}`}>
                                   <ScoreIcon className="h-3 w-3 shrink-0 animate-pulse" />
                                   {Math.round(item.matchScore * 100)}%
                                 </span>
@@ -333,16 +360,16 @@ export default function SynergyPage() {
                                 {/* Startup */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    {startup && (startup as any).logo ? (
+                                    {startup && getLogoForName(startup.name) ? (
                                       <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                        <img src={(startup as any).logo} alt={startup.name} className="h-full w-full object-contain p-0.5" />
+                                        <img src={getLogoForName(startup.name)} alt={startup.name} className="h-full w-full object-contain p-0.5" />
                                       </div>
                                     ) : (
                                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-blue-50 text-blue-600 text-[11px] font-extrabold border border-blue-100 shadow-2xs">
                                         {startup?.name.charAt(0) || "S"}
                                       </span>
                                     )}
-                                    <span className="text-[13px] font-bold text-[#161616] truncate">
+                                    <span className="text-[13px] font-bold text-foreground truncate">
                                       {startup?.name || getStartupName(item.startupId)}
                                     </span>
                                   </div>
@@ -358,9 +385,9 @@ export default function SynergyPage() {
                                 {/* Telkom BU */}
                                 <div className="flex items-center justify-between gap-2">
                                   <div className="flex items-center gap-2 min-w-0">
-                                    {bu && (bu as any).logo ? (
+                                    {bu && getLogoForName(bu.name) ? (
                                       <div className="h-6 w-6 shrink-0 items-center justify-center rounded-md bg-white border border-slate-200 overflow-hidden shadow-2xs">
-                                        <img src={(bu as any).logo} alt={bu.name} className="h-full w-full object-contain p-0.5" />
+                                        <img src={getLogoForName(bu.name)} alt={bu.name} className="h-full w-full object-contain p-0.5" />
                                       </div>
                                     ) : (
                                       <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-red-50 text-[#ED1C24] text-[11px] font-extrabold border border-[#ED1C24]/10 shadow-2xs">
@@ -382,7 +409,7 @@ export default function SynergyPage() {
                               {item.notes && (
                                 <div className="mt-3 rounded-lg border-l-2 border-indigo-500 bg-indigo-50/50 p-2 shadow-xs border border-indigo-100/50 flex items-start gap-2">
                                   <MessageSquare className="h-3 w-3 text-indigo-500 shrink-0 mt-0.5" />
-                                  <p className="text-[10px] text-slate-600 italic leading-relaxed line-clamp-1 flex-1">
+                                  <p className="text-xs text-slate-600 italic leading-relaxed line-clamp-1 flex-1">
                                     {item.notes}
                                   </p>
                                 </div>
@@ -400,7 +427,7 @@ export default function SynergyPage() {
                                 
                                 <span className="flex items-center gap-1.5 text-[#8c8f93] font-medium bg-slate-50 px-2 py-1 rounded-md border border-slate-100">
                                   <Calendar className="h-3 w-3 text-slate-400" />
-                                  <span className="text-[10px]">{new Date(item.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })}</span>
+                                  <span className="text-xs">{new Date(item.createdAt).toLocaleDateString("id-ID", { day: "2-digit", month: "short" })}</span>
                                 </span>
                               </div>
                             </div>
@@ -425,7 +452,7 @@ export default function SynergyPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Activity className="h-5 w-5 text-indigo-600" />
-                  <h2 className="text-lg font-bold text-[#161616]">CRM & Activity Log</h2>
+                  <h2 className="text-lg font-bold text-foreground">CRM & Activity Log</h2>
                 </div>
                 <p className="text-xs text-slate-500">Manage pipeline progression notes and tasks.</p>
               </div>
@@ -446,8 +473,8 @@ export default function SynergyPage() {
                       {getStartupName(activeCRMItem.startupId).charAt(0)}
                     </div>
                     <div>
-                      <p className="font-bold text-[#161616]">{getStartupName(activeCRMItem.startupId)}</p>
-                      <p className="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
+                      <p className="font-bold text-foreground">{getStartupName(activeCRMItem.startupId)}</p>
+                      <p className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Startup Partner</p>
                     </div>
                   </div>
                 </div>
@@ -464,8 +491,8 @@ export default function SynergyPage() {
                       </div>
                     )}
                     <div>
-                      <p className="font-bold text-[#161616]">{getBuName(activeCRMItem.telkomBuId)}</p>
-                      <p className="text-[10px] text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
+                      <p className="font-bold text-foreground">{getBuName(activeCRMItem.telkomBuId)}</p>
+                      <p className="text-xs text-[#ED1C24] bg-red-50 border border-red-100 px-2 py-0.5 rounded-full inline-block mt-0.5">Telkom Business Unit</p>
                     </div>
                   </div>
                 </div>
@@ -477,7 +504,7 @@ export default function SynergyPage() {
                   <MessageSquare className="h-3.5 w-3.5" /> Pipeline Progress Notes
                 </h3>
                 <div className="rounded-xl border border-indigo-100 bg-white overflow-hidden shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
-                  <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 text-[10px] font-semibold text-slate-500">
+                  <div className="bg-slate-50 px-4 py-2 border-b border-slate-100 text-xs font-semibold text-slate-500">
                     Catat riwayat diskusi, kendala, atau next step di sini.
                   </div>
                   <textarea
@@ -512,11 +539,11 @@ export default function SynergyPage() {
                   <Target className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-[#161616]">Create Pipeline</h2>
+                  <h2 className="text-lg font-bold text-foreground">Create Pipeline</h2>
                   <p className="text-[11px] text-slate-500">Tambahkan inisiasi sinergi baru ke Kanban</p>
                 </div>
               </div>
-              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-[#161616] p-2 hover:bg-slate-200 rounded-full transition-colors">
+              <button onClick={() => setShowNewForm(false)} className="text-[#8c8f93] hover:text-foreground p-2 hover:bg-slate-200 rounded-full transition-colors">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -534,7 +561,7 @@ export default function SynergyPage() {
                     type="button" 
                     onClick={handleAIMatchmaking}
                     disabled={isSimulatingAI}
-                    className="flex items-center gap-1.5 bg-[#ED1C24] text-white px-3 py-1.5 rounded-full text-[10px] font-bold hover:bg-red-700 transition-colors disabled:opacity-50 shadow-md shadow-red-600/20"
+                    className="flex items-center gap-1.5 bg-[#ED1C24] text-white px-3 py-1.5 rounded-full text-xs font-bold hover:bg-red-700 transition-colors disabled:opacity-50 shadow-md shadow-red-600/20"
                   >
                     {isSimulatingAI ? (
                       <><div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" /> Analyzing...</>
@@ -547,7 +574,7 @@ export default function SynergyPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Startup Partner</label>
-                <select name="startupId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                <select name="startupId" required className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
                   <option value="">-- Pilih Startup --</option>
                   {startupsData.map((s) => (
                     <option key={s.id} value={s.id}>{s.name} — {s.sector}</option>
@@ -557,7 +584,7 @@ export default function SynergyPage() {
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Telkom Business Unit</label>
-                <select name="telkomBuId" required className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
+                <select name="telkomBuId" required className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm">
                   <option value="">-- Pilih Divisi Telkom --</option>
                   {telkomBusData.map((bu) => (
                     <option key={bu.id} value={bu.id}>{bu.name} — {bu.sector}</option>
@@ -568,17 +595,17 @@ export default function SynergyPage() {
               <div>
                 <div className="flex justify-between mb-1.5">
                   <label className="block text-xs font-bold text-[#344054] uppercase tracking-wide">Synergy Match Score (0-100)</label>
-                  <span className="text-[10px] font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
+                  <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 rounded-full border border-emerald-100">AI Estimated</span>
                 </div>
                 <input type="number" name="matchScore" min="0" max="100" defaultValue={75}
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#161616] font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"
+                  className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-foreground font-bold focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all shadow-sm"
                 />
               </div>
 
               <div>
                 <label className="mb-1.5 block text-xs font-bold text-[#344054] uppercase tracking-wide">Alasan Strategis</label>
                 <textarea name="reason" rows={3} placeholder="Deskripsi alasan mengapa kolaborasi ini menguntungkan..."
-                  className="w-full rounded-lg border border-[#e0e0e0] bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all resize-none shadow-sm"
+                  className="w-full rounded-lg border border-border bg-slate-50 px-4 py-3 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] focus:bg-white transition-all resize-none shadow-sm"
                 />
               </div>
 

@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { AppShell } from "@/components/layout/app-shell";
-import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X } from "lucide-react";
+import { Search, Filter, Building2, TrendingUp, AlertTriangle, Layers, Sparkles, RefreshCw, GitBranch, FileText, Gift, Cloud, TerminalSquare, Download, CheckCircle2, Activity, X, LayoutDashboard, Info, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, ZAxis, AreaChart, Area, ReferenceArea } from "recharts";
 import { exportToPdf } from "@/lib/pdf-export";
+import { getLogoForName } from "@/lib/logos";
 
 type Startup = {
   id: string;
@@ -21,7 +22,7 @@ const sectorColors: Record<string, string> = {
   Logistik: "bg-blue-700",
   Agritech: "bg-emerald-700",
   Fintech: "bg-amber-700",
-  Edtech: "bg-indigo-700",
+  Edtech: "bg-violet-600",
   Healthtech: "bg-[#ED1C24]",
   Energy: "bg-orange-700",
   Travel: "bg-rose-700",
@@ -43,7 +44,7 @@ const sectorColorMap: Record<string, string> = {
   Logistik: "#1d4ed8",
   Agritech: "#047857",
   Fintech: "#b45309",
-  Edtech: "#4338ca",
+  Edtech: "#7C3AED",
   Healthtech: "#ED1C24",
   Energy: "#c2410c",
   Travel: "#be123c",
@@ -53,6 +54,21 @@ const sectorColorMap: Record<string, string> = {
 const sparklineHighGrowth = [ { val: 2 }, { val: 4 }, { val: 3 }, { val: 6 }, { val: 5 }, { val: 8 }, { val: 7 } ];
 const sparklineAtRisk = [ { val: 5 }, { val: 4 }, { val: 6 }, { val: 5 }, { val: 7 }, { val: 6 }, { val: 8 } ];
 const sparklineBatch = [ { val: 2 }, { val: 2 }, { val: 3 }, { val: 2 }, { val: 4 }, { val: 3 }, { val: 4 } ];
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MatrixTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 rounded-xl border border-[#f2f4f7] shadow-lg">
+        <p className="font-bold text-sm text-slate-800 mb-1">{data.name}</p>
+        <p className="text-xs text-slate-600">Sinergi: <span className="font-bold text-emerald-600">{data.synergy}%</span></p>
+        <p className="text-xs text-slate-600">Risiko AI: <span className="font-bold text-rose-600">{data.risk}%</span></p>
+      </div>
+    );
+  }
+  return null;
+};
 
 export default function DashboardPage() {
   const [mounted, setMounted] = useState(false);
@@ -64,7 +80,11 @@ export default function DashboardPage() {
   const [aiSearchLoading, setAiSearchLoading] = useState(false);
   const [aiSearchActive, setAiSearchActive] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [analysisModal, setAnalysisModal] = useState<any | null>(null);
+  const [isHealthModalOpen, setIsHealthModalOpen] = useState(false);
+  const [isSectorModalOpen, setIsSectorModalOpen] = useState(false);
+  const [isMatrixFullscreen, setIsMatrixFullscreen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -153,7 +173,7 @@ export default function DashboardPage() {
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && aiSearch) {
+    if (e.key === "Enter" && search.trim() !== "") {
       handleAiSearch();
     }
   };
@@ -201,15 +221,34 @@ export default function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-background print:h-auto print:overflow-visible" ref={dashboardRef}>
+      <div className="flex h-full flex-col overflow-hidden bg-background print:h-auto print:overflow-visible" ref={dashboardRef}>
         {/* Fixed Header Bar */}
         <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10 print:hidden">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-[#161616]">{config.title}</h1>
-              <p className="mt-1 text-sm text-[#667085]">{config.subtitle}</p>
-            </div>
             <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <LayoutDashboard className="h-5 w-5" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">{config.title}</h1>
+                <p className="mt-0.5 text-sm text-[#667085]">{config.subtitle}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* AI Analysis Live Badge */}
+              <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-bold text-emerald-700">AI Analysis Live</span>
+                <Activity className="h-3.5 w-3.5 text-emerald-600" />
+              </div>
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir diperbarui</p>
+                <p className="text-xs font-bold text-[#344054]">{new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB</p>
+              </div>
               {user?.role === "admin" && (
                 <button 
                   onClick={handleExportReport}
@@ -227,7 +266,7 @@ export default function DashboardPage() {
               )}
               {user?.role === "founder" && (
                 <>
-                  <a href="/forecast" className="btn-primary-outline border-[#e0e0e0] text-[#344054] px-4 py-2 text-sm bg-white hover:bg-slate-50 flex items-center gap-2">
+                  <a href="/forecast" className="btn-primary-outline border-border text-[#344054] px-4 py-2 text-sm bg-white hover:bg-slate-50 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" /> Lihat Forecast
                   </a>
                   <a href="/reports" className="btn-primary-solid px-4 py-2 text-sm flex items-center gap-2 shadow-sm">
@@ -243,46 +282,50 @@ export default function DashboardPage() {
         <div className="flex-1 overflow-x-hidden overflow-y-auto p-8 print:p-0 print:overflow-visible">
 
         {user?.role !== "founder" && (
+          <>
+
+            
           <div className="mb-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Card 1: Total Startup (Main Highlight) */}
-            <div 
-              className="rounded-[20px] p-6 relative overflow-hidden shadow-lg hover:scale-[1.02] hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-[#ED1C24]/20"
-              style={{ background: 'linear-gradient(135deg, #ff0a16 0%, #b30000 100%)' }}
-            >
-              <div className="absolute right-[-20px] bottom-[-20px] w-40 h-40 opacity-90 pointer-events-none">
-                <img src="/images/red-cubes.png" alt="3D Cubes" className="w-full h-full object-contain" />
-              </div>
+            <div className="p-6 flex flex-col justify-between group overflow-hidden relative border-none hover:shadow-xl hover:-translate-y-1 transition-all duration-300 rounded-[20px]" style={{ background: 'linear-gradient(to bottom right, #ED1C24, #B91217)' }}>
               <div className="relative z-10">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-white/90 mb-1">Total Startup</p>
-                    <p className="text-[40px] leading-none font-extrabold text-white tracking-wide">{totalStartups}</p>
-                    <p className="text-xs font-medium text-white/80 mt-1">Portfolio Active</p>
-                  </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#ED1C24] shadow-sm">
-                    <Building2 className="h-5 w-5" />
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-bold text-white/90">Total Startup</p>
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-white backdrop-blur-sm group-hover:scale-110 transition-transform">
+                    <Building2 className="h-4.5 w-4.5" />
                   </div>
                 </div>
+                <div className="flex items-baseline gap-2 mt-2">
+                  <p className="text-5xl font-extrabold text-white tracking-tight leading-none">{totalStartups}</p>
+                  <p className="text-sm font-semibold text-white/70">startup</p>
+                </div>
+                <div className="mt-4 flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 w-fit">
+                  <ArrowUpRight className="h-3 w-3 text-white" />
+                  <span className="text-xs font-bold text-white">↑ 20% vs last month</span>
+                </div>
               </div>
+              <div className="absolute right-[-10%] top-[-20%] h-32 w-32 rounded-full bg-white/10 blur-2xl transition-transform group-hover:scale-150 duration-700 ease-in-out"></div>
+              <div className="absolute right-[-5%] bottom-[-15%] h-24 w-24 rounded-full bg-white/5 blur-xl"></div>
             </div>
 
             {/* Card 2: High Growth */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
-                      <TrendingUp className="h-3.5 w-3.5" />
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">High Growth</p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-bold text-foreground">High Growth</p>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 group-hover:scale-110 transition-transform">
+                    <TrendingUp className="h-5 w-5" />
                   </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{highGrowth}</p>
+                <div className="mt-2">
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">{highGrowth}</p>
                 </div>
-                <p className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari total</p>
+                <div className="mt-4 flex items-center gap-1.5 bg-emerald-50 rounded-full px-3 py-1 w-fit border border-emerald-100">
+                  <TrendingUp className="h-3 w-3 text-emerald-600" />
+                  <span className="text-xs font-bold text-emerald-600">{totalStartups > 0 ? Math.round((highGrowth / totalStartups) * 100) : 0}% dari portofolio</span>
+                </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
@@ -295,168 +338,195 @@ export default function DashboardPage() {
 
             {/* Card 3: At Risk */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600">
-                      <AlertTriangle className="h-3.5 w-3.5" />
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">At Risk</p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-bold text-foreground">At Risk</p>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-500 group-hover:scale-110 transition-transform">
+                    <AlertTriangle className="h-5 w-5" />
                   </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">{atRisk}</p>
+                <div className="mt-2">
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">{atRisk}</p>
                 </div>
-                <p className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded inline-block mt-2">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari total</p>
+                <div className="mt-4 flex items-center gap-1.5 bg-orange-50 rounded-full px-3 py-1 w-fit border border-orange-100">
+                  <AlertTriangle className="h-3 w-3 text-orange-600" />
+                  <span className="text-xs font-bold text-orange-600">{totalStartups > 0 ? Math.round((atRisk / totalStartups) * 100) : 0}% dari portofolio</span>
+                </div>
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={sparklineAtRisk}>
-                    <Area type="monotone" dataKey="val" stroke="#ef4444" strokeWidth={2} fill="#ef4444" fillOpacity={0.2} />
+                    <Area type="monotone" dataKey="val" stroke="#f97316" strokeWidth={2} fill="#f97316" fillOpacity={0.2} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            {/* Card 4: Sektor / Batch */}
+            {/* Card 4: Batch Aktif */}
             <div 
-              className="rounded-[20px] bg-white p-6 pb-4 relative overflow-hidden shadow-soft border border-[#f2f4f7] hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between"
+              className="rounded-[20px] p-6 pb-4 relative overflow-hidden shadow-soft border border-pink-100 hover:scale-[1.02] transition-all duration-300 flex flex-col justify-between group"
+              style={{ background: 'linear-gradient(135deg, #fff5f5 0%, #ffe4e6 50%, #fce7f3 100%)' }}
             >
               <div className="relative z-10 flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                      {user?.role === "synergy" ? <GitBranch className="h-3.5 w-3.5" /> : <Layers className="h-3.5 w-3.5" />}
-                    </div>
-                    <p className="text-sm font-bold text-[#161616]">
-                      {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
-                    </p>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-bold text-foreground">
+                    {user?.role === "synergy" ? "Sektor Dikelola" : "Batch Aktif"}
+                  </p>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/60 text-emerald-500 group-hover:scale-110 transition-transform">
+                    {user?.role === "synergy" ? <GitBranch className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}
                   </div>
                 </div>
-                <div className="flex items-end justify-between">
-                  <p className="text-[32px] leading-none font-extrabold text-[#161616] tracking-wide">
+                <div className="mt-2">
+                  <p className="text-4xl font-extrabold text-foreground tracking-tight leading-none">
                     {user?.role === "synergy"
                       ? synergySectorMap["demo-synergy-id"]?.length || 0
                       : uniqueBatches.length}
                   </p>
                 </div>
-                <p className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded inline-block mt-2">Active batch</p>
+                <div className="mt-4 flex items-center gap-1.5 bg-white/60 backdrop-blur-sm rounded-full px-3 py-1 w-fit border border-pink-200">
+                  <Activity className="h-3 w-3 text-[#ec4899]" />
+                  <span className="text-xs font-bold text-[#ec4899]">Menjalankan evaluasi AI</span>
+                </div>
               </div>
-              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-40">
+              <div className="absolute bottom-0 left-0 right-0 h-[60px] opacity-30">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={sparklineBatch}>
-                    <Area type="monotone" dataKey="val" stroke="#3b82f6" strokeWidth={2} fill="#3b82f6" fillOpacity={0.2} />
+                    <Area type="monotone" dataKey="val" stroke="#ec4899" strokeWidth={2} fill="#ec4899" fillOpacity={0.2} />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </div>
           </div>
+          </>
         )}
 
         {/* Charts section - only for admin and synergy */}
         {user?.role !== "founder" && mounted && (
           <div className="mb-8 grid gap-6 lg:grid-cols-2">
-            {/* Health Score Distribution - Sleek Progress Cards */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+            {/* Health Score Distribution */}
+            <div className="card-legion p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-red-50 to-orange-50 border border-red-100 flex items-center justify-center text-[#ED1C24] shadow-sm">
-                    <Activity className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Health Score Distribution</h3>
-                    <p className="text-xs font-medium text-[#8c8f93]">Perbandingan status performa portofolio</p>
-                  </div>
+                  <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">Health Score Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
-                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                  View detail <span className="text-[10px]">›</span>
+                <button onClick={() => setIsHealthModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                  View detail <span className="text-xs">›</span>
                 </button>
               </div>
-              <div className="mt-8 space-y-7 relative z-10">
-                {healthDistribution.map((item) => (
-                  <div key={item.label}>
-                    <div className="mb-2.5 flex items-center justify-between text-sm">
-                      <span className="font-bold text-[#344054] flex items-center gap-2">
-                        <span className={`h-2 w-2 rounded-full ${item.color}`} />
-                        {item.label}
-                      </span>
-                      <span className="font-extrabold text-[#161616] bg-slate-50 px-2.5 py-0.5 rounded-md border border-slate-100">{item.count} <span className="text-xs text-[#8c8f93] font-medium ml-1">({totalStartups > 0 ? Math.round((item.count / totalStartups) * 100) : 0}%)</span></span>
-                    </div>
-                    <div className="h-3.5 rounded-full bg-[#f8fafc] overflow-hidden shadow-inner border border-slate-100/50">
-                      <div
-                        className={`h-full rounded-full ${item.color} transition-all duration-1000 ease-out relative overflow-hidden`}
-                        style={{ width: `${totalStartups > 0 ? (item.count / totalStartups) * 100 : 0}%` }}
-                      >
-                        <div className="absolute inset-0 bg-white/20 w-full h-full transform -skew-x-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+              <p className="text-xs font-medium text-[#8c8f93] relative z-10 mb-2">Perbandingan status performa portofolio startup</p>
+              <div className="mt-4 space-y-6 relative z-10">
+                {/* High Growth */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                        <TrendingUp className="h-4 w-4" />
                       </div>
-                    </div>
+                      High Growth
+                    </span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[0].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[0].count / totalStartups) * 100) : 0}%)</span></span>
                   </div>
-                ))}
+                  <div className="h-3 rounded-full bg-[#f0fdf4] overflow-hidden">
+                    <div className="h-full rounded-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[0].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
+                {/* Stable */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                        <CheckCircle2 className="h-4 w-4" />
+                      </div>
+                      Stable
+                    </span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[1].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[1].count / totalStartups) * 100) : 0}%)</span></span>
+                  </div>
+                  <div className="h-3 rounded-full bg-[#eff6ff] overflow-hidden">
+                    <div className="h-full rounded-full bg-blue-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[1].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
+                {/* At Risk */}
+                <div>
+                  <div className="mb-2.5 flex items-center justify-between text-sm">
+                    <span className="font-bold text-[#344054] flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                        <AlertTriangle className="h-4 w-4" />
+                      </div>
+                      At Risk
+                    </span>
+                    <span className="font-extrabold text-foreground text-lg">{healthDistribution[2].count} <span className="text-xs text-[#8c8f93] font-medium">({totalStartups > 0 ? Math.round((healthDistribution[2].count / totalStartups) * 100) : 0}%)</span></span>
+                  </div>
+                  <div className="h-3 rounded-full bg-[#fef2f2] overflow-hidden">
+                    <div className="h-full rounded-full bg-red-500 transition-all duration-1000 ease-out" style={{ width: `${totalStartups > 0 ? (healthDistribution[2].count / totalStartups) * 100 : 0}%` }} />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Sektor Distribution - Recharts Premium Donut Chart */}
-            <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+            {/* Sektor Distribution - Donut with Center Label & Right Legend */}
+            <div className="card-legion p-6 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] z-0 opacity-50 transition-all group-hover:scale-110" />
               <div className="flex items-center justify-between gap-3 mb-1 relative z-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-sm">
-                    <Layers className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Sector Distribution</h3>
-                    <p className="text-xs font-medium text-[#8c8f93]">Proporsi startup berdasarkan sektor industri</p>
-                  </div>
+                  <h3 className="text-base font-extrabold text-foreground tracking-wide flex items-center gap-2">Sector Distribution <Info className="h-4 w-4 text-[#c0c3c8] cursor-help" /></h3>
                 </div>
-                <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
-                  View detail <span className="text-[10px]">›</span>
+                <button onClick={() => setIsSectorModalOpen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1">
+                  View detail <span className="text-xs">›</span>
                 </button>
               </div>
-              <div className="mt-4 h-[240px] w-full flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <defs>
-                      <filter id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="0" dy="4" stdDeviation="5" floodOpacity="0.15" />
-                      </filter>
-                    </defs>
-                    <Pie
-                      data={sectorData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={55}
-                      outerRadius={85}
-                      paddingAngle={5}
-                      dataKey="value"
-                      stroke="none"
-                      style={{ filter: "url(#pie-shadow)" }}
-                    >
-                      {sectorData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ background: '#ffffff', border: '1px solid #f2f4f7', borderRadius: '12px', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', color: '#161616', fontSize: '12px', fontWeight: 'bold' }}
-                      itemStyle={{ color: '#161616' }}
-                    />
-                    <Legend 
-                      verticalAlign="bottom" 
-                      height={36} 
-                      iconType="circle"
-                      iconSize={8}
-                      formatter={(value) => <span className="text-xs font-semibold text-[#525252]">{value}</span>}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+              <p className="text-xs font-medium text-[#8c8f93] relative z-10">Proporsi startup berdasarkan sektor industri</p>
+              <div className="mt-4 flex items-center gap-4 relative z-10">
+                {/* Donut Chart with Center Label */}
+                <div className="relative w-[200px] h-[200px] shrink-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={sectorData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={55}
+                        outerRadius={82}
+                        paddingAngle={3}
+                        dataKey="value"
+                        stroke="#fff"
+                        strokeWidth={2}
+                      >
+                        {sectorData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={sectorColorMap[entry.name] || "#64748b"} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ background: '#ffffff', border: '1px solid #f2f4f7', borderRadius: '12px', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)', color: '#161616', fontSize: '12px', fontWeight: 'bold' }}
+                        itemStyle={{ color: '#161616' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* Center Label */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-3xl font-extrabold text-foreground">{totalStartups}</span>
+                    <span className="text-xs font-semibold text-[#8c8f93] leading-tight text-center">Startup<br/>Portfolio</span>
+                  </div>
+                </div>
+                {/* Right-side Legend with Percentages */}
+                <div className="flex-1 space-y-2 min-w-0">
+                  {sectorData.map((entry) => (
+                    <div key={entry.name} className="flex items-center justify-between text-xs gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="h-2.5 w-2.5 rounded-full shrink-0" style={{ backgroundColor: sectorColorMap[entry.name] || '#64748b' }} />
+                        <span className="font-semibold text-[#344054] truncate">{entry.name}</span>
+                      </div>
+                      <span className="font-bold text-foreground shrink-0 tabular-nums">{totalStartups > 0 ? Math.round((entry.value / totalStartups) * 100) : 0}% <span className="text-[#8c8f93] font-medium">({entry.value})</span></span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Risk Matrix & Synergy Potential Heatmap (Admin Only) */}
-            {user?.role === "admin" && (
-              <div className="lg:col-span-2 rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+            {/* Risk Matrix & Synergy Potential Heatmap (Admin & Synergy) */}
+              <div className="lg:col-span-2 card-legion p-6 flex flex-col justify-between mt-2 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-bl-[200px] z-0 opacity-50 transition-all group-hover:scale-110" />
                 <div className="flex items-center justify-between gap-3 mb-4 relative z-10">
                   <div className="flex items-center gap-3">
@@ -464,18 +534,18 @@ export default function DashboardPage() {
                       <TrendingUp className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Executive Risk Matrix</h3>
+                      <h3 className="text-base font-extrabold text-foreground tracking-wide">Executive Risk Matrix</h3>
                       <p className="text-xs font-medium text-[#8c8f93]">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 flex-wrap">
-                    <div className="flex items-center gap-3 text-[10px] font-bold">
+                    <div className="flex items-center gap-3 text-xs font-bold">
                       <span className="flex items-center gap-1.5 text-[#10b981]"><span className="h-2 w-2 rounded-full bg-[#10b981]" /> Low Risk</span>
                       <span className="flex items-center gap-1.5 text-[#f59e0b]"><span className="h-2 w-2 rounded-full bg-[#f59e0b]" /> Medium Risk</span>
                       <span className="flex items-center gap-1.5 text-[#ef4444]"><span className="h-2 w-2 rounded-full bg-[#ef4444]" /> High Risk</span>
                       <span className="flex items-center gap-1.5 text-[#3b82f6]"><span className="h-2 w-2 rounded-full bg-[#3b82f6]" /> Monitor</span>
                     </div>
-                    <button className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors">
+                    <button onClick={() => setIsMatrixFullscreen(true)} className="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded flex items-center gap-1.5 transition-colors">
                       [ ] Full Screen
                     </button>
                   </div>
@@ -506,7 +576,7 @@ export default function DashboardPage() {
                       <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
                       <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 10, fontWeight: "bold" }} />
 
-                      <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ borderRadius: '12px', border: '1px solid #f2f4f7', boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08)' }} />
+                      <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<MatrixTooltip />} />
                       <Scatter name="Startups" data={[
                         { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
                         { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
@@ -529,36 +599,7 @@ export default function DashboardPage() {
                     </ScatterChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="mt-6 flex flex-col md:flex-row items-center gap-3 bg-[#f8fafc] p-3 rounded-xl border border-slate-200/60 relative z-10">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm border border-slate-100 text-slate-400">
-                    <Filter className="h-4 w-4" />
-                  </div>
-                  <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
-                      <option>Semua Sektor</option>
-                      {uniqueSectors.map(s => <option key={s}>{s}</option>)}
-                    </select>
-                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
-                      <option>Semua Batch</option>
-                      {uniqueBatches.map(b => <option key={b}>{b}</option>)}
-                    </select>
-                    <select className="h-10 px-3 rounded-lg border border-slate-200 bg-white text-xs font-bold text-[#344054] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-full appearance-none">
-                      <option>Semua Status</option>
-                      <option>High Growth</option>
-                      <option>Stable</option>
-                      <option>At Risk</option>
-                    </select>
-                  </div>
-                  <div className="flex-1 w-full flex items-center gap-2 h-10 px-3 rounded-lg border border-slate-200 bg-white shadow-inner focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
-                    <Search className="h-4 w-4 text-slate-400" />
-                    <input type="text" placeholder="Cari startup..." className="flex-1 bg-transparent text-xs font-medium outline-none" />
-                  </div>
-                  <button className="h-10 px-5 rounded-lg bg-indigo-50 text-indigo-700 font-bold text-xs hover:bg-indigo-100 transition-colors flex items-center gap-1.5 shrink-0 whitespace-nowrap shadow-sm">
-                    <Sparkles className="h-3.5 w-3.5" /> AI Search
-                  </button>
-                </div>
               </div>
-            )}
           </div>
         )}
 
@@ -581,14 +622,14 @@ export default function DashboardPage() {
                     
                     {/* Company Info */}
                     <div className="flex-1 min-w-0 flex items-start gap-5">
-                      {startup.logoUrl && (
+                      {startup && getLogoForName(startup.name) && (
                         <div className="h-16 w-16 shrink-0 rounded-xl bg-white border border-slate-200 overflow-hidden shadow-sm p-1">
-                          <img src={startup.logoUrl} alt={startup.name} className="h-full w-full object-contain" />
+                          <img src={getLogoForName(startup.name) || "/startups/indigo-red.png"} alt={startup.name} className="h-full w-full object-contain" />
                         </div>
                       )}
                       <div>
                         <div className="flex items-center gap-3">
-                          <h2 className="text-2xl font-extrabold text-[#161616] tracking-tight">{startup.name}</h2>
+                          <h2 className="text-2xl font-extrabold text-foreground tracking-tight">{startup.name}</h2>
                           <span className={isHigh ? "badge-high-growth shadow-sm" : "badge-at-risk shadow-sm"}>
                             {isHigh ? "High Growth" : "At Risk"}
                           </span>
@@ -606,7 +647,7 @@ export default function DashboardPage() {
                     <div className="w-full lg:w-[320px] shrink-0 bg-[#f8fafc] border border-slate-200 rounded-xl p-5 shadow-inner flex flex-col justify-center">
                       <div className="flex items-center justify-between text-xs mb-2">
                         <span className="font-bold text-[#667085] uppercase tracking-wider">AI Health Index</span>
-                        <span className={`px-2 py-1 rounded text-[10px] font-extrabold border ${healthColor}`}>
+                        <span className={`px-2 py-1 rounded text-xs font-extrabold border ${healthColor}`}>
                           {healthScore}% · {healthLabel}
                         </span>
                       </div>
@@ -633,37 +674,16 @@ export default function DashboardPage() {
               )
             })}
 
-            {/* Quick Actions */}
-            <div className="grid gap-5 sm:grid-cols-2">
-              <a href="/reports" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#ED1C24] hover:shadow-lg hover:shadow-red-500/10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FEF2F2] text-[#ED1C24] group-hover:bg-[#ED1C24] group-hover:text-white transition-colors">
-                  <FileText className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#161616]">Submit Laporan Baru</p>
-                  <p className="text-xs text-[#667085]">Kirim laporan bulanan untuk evaluasi AI</p>
-                </div>
-              </a>
-              <a href="/forecast" className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] group flex items-center gap-4 p-6 transition-all hover:border-[#16a34a] hover:shadow-lg hover:shadow-green-500/10">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#f0fdf4] text-[#16a34a] group-hover:bg-[#16a34a] group-hover:text-white transition-colors">
-                  <TrendingUp className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#161616]">Lihat Forecast</p>
-                  <p className="text-xs text-[#667085]">Prediksi pertumbuhan 3 bulan ke depan</p>
-                </div>
-              </a>
-            </div>
 
             {/* Peer Benchmarking & Resource Hub Grid */}
             <div className="grid gap-6 lg:grid-cols-2">
               
               {/* Peer Benchmarking (Anonim) */}
-              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col justify-between">
+              <div className="card-legion p-6 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <TrendingUp className="h-4 w-4 text-indigo-600" />
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">Peer Benchmarking</h3>
+                    <h3 className="text-base font-extrabold text-foreground tracking-wide">Peer Benchmarking</h3>
                   </div>
                   <p className="text-xs text-[#8c8f93]">Perbandingan performa (anonim) terhadap ekosistem Indigo</p>
                 </div>
@@ -706,11 +726,11 @@ export default function DashboardPage() {
               </div>
 
               {/* AI Action Items (Replaced Resource Hub) */}
-              <div className="rounded-[20px] bg-white shadow-soft border border-[#f2f4f7] p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
+              <div className="card-legion p-6 flex flex-col bg-gradient-to-br from-white to-red-50/30">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Sparkles className="h-4 w-4 text-[#ED1C24]" />
-                    <h3 className="text-base font-extrabold text-[#161616] tracking-wide">AI Action Items</h3>
+                    <h3 className="text-base font-extrabold text-foreground tracking-wide">AI Action Items</h3>
                   </div>
                   <p className="text-xs text-[#8c8f93]">Fokus perbaikan berdasarkan evaluasi laporan bulan lalu</p>
                 </div>
@@ -721,7 +741,7 @@ export default function DashboardPage() {
                       <AlertTriangle className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Optimalkan Margin Mitra</p>
+                      <p className="text-sm font-bold text-foreground">Optimalkan Margin Mitra</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">AI mendeteksi sentimen peringatan pada penurunan retensi aktif bulan lalu. Rancang strategi insentif baru bulan ini.</p>
                     </div>
                   </div>
@@ -731,7 +751,7 @@ export default function DashboardPage() {
                       <CheckCircle2 className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Follow-up Sinergi Telkom</p>
+                      <p className="text-sm font-bold text-foreground">Follow-up Sinergi Telkom</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">Peluang sinergi dengan LinkAja & PADI UMKM (Match: 95%). Siapkan ringkasan teknis API untuk diajukan ke manajer Sinergi.</p>
                     </div>
                   </div>
@@ -741,7 +761,7 @@ export default function DashboardPage() {
                       <RefreshCw className="h-3 w-3" />
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-[#161616]">Persiapan Laporan Selanjutnya</p>
+                      <p className="text-sm font-bold text-foreground">Persiapan Laporan Selanjutnya</p>
                       <p className="text-xs text-[#667085] mt-1 leading-relaxed">Laporan berikutnya dijadwalkan dalam 8 hari. Pastikan Anda menyertakan data burn-rate (pengeluaran) terbaru.</p>
                     </div>
                   </div>
@@ -758,10 +778,13 @@ export default function DashboardPage() {
 
         {/* Filters & search — hidden for founder with few startups */}
         {(user?.role !== "founder" || startups.length > 3) && (
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <Filter className="h-4 w-4 text-[#667085]" />
+          <div 
+            className="mb-8 flex flex-wrap items-center gap-4 rounded-[20px] p-5 shadow-lg border border-white/5"
+            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+          >
+            <Filter className="h-4 w-4 text-slate-300" />
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.sector}
               onChange={(e) => setFilters({ ...filters, sector: e.target.value })}
             >
@@ -771,7 +794,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.batch}
               onChange={(e) => setFilters({ ...filters, batch: e.target.value })}
             >
@@ -781,7 +804,7 @@ export default function DashboardPage() {
               ))}
             </select>
             <select
-              className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+              className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] [&>option]:text-slate-800"
               value={filters.risk}
               onChange={(e) => setFilters({ ...filters, risk: e.target.value })}
             >
@@ -791,34 +814,34 @@ export default function DashboardPage() {
             </select>
 
             <div className="relative flex flex-1 min-w-[300px]">
-              <div className="flex w-full items-center gap-2 rounded-lg border border-[#e0e0e0] bg-white px-3 py-1 focus-within:border-[#ED1C24] focus-within:ring-1 focus-within:ring-[#ED1C24]">
+              <div className="flex w-full items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 focus-within:border-[#ED1C24] focus-within:ring-1 focus-within:ring-[#ED1C24] shadow-inner">
                 {aiSearch ? (
                   <Sparkles className="h-4 w-4 text-[#ED1C24]" />
                 ) : (
-                  <Search className="h-4 w-4 text-[#667085]" />
+                  <Search className="h-4 w-4 text-slate-400" />
                 )}
                 <input
-                  className="flex-1 border-0 bg-transparent py-2 text-sm text-[#344054] placeholder:text-[#8c8f93] focus:outline-none"
+                  className="flex-1 border-0 bg-transparent py-2 text-sm text-white placeholder:text-slate-400 focus:outline-none"
                   placeholder={aiSearch ? 'Contoh: "cari startup fintech at risk" atau "perusahaan logistik batch 6"' : "Cari startup..."}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
                 />
                 {aiSearch && search && (
-                  <button onClick={handleAiSearch} disabled={aiSearchLoading} className="btn-primary-solid rounded-md px-3 py-1.5 text-xs disabled:opacity-50">
+                  <button onClick={handleAiSearch} disabled={aiSearchLoading} className="btn-primary-solid rounded-md px-3 py-1.5 text-xs disabled:opacity-50 border-0">
                     {aiSearchLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : "Cari"}
                   </button>
                 )}
                 {aiSearchActive && (
-                  <button onClick={clearAiSearch} className="text-[#8c8f93] hover:text-[#161616] text-xs">✕</button>
+                  <button onClick={clearAiSearch} className="text-slate-400 hover:text-white text-xs">✕</button>
                 )}
               </div>
               <button
                 onClick={() => { setAiSearch(!aiSearch); if (aiSearchActive) clearAiSearch(); }}
-                className={`ml-2 flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors whitespace-nowrap ${
+                className={`ml-3 flex items-center gap-1.5 rounded-lg border px-4 py-2 text-xs font-bold transition-all whitespace-nowrap shadow-sm ${
                   aiSearch
-                    ? "border-[#ED1C24] bg-[#FEF2F2] text-[#ED1C24]"
-                    : "border-[#e0e0e0] text-[#667085] hover:border-[#ED1C24]"
+                    ? "border-[#ED1C24] bg-gradient-to-r from-[#ED1C24] to-[#B91217] text-white hover:brightness-110"
+                    : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white"
                 }`}
               >
                 <Sparkles className="h-3.5 w-3.5" />
@@ -876,13 +899,13 @@ export default function DashboardPage() {
                   <div className="p-6 pl-7 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-3">
-                        {startup.logoUrl && (
+                        {startup && getLogoForName(startup.name) && (
                           <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm">
-                            <img src={startup.logoUrl} alt={startup.name} className="h-full w-full object-contain p-1" />
+                            <img src={getLogoForName(startup.name) || "/startups/indigo-red.png"} alt={startup.name} className="h-full w-full object-contain p-1" />
                           </div>
                         )}
                         <div>
-                          <h3 className="text-base font-extrabold text-[#161616] group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
+                          <h3 className="text-base font-extrabold text-foreground group-hover:text-[#ED1C24] transition-colors">{startup.name}</h3>
                           <p className="mt-1 text-xs font-semibold text-[#8c8f93] tracking-wide uppercase">{startup.sector} · {startup.batch}</p>
                         </div>
                       </div>
@@ -901,7 +924,7 @@ export default function DashboardPage() {
                         <div>
                           <div className="flex items-center justify-between text-xs mb-1.5">
                             <span className="font-semibold text-[#667085]">Health Index</span>
-                            <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${healthColor}`}>
+                            <span className={`px-1.5 py-0.5 rounded text-xs font-bold border ${healthColor}`}>
                               {healthScore}% · {healthLabel}
                             </span>
                           </div>
@@ -918,8 +941,8 @@ export default function DashboardPage() {
                       {user?.role === "synergy" && (
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-3 shadow-sm shadow-[#f2f4f7]">
                           <div className="flex items-center justify-between mb-2">
-                            <span className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
-                            <span className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</span>
+                            <span className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider">Synergy Target</span>
+                            <span className="text-xs font-bold text-foreground uppercase tracking-wider">AI Match</span>
                           </div>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2 pr-2 truncate">
@@ -941,7 +964,7 @@ export default function DashboardPage() {
                       {(user?.role === "admin" || !user) && (
                         <div className="bg-[#fcfcfd] border border-[#f2f4f7] rounded-lg p-2.5 flex items-center justify-between">
                           <div className="truncate pr-2">
-                            <p className="text-[10px] font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Synergy Target</p>
+                            <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Synergy Target</p>
                             <div className="flex items-center gap-1.5">
                               {synergy.logos && synergy.logos.length > 0 && (
                                 <div className="flex -space-x-1 shrink-0">
@@ -954,7 +977,7 @@ export default function DashboardPage() {
                             </div>
                           </div>
                           <div className="text-right shrink-0">
-                            <p className="text-[10px] font-bold text-[#ED1C24] uppercase tracking-wider">AI Match</p>
+                            <p className="text-xs font-bold text-foreground uppercase tracking-wider">AI Match</p>
                             <p className="text-xs font-extrabold text-emerald-600 mt-0.5">{synergy.match}%</p>
                           </div>
                         </div>
@@ -989,7 +1012,7 @@ export default function DashboardPage() {
                     {/* Right Action Button */}
                     <button 
                       onClick={() => setAnalysisModal(startup)}
-                      className="text-[#ED1C24] font-bold hover:underline flex items-center gap-1 group/btn transition-colors cursor-pointer"
+                      className="bg-red-50 border border-red-100 text-[#ED1C24] hover:bg-[#ED1C24] hover:text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 group/btn transition-all shadow-sm cursor-pointer"
                     >
                       {user?.role === "synergy" ? (
                         <span>Potensi Sinergi</span>
@@ -1011,100 +1034,253 @@ export default function DashboardPage() {
       </div>
 
       {/* Analysis Modal */}
-      {analysisModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl rounded-[24px] bg-white shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-            {/* Modal Header */}
-            <div className="border-b border-[#f2f4f7] p-6 flex items-start justify-between bg-gradient-to-r from-slate-50 to-white relative">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50" />
-              <div className="flex items-center gap-4 relative z-10">
-                <div className="h-12 w-12 rounded-xl bg-white shadow-sm border border-[#f2f4f7] p-2 flex items-center justify-center shrink-0">
-                  {analysisModal.logoUrl ? (
-                    <img src={analysisModal.logoUrl} alt={analysisModal.name} className="h-full w-full object-contain" />
-                  ) : (
-                    <span className="text-xl font-bold text-[#ED1C24]">{analysisModal.name?.charAt(0)}</span>
-                  )}
+      {analysisModal && (() => {
+        const logo = getLogoForName(analysisModal.name) || "/startups/indigo-red.png";
+        const isHigh = analysisModal.status === "ACTIVE";
+        const healthScore = isHigh ? 92 : 45;
+        const healthLabel = isHigh ? "Excellent" : "Critical Risk";
+        const riskLabel = (isHigh ? "LOW_RISK" : "HIGH_RISK") as string;
+        
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="w-full max-w-2xl rounded-[24px] bg-white shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              {/* Modal Header */}
+              <div className="border-b border-[#f2f4f7] p-6 flex items-start justify-between bg-gradient-to-r from-slate-50 to-white relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-50 rounded-bl-[100px] z-0 opacity-50" />
+                <div className="flex items-center gap-4 relative z-10">
+                  <div className="h-12 w-12 rounded-xl bg-white border border-[#f2f4f7] p-2 flex items-center justify-center shrink-0">
+                    <img src={logo} alt={analysisModal.name} className="h-full w-full object-contain" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-extrabold text-foreground">
+                      {user?.role === "synergy" ? "Analisis Potensi Sinergi" : user?.role === "founder" ? "Update Laporan Kinerja" : "AI Risk Analysis"}
+                    </h2>
+                    <p className="text-sm font-medium text-[#667085]">{analysisModal.name} — {analysisModal.sector}</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-lg font-extrabold text-[#161616]">
-                    {user?.role === "synergy" ? "Analisis Potensi Sinergi" : user?.role === "founder" ? "Update Laporan Kinerja" : "AI Risk Analysis"}
-                  </h2>
-                  <p className="text-sm font-medium text-[#667085]">{analysisModal.name} — {analysisModal.sector}</p>
-                </div>
+                <button 
+                  onClick={() => setAnalysisModal(null)}
+                  className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[#667085] hover:bg-slate-200 transition-colors cursor-pointer relative z-10"
+                >
+                  <X className="h-4 w-4" />
+                </button>
               </div>
-              <button 
-                onClick={() => setAnalysisModal(null)}
-                className="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center text-[#667085] hover:bg-slate-200 transition-colors cursor-pointer relative z-10"
-              >
-                <X className="h-4 w-4" />
+              
+              {/* Modal Body */}
+              <div className="p-6">
+                {user?.role === "synergy" ? (
+                  <div className="space-y-4">
+                    <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="h-4 w-4 text-emerald-600" />
+                        <h4 className="font-bold text-emerald-800">Rekomendasi AI Matcher</h4>
+                      </div>
+                      <p className="text-sm text-emerald-700 leading-relaxed">
+                        Sistem AI mendeteksi potensi sinergi yang tinggi antara {analysisModal.name} dengan ekosistem Telkom Group di sektor {analysisModal.sector}. AI menyarankan integrasi PoC (Proof of Concept) dalam kuartal ini.
+                      </p>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <a href="/synergy" className="btn-primary-solid px-6 py-2.5 text-sm shadow-md hover:shadow-lg transition-all">Buka Pipeline Sinergi</a>
+                    </div>
+                  </div>
+                ) : user?.role === "founder" ? (
+                  <div className="space-y-4 text-center py-6">
+                    <FileText className="h-12 w-12 text-[#d0d5dd] mx-auto mb-3" />
+                    <h3 className="text-base font-bold text-foreground">Upload Laporan Bulanan</h3>
+                    <p className="text-sm text-[#667085] max-w-md mx-auto">AI Synergy Risk Engine akan secara otomatis mengekstrak metrik kunci (Revenue, User, Burn Rate) dari dokumen PDF laporan Anda.</p>
+                    <div className="mt-6">
+                      <a href="/reports" className="btn-primary-solid px-6 py-2.5 shadow-md hover:shadow-lg transition-all">Buka Modul Reports</a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-5">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="rounded-xl border border-border p-4 bg-[#f8fafc]">
+                        <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
+                        <div className="flex items-end gap-2">
+                          <p className="text-3xl font-extrabold text-foreground">{healthScore}</p>
+                          <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
+                        </div>
+                      </div>
+                      <div className="rounded-xl border border-border p-4 bg-[#f8fafc]">
+                        <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <div className={`h-3 w-3 rounded-full ${riskLabel === "LOW_RISK" ? "bg-emerald-500" : riskLabel === "MEDIUM_RISK" ? "bg-amber-500" : "bg-red-500"}`} />
+                          <p className={`text-base font-bold ${riskLabel === "LOW_RISK" ? "text-emerald-700" : riskLabel === "MEDIUM_RISK" ? "text-amber-700" : "text-red-700"}`}>
+                            {riskLabel.replace("_", " ")}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="rounded-xl bg-red-50 border border-red-100 p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <AlertTriangle className="h-4 w-4 text-[#ED1C24]" />
+                        <h4 className="font-bold text-red-800">Catatan Risiko AI</h4>
+                      </div>
+                      <p className="text-sm text-red-700 leading-relaxed">
+                        AI mendeteksi anomali pada rasio burn-rate 3 bulan terakhir. Terdapat potensi hambatan teknis pada skalabilitas infrastruktur saat beban puncak (peak traffic). Direkomendasikan melakukan intervensi pendampingan teknis.
+                      </p>
+                    </div>
+                    <div className="flex justify-end mt-2">
+                      <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-border text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* 1. Health Modal */}
+      {isHealthModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">Detail Health Score</h3>
+              <button onClick={() => setIsHealthModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="h-5 w-5" />
               </button>
             </div>
-            
-            {/* Modal Body */}
-            <div className="p-6">
-              {user?.role === "synergy" ? (
-                <div className="space-y-4">
-                  <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="h-4 w-4 text-emerald-600" />
-                      <h4 className="font-bold text-emerald-800">Rekomendasi AI Matcher</h4>
-                    </div>
-                    <p className="text-sm text-emerald-700 leading-relaxed">
-                      Sistem AI mendeteksi potensi sinergi yang tinggi antara {analysisModal.name} dengan ekosistem Telkom Group di sektor {analysisModal.sector}. AI menyarankan integrasi PoC (Proof of Concept) dalam kuartal ini.
-                    </p>
+            <div className="p-5 max-h-[60vh] overflow-y-auto space-y-4">
+              {healthDistribution.map((item, idx) => (
+                <div key={idx} className="border border-slate-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${item.color}`} />
+                      {item.label}
+                    </h4>
+                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{item.count} Startup</span>
                   </div>
-                  <div className="flex justify-end mt-4">
-                    <a href="/synergy" className="btn-primary-solid px-6 py-2.5 text-sm shadow-md hover:shadow-lg transition-all">Buka Pipeline Sinergi</a>
-                  </div>
-                </div>
-              ) : user?.role === "founder" ? (
-                <div className="space-y-4 text-center py-6">
-                  <FileText className="h-12 w-12 text-[#d0d5dd] mx-auto mb-3" />
-                  <h3 className="text-base font-bold text-[#161616]">Upload Laporan Bulanan</h3>
-                  <p className="text-sm text-[#667085] max-w-md mx-auto">AI Synergy Risk Engine akan secara otomatis mengekstrak metrik kunci (Revenue, User, Burn Rate) dari dokumen PDF laporan Anda.</p>
-                  <div className="mt-6">
-                    <a href="/reports" className="btn-primary-solid px-6 py-2.5 shadow-md hover:shadow-lg transition-all">Buka Modul Reports</a>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-5">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
-                      <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Health Score</p>
-                      <div className="flex items-end gap-2">
-                        <p className="text-3xl font-extrabold text-[#161616]">{analysisModal.healthScore ?? "—"}</p>
-                        <p className="text-sm font-medium text-emerald-600 mb-1">Stable Trend</p>
+                  <div className="space-y-2">
+                    {filteredStartups.filter(s => (item.label === "High Growth" && s.status === "ACTIVE") || (item.label === "At Risk" && s.status === "AT_RISK") || (item.label === "Stable" && s.status === "STABLE")).map(s => (
+                      <div key={s.id} className="text-sm text-slate-600 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 flex justify-between">
+                        <span className="font-medium text-slate-700">{s.name}</span>
+                        <span className="text-xs text-slate-400">{s.sector}</span>
                       </div>
-                    </div>
-                    <div className="rounded-xl border border-[#e0e0e0] p-4 bg-[#f8fafc]">
-                      <p className="text-xs font-bold text-[#8c8f93] uppercase tracking-wider mb-1">Risk Profile</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <div className={`h-3 w-3 rounded-full ${analysisModal.riskLabel === "HIGH_GROWTH" ? "bg-emerald-500" : analysisModal.riskLabel === "STABLE" ? "bg-amber-500" : analysisModal.riskLabel === "AT_RISK" ? "bg-red-500" : "bg-slate-400"}`} />
-                        <p className={`text-base font-bold ${analysisModal.riskLabel === "HIGH_GROWTH" ? "text-emerald-700" : analysisModal.riskLabel === "STABLE" ? "text-amber-700" : analysisModal.riskLabel === "AT_RISK" ? "text-red-700" : "text-slate-500"}`}>
-                          {analysisModal.riskLabel ? analysisModal.riskLabel.replace("_", " ") : "Belum Dievaluasi"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="rounded-xl bg-red-50 border border-red-100 p-4">
-                    <div className="flex items-center gap-2 mb-2">
-                      <AlertTriangle className="h-4 w-4 text-[#ED1C24]" />
-                      <h4 className="font-bold text-red-800">Catatan Risiko AI</h4>
-                    </div>
-                    <p className="text-sm text-red-700 leading-relaxed">
-                      AI mendeteksi anomali pada rasio burn-rate 3 bulan terakhir. Terdapat potensi hambatan teknis pada skalabilitas infrastruktur saat beban puncak (peak traffic). Direkomendasikan melakukan intervensi pendampingan teknis.
-                    </p>
-                  </div>
-                  <div className="flex justify-end mt-2">
-                    <a href={`/forecast`} className="btn-primary-outline px-6 py-2.5 text-sm border-[#e0e0e0] text-[#344054] hover:border-[#ED1C24] hover:text-[#ED1C24] hover:bg-red-50 transition-all font-semibold">Lihat Forecast Detail</a>
+                    ))}
+                    {filteredStartups.filter(s => (item.label === "High Growth" && s.status === "ACTIVE") || (item.label === "At Risk" && s.status === "AT_RISK") || (item.label === "Stable" && s.status === "STABLE")).length === 0 && (
+                      <p className="text-xs text-slate-400 italic">Tidak ada data di kategori ini.</p>
+                    )}
                   </div>
                 </div>
-              )}
+              ))}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setIsHealthModalOpen(false)} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">Tutup</button>
             </div>
           </div>
         </div>
       )}
 
+      {/* 2. Sector Modal */}
+      {isSectorModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">Detail Sector Distribution</h3>
+              <button onClick={() => setIsSectorModalOpen(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-5 max-h-[60vh] overflow-y-auto space-y-4">
+              {sectorData.map((item, idx) => (
+                <div key={idx} className="border border-slate-100 rounded-xl p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-bold text-sm text-slate-800 flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: sectorColorMap[item.name] || '#64748b' }} />
+                      {item.name}
+                    </h4>
+                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-md">{item.value} Startup</span>
+                  </div>
+                  <div className="space-y-2">
+                    {filteredStartups.filter(s => s.sector === item.name).map(s => (
+                      <div key={s.id} className="text-sm text-slate-600 bg-slate-50 px-3 py-2 rounded-lg border border-slate-100 flex justify-between">
+                        <span className="font-medium text-slate-700">{s.name}</span>
+                        <span className={`text-xs ${s.status === 'ACTIVE' ? 'text-emerald-500' : 'text-red-500'}`}>{s.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+              <button onClick={() => setIsSectorModalOpen(false)} className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">Tutup</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. Matrix Fullscreen Modal */}
+      {isMatrixFullscreen && (
+        <div className="fixed inset-0 z-[100] flex flex-col bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-200">
+          <div 
+            className="p-6 flex items-center justify-between border-b border-white/5"
+            style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] flex items-center justify-center text-white shadow-sm">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-xl font-extrabold text-white tracking-wide">Executive Risk Matrix (Full Screen)</h3>
+                <p className="text-sm font-medium text-slate-400">Pemetaan portfolio berdasarkan Potensi Sinergi vs Tingkat Risiko AI</p>
+              </div>
+            </div>
+            <button onClick={() => setIsMatrixFullscreen(false)} className="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-lg transition-colors">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="flex-1 p-8 w-full h-full min-h-0 bg-white">
+            <ResponsiveContainer width="100%" height="100%">
+              <ScatterChart margin={{ top: 20, right: 40, bottom: 40, left: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f8fafc" vertical={false} />
+                <XAxis type="number" dataKey="synergy" name="Potensi Sinergi" unit="%" domain={[0, 100]} tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Potensi Sinergi (%)', position: 'insideBottom', offset: -20, fontSize: 14, fill: '#94a3b8', fontWeight: 'bold' }} />
+                <YAxis type="number" dataKey="risk" name="Tingkat Risiko" unit="%" domain={[0, 100]} tick={{ fontSize: 13, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} ticks={[0, 25, 50, 75, 100]} label={{ value: 'Tingkat Risiko AI (%)', angle: -90, position: 'insideLeft', offset: 10, fontSize: 14, fill: '#94a3b8', fontWeight: 'bold' }} />
+                <ZAxis type="number" dataKey="z" range={[200, 1000]} name="Valuasi" />
+                
+                <ReferenceArea x1={0} x2={50} y1={50} y2={100} fill="#fce8e8" fillOpacity={0.6} />
+                <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill="#fef3c7" fillOpacity={0.6} />
+                <ReferenceArea x1={0} x2={50} y1={0} y2={50} fill="#e0f2fe" fillOpacity={0.6} />
+                <ReferenceArea x1={50} x2={100} y1={0} y2={50} fill="#dcfce7" fillOpacity={0.6} />
+
+                <ReferenceArea x1={10} x2={10} y1={85} y2={85} label={{ value: "High Risk", position: "inside", fill: "#ef4444", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={10} x2={10} y1={80} y2={80} label={{ value: "Low Synergy", position: "inside", fill: "#ef4444", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={90} x2={90} y1={85} y2={85} label={{ value: "High Synergy", position: "inside", fill: "#f59e0b", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={90} x2={90} y1={80} y2={80} label={{ value: "High Risk", position: "inside", fill: "#f59e0b", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={10} x2={10} y1={20} y2={20} label={{ value: "Low Synergy", position: "inside", fill: "#3b82f6", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={10} x2={10} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#3b82f6", fontSize: 12, fontWeight: "bold" }} />
+                
+                <ReferenceArea x1={90} x2={90} y1={20} y2={20} label={{ value: "High Synergy", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
+                <ReferenceArea x1={90} x2={90} y1={15} y2={15} label={{ value: "Low Risk", position: "inside", fill: "#10b981", fontSize: 12, fontWeight: "bold" }} />
+
+                <Tooltip cursor={{ strokeDasharray: '3 3' }} content={<MatrixTooltip />} />
+                <Scatter name="Startups" data={[
+                  { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                  { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                  { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                  { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                  { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                ]} fill="#8884d8" opacity={0.85}>
+                  {
+                    [
+                      { name: 'Logee', synergy: 85, risk: 20, z: 300, fill: '#10b981' },
+                      { name: 'Verihubs', synergy: 90, risk: 30, z: 400, fill: '#10b981' },
+                      { name: 'T-Con', synergy: 70, risk: 40, z: 250, fill: '#f59e0b' },
+                      { name: 'HealthSync', synergy: 65, risk: 75, z: 200, fill: '#ef4444' },
+                      { name: 'PayDesa', synergy: 45, risk: 85, z: 150, fill: '#ef4444' },
+                    ].map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} stroke="#ffffff" strokeWidth={2} />
+                    ))
+                  }
+                </Scatter>
+              </ScatterChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }

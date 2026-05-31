@@ -1,6 +1,8 @@
 "use client";
 
-import { Shield, TrendingUp, AlertTriangle, Target, Lightbulb } from "lucide-react";
+import { TrendingUp, Target, Lightbulb, AlertTriangle, Shield } from "lucide-react";
+import { getLogoForName } from "@/lib/logos";
+import Image from "next/image";
 
 interface HealthScoreProps {
   healthScore: number;
@@ -39,14 +41,7 @@ export function HealthScoreCard({
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Health Score Card (Hero) */}
-        <div 
-          className="rounded-[24px] overflow-hidden relative flex flex-col h-full"
-          style={{
-          background: 'linear-gradient(145deg, rgba(255,255,255,1), rgba(248,248,252,1))',
-          border: '1px solid rgba(255,0,60,0.06)',
-          boxShadow: '0 10px 40px rgba(15,0,40,0.08)'
-        }}
-      >
+        <div className="card-legion overflow-hidden relative flex flex-col h-full border-t border-t-[#ED1C24]">
         {/* Subtle AI Pattern Overlay */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '24px 24px' }}></div>
         
@@ -83,13 +78,13 @@ export function HealthScoreCard({
                 <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`h-2 w-2 rounded-full ${sentimentScore >= 0.7 ? 'bg-emerald-500' : sentimentScore >= 0.4 ? 'bg-amber-500' : 'bg-red-500'}`}></div>
-                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
+                    <p className="text-xs font-bold text-[#64748b] uppercase tracking-wider">AI Sentiment</p>
                   </div>
                   <div className="flex flex-col items-end gap-0.5">
                     <p className={`text-xl font-extrabold ${sentimentScore >= 0.7 ? 'text-emerald-600' : sentimentScore >= 0.4 ? 'text-amber-600' : 'text-red-600'}`}>
                       {(sentimentScore * 100).toFixed(0)}%
                     </p>
-                    <p className="text-[10px] font-semibold text-[#94a3b8]">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
+                    <p className="text-xs font-semibold text-[#94a3b8]">{sentimentScore >= 0.7 ? 'Positif' : sentimentScore >= 0.4 ? 'Netral' : 'Negatif'}</p>
                   </div>
                 </div>
               )}
@@ -97,7 +92,7 @@ export function HealthScoreCard({
                 <div className="rounded-[16px] bg-white border border-slate-100 p-4 shadow-sm hover:shadow-md transition-shadow flex flex-row items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`h-2 w-2 rounded-full ${operationalStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-red-500'}`}></div>
-                    <p className="text-[10px] font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
+                    <p className="text-xs font-bold text-[#64748b] uppercase tracking-wider">Op Status</p>
                   </div>
                   <div>
                     <span className={`inline-flex items-center rounded-md px-2.5 py-1 text-xs font-extrabold border ${operationalStatus === 'ACTIVE' ? 'text-emerald-700 bg-emerald-50 border-emerald-100' : 'text-red-700 bg-red-50 border-red-100'}`}>
@@ -114,7 +109,7 @@ export function HealthScoreCard({
 
       {/* Executive Summary Insight Cards */}
       {summaryPoints && summaryPoints.length > 0 ? (
-        <div className="rounded-[20px] bg-[#FCFBFF] border border-[#f1f1f5] shadow-md p-6 flex flex-col h-full">
+        <div className="card-legion bg-slate-50 border-slate-200 p-8 flex flex-col justify-center">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-50 to-orange-50 text-[#ED1C24] shadow-sm">
               <Lightbulb className="h-5 w-5" />
@@ -123,7 +118,7 @@ export function HealthScoreCard({
               <h3 className="text-lg font-extrabold text-[#0f172a]">AI Insights & Summary</h3>
               <p className="text-xs font-medium text-[#64748b]">Key takeaways extracted by Gemini 2.0</p>
             </div>
-            <span className="ml-auto inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 text-[10px] font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20 uppercase tracking-widest">
+            <span className="ml-auto inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700 ring-1 ring-inset ring-indigo-600/20 uppercase tracking-widest">
               AI Generated
             </span>
           </div>
@@ -156,7 +151,7 @@ export function HealthScoreCard({
 
       {/* Synergy Recommendations */}
       {synergyMatches && synergyMatches.length > 0 && (
-        <div className="rounded-[20px] bg-white border border-[#f1f1f5] shadow-md p-6">
+        <div className="rounded-[20px] bg-white border border-border shadow-md p-6">
           <div className="flex items-center gap-3 mb-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#fffbeb] to-[#fef3c7] text-[#d97706] shadow-sm">
               <Lightbulb className="h-5 w-5" />
@@ -168,21 +163,30 @@ export function HealthScoreCard({
           </div>
           <div className="space-y-3">
             {synergyMatches.map((match, i) => (
-              <div key={i} className="rounded-xl border border-slate-100 bg-[#FAFAFD] p-5 hover:border-amber-200 transition-colors">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    {match.logo && (
-                      <div className="h-10 w-10 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center">
-                        <img src={match.logo} alt={match.name} className="h-full w-full object-contain p-1" />
+              <div key={i} className="rounded-xl border border-slate-100 bg-background p-5 hover:border-amber-200 transition-colors flex items-center gap-6">
+                
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2.5">
+                    {(match.logo || getLogoForName(match.name)) && (
+                      <div className="h-8 w-8 shrink-0 rounded-lg bg-white border border-slate-200 overflow-hidden shadow-sm flex items-center justify-center relative">
+                        <Image src={match.logo || getLogoForName(match.name) || '/startups/indigo-red.png'} alt={match.name} fill className="object-contain p-1" />
                       </div>
                     )}
-                    <p className="font-bold text-[#0f172a]">{match.name}</p>
+                    <p className="font-extrabold text-[#0f172a]">{match.name}</p>
                   </div>
-                  <span className="inline-flex items-center rounded-full bg-[#FEF2F2] px-2.5 py-0.5 text-xs font-bold text-[#ED1C24] shadow-sm">
-                    {Math.round(match.score * 100)}% match
-                  </span>
+                  <p className="text-sm font-medium text-[#475569] leading-relaxed">{match.reason}</p>
                 </div>
-                <p className="text-sm font-medium text-[#475569] leading-relaxed">{match.reason}</p>
+
+                <div className="flex flex-col items-end justify-center shrink-0 border-l border-slate-200 pl-6 py-2">
+                  <p className={`text-5xl font-black tracking-tighter ${
+                    (match.score > 1 ? match.score : match.score * 100) >= 80 ? 'text-emerald-600' : 
+                    (match.score > 1 ? match.score : match.score * 100) >= 60 ? 'text-amber-600' : 'text-red-600'
+                  }`}>
+                    {Math.round(match.score > 1 ? match.score : match.score * 100)}%
+                  </p>
+                  <p className="text-[11px] font-bold text-[#94a3b8] uppercase tracking-wider mt-1">Synergy Score</p>
+                </div>
+
               </div>
             ))}
           </div>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { AlertType } from "@prisma/client";
 
-function mapAlert(a: any) {
+function mapAlert(a: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
   return {
     id: a.id,
     startupId: a.startupId,
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
   const unreadOnly = searchParams.get("unread") === "true";
   const type = searchParams.get("type");
 
-  let where: any = {};
+  let where: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ = {};
 
   if (unreadOnly) {
     where.readAt = null;
@@ -52,7 +52,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Alert not found" }, { status: 404 });
     }
 
-    let updateData: any = {};
+    let updateData: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ = {};
     if (read !== undefined) {
       updateData.readAt = read ? new Date() : null;
     }

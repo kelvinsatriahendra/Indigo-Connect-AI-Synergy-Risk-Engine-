@@ -85,7 +85,7 @@ export default function MentorPage() {
           setUser(userData.user);
           if (userData.user.role === "founder" && userData.user.userId) {
             const myIds = founderStartupMap[userData.user.userId] || ["s3"];
-            const startup = fetchedStartups.find((s: any) => myIds.includes(s.id));
+            const startup = fetchedStartups.find((s: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) => myIds.includes(s.id));
             if (startup) setStartupName(startup.name);
           }
         }
@@ -121,22 +121,42 @@ export default function MentorPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <Bot className="h-6 w-6 text-[#ED1C24]" />
-                <h1 className="text-2xl font-bold text-[#161616]">AI Mentor</h1>
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <Bot className="h-5 w-5" />
               </div>
-              <p className="mt-1 text-sm text-[#667085]">
-                Konsultasi strategi bisnis dengan AI berdasarkan evaluasi dan data startup Anda
-              </p>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">AI Mentor</h1>
+                  {/* AI Analysis Live Badge */}
+                  <div className="hidden md:flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-xs font-bold text-emerald-700">AI Mentor Online</span>
+                  </div>
+                </div>
+                <p className="mt-0.5 text-sm text-[#667085]">
+                  Konsultasi strategi bisnis dengan AI berdasarkan evaluasi dan data startup Anda
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-semibold text-emerald-600">Online</span>
+
+            <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dihubungkan</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -163,12 +183,12 @@ export default function MentorPage() {
                       className={`rounded-2xl px-5 py-3.5 text-sm leading-relaxed max-w-[85%] whitespace-pre-line ${
                         msg.role === "user"
                           ? "bg-[#ED1C24] text-white rounded-tr-sm shadow-md shadow-red-500/15"
-                          : "bg-white border border-[#e0e0e0] text-[#344054] rounded-tl-sm shadow-sm"
+                          : "bg-white border border-border text-[#344054] rounded-tl-sm shadow-sm"
                       }`}
                     >
                       {msg.content.split(/(\*\*[^*]+\*\*)/).map((part, j) =>
                         part.startsWith("**") && part.endsWith("**") ? (
-                          <strong key={j} className={msg.role === "user" ? "text-white" : "text-[#161616]"}>
+                          <strong key={j} className={msg.role === "user" ? "text-white" : "text-foreground"}>
                             {part.slice(2, -2)}
                           </strong>
                         ) : (
@@ -184,7 +204,7 @@ export default function MentorPage() {
                     <div className="h-9 w-9 shrink-0 rounded-full bg-[#161616] text-white flex items-center justify-center shadow-sm">
                       <Bot className="h-4 w-4" />
                     </div>
-                    <div className="rounded-2xl px-5 py-4 bg-white border border-[#e0e0e0] rounded-tl-sm shadow-sm flex items-center gap-1.5">
+                    <div className="rounded-2xl px-5 py-4 bg-white border border-border rounded-tl-sm shadow-sm flex items-center gap-1.5">
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" />
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "150ms" }} />
                       <span className="h-2 w-2 rounded-full bg-[#ED1C24] animate-bounce" style={{ animationDelay: "300ms" }} />
@@ -207,7 +227,7 @@ export default function MentorPage() {
                         <button
                           key={i}
                           onClick={() => handleSendMessage(qp.prompt)}
-                          className="flex items-center gap-3 rounded-xl border border-[#e0e0e0] bg-white px-4 py-3 text-left transition-all hover:border-red-300 hover:shadow-sm hover:bg-red-50/30 group cursor-pointer"
+                          className="flex items-center gap-3 rounded-xl border border-border bg-white px-4 py-3 text-left transition-all hover:border-red-300 hover:shadow-sm hover:bg-red-50/30 group cursor-pointer"
                         >
                           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-50 text-[#ED1C24] group-hover:bg-red-100 transition-colors">
                             <Icon className="h-4 w-4" />
@@ -222,9 +242,9 @@ export default function MentorPage() {
             )}
 
             {/* Input Bar */}
-            <div className="border-t border-[#e0e0e0] bg-white px-6 py-4">
+            <div className="border-t border-border bg-white px-6 py-4">
               <form onSubmit={handleSubmit} className="mx-auto max-w-3xl flex items-center gap-3">
-                <div className="flex-1 flex items-center gap-2 rounded-xl border border-[#e0e0e0] bg-[#f8fafc] px-4 py-2.5 focus-within:border-[#ED1C24] focus-within:ring-2 focus-within:ring-red-100 transition-all">
+                <div className="flex-1 flex items-center gap-2 rounded-xl border border-border bg-[#f8fafc] px-4 py-2.5 focus-within:border-[#ED1C24] focus-within:ring-2 focus-within:ring-red-100 transition-all">
                   <Sparkles className="h-4 w-4 text-red-400 shrink-0" />
                   <input
                     type="text"
@@ -242,7 +262,7 @@ export default function MentorPage() {
                   <Send className="h-4 w-4 ml-0.5" />
                 </button>
               </form>
-              <p className="mx-auto max-w-3xl mt-2 text-[10px] text-[#a1a1aa] text-center">
+              <p className="mx-auto max-w-3xl mt-2 text-xs text-[#a1a1aa] text-center">
                 AI Mentor menghasilkan rekomendasi berdasarkan data evaluasi {startupName}. Selalu verifikasi dengan tim Anda sebelum mengambil keputusan.
               </p>
             </div>

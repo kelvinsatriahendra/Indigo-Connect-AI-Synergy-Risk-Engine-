@@ -87,7 +87,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -112,7 +112,7 @@
 .card-legion {
   border-radius: 1.25rem;
   border: 1px solid rgba(0, 0, 0, 0.03);
-  background: var(--card);
+  background-color: var(--card);
   color: var(--card-foreground);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.02);
@@ -132,7 +132,7 @@
 .card-subtle {
   border-radius: 1rem;
   border: 1px solid var(--border);
-  background: var(--card-subtle-bg);
+  background-color: var(--card-subtle-bg);
   color: var(--card-foreground);
 }
 
@@ -209,3 +209,10 @@
   background: #fef2f2;
   color: #b91c1c;
 }
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: rgba(156, 163, 175, 0.5); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover { background-color: rgba(107, 114, 128, 0.8); }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
@@ -39,7 +40,7 @@ const roleBadgeColors: Record<string, string> = {
   founder: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
 };
 
-export function Sidebar() {
+export function Sidebar({ isOpen, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
   const [unreadCount, setUnreadCount] = useState(0);
   const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(() => {
@@ -83,16 +84,31 @@ export function Sidebar() {
     : [];
 
   return (
-    <aside
-      className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/5 text-white"
-      style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
-    >
-      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6">
-        <img
-          src="/indigo-red.png"
-          alt="Indigo Logo"
-          className="h-8 w-auto object-contain brightness-110"
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-slate-900/40 lg:hidden backdrop-blur-sm transition-opacity" 
+          onClick={onClose}
         />
+      )}
+      
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-50 flex h-screen w-64 flex-col border-r border-white/5 text-white transition-transform duration-300 lg:translate-x-0 shadow-2xl lg:shadow-none",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+        style={{ background: 'radial-gradient(circle at 50% 20%, #1e1136 0%, #0d0a1b 75%, #06040f 100%)' }}
+      >
+      <div className="flex h-16 items-center gap-3 border-b border-white/5 px-6 relative">
+        <div className="h-8 w-24 relative">
+          <Image
+            src="/indigo-red.png"
+            alt="Indigo Logo"
+            fill
+            className="object-contain brightness-110"
+          />
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
@@ -115,7 +131,7 @@ export function Sidebar() {
               <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-[#ED1C24]" : "text-slate-400")} />
               <span className="flex-1">{item.label}</span>
               {showBadge && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ED1C24] px-1.5 text-[10px] font-bold text-white">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ED1C24] px-1.5 text-xs font-bold text-white">
                   {unreadCount}
                 </span>
               )}
@@ -138,7 +154,7 @@ export function Sidebar() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{user.name}</p>
-              <p className="text-[10px] text-slate-400">{roleLabels[user.role] || user.role}</p>
+              <p className="text-xs text-slate-400">{roleLabels[user.role] || user.role}</p>
             </div>
           </div>
         )}
@@ -151,5 +167,6 @@ export function Sidebar() {
         </button>
       </div>
     </aside>
+    </>
   );
 }

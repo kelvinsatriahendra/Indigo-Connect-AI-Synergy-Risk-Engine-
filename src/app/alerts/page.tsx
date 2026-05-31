@@ -100,38 +100,55 @@ export default function AlertsPage() {
 
   return (
     <AppShell>
-      <div className="flex h-screen flex-col overflow-hidden bg-slate-50/50">
+      <div className="flex h-full flex-col overflow-hidden bg-background relative">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none z-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #000 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+        
         {/* Fixed Header Bar */}
-        <div className="border-b bg-white px-8 py-5 shadow-sm relative z-10">
-          <div className="flex items-center justify-between">
-            <div>
+        <div className="border-b border-border bg-white px-8 py-5 shadow-sm relative z-10">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#ED1C24] to-[#991217] text-white shadow-md">
+                <Bell className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Alerts</h1>
+                  {unreadCount > 0 && (
+                    <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600 border border-red-100">
+                      {unreadCount} unread
+                    </span>
+                  )}
+                </div>
+                <p className="mt-0.5 text-sm text-[#667085]">Notifikasi dan peringatan portofolio startup</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {/* Timestamp */}
+              <div className="hidden lg:block text-right">
+                <p className="text-xs font-medium text-[#8c8f93]">Terakhir dimutakhirkan</p>
+                <p className="text-xs font-bold text-[#344054]">
+                  {new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}, {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+                </p>
+              </div>
+
               <div className="flex items-center gap-3">
-                <Bell className="h-6 w-6 text-[#ED1C24]" />
-                <h1 className="text-2xl font-bold text-[#161616]">Alerts</h1>
+                <select
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                  className="rounded-lg border border-border bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
+                >
+                  <option value="all">Semua Tipe</option>
+                  <option value="RISK">Risk</option>
+                  <option value="MILESTONE">Milestone</option>
+                  <option value="REMINDER">Reminder</option>
+                </select>
                 {unreadCount > 0 && (
-                  <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-semibold text-red-600">
-                    {unreadCount} unread
-                  </span>
+                  <button onClick={markAllRead} className="btn-primary-outline gap-2 px-4 py-2 text-sm">
+                    <CheckCheck className="h-4 w-4" /> Mark All Read
+                  </button>
                 )}
               </div>
-              <p className="mt-1 text-sm text-[#667085]">Notifikasi dan peringatan portofolio startup</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <select
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="rounded-lg border border-[#e0e0e0] bg-white px-3 py-2 text-sm text-[#344054] focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24]"
-              >
-                <option value="all">Semua Tipe</option>
-                <option value="RISK">Risk</option>
-                <option value="MILESTONE">Milestone</option>
-                <option value="REMINDER">Reminder</option>
-              </select>
-              {unreadCount > 0 && (
-                <button onClick={markAllRead} className="btn-primary-outline gap-2 px-4 py-2 text-sm">
-                  <CheckCheck className="h-4 w-4" /> Mark All Read
-                </button>
-              )}
             </div>
           </div>
         </div>
@@ -167,15 +184,15 @@ export default function AlertsPage() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <h3 className="text-sm font-bold text-[#161616]">{alert.title}</h3>
+                          <h3 className="text-sm font-bold text-foreground">{alert.title}</h3>
                           {startupName && (
-                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#FEF2F2] px-2 py-0.5 text-[10px] font-medium text-[#ED1C24]">
+                            <span className="mt-0.5 inline-flex items-center rounded-full bg-[#FEF2F2] px-2 py-0.5 text-xs font-medium text-[#ED1C24]">
                               {startupName}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-[10px] text-[#8c8f93]">
+                          <span className="text-xs text-[#8c8f93]">
                             {new Date(alert.createdAt).toLocaleDateString("id-ID", {
                               day: "numeric", month: "short", hour: "2-digit", minute: "2-digit",
                             })}
@@ -183,7 +200,7 @@ export default function AlertsPage() {
                           {!alert.read && (
                             <button
                               onClick={() => markRead(alert.id)}
-                              className="rounded-md px-2 py-1 text-[10px] font-medium text-[#ED1C24] hover:bg-[#FEF2F2] transition-colors"
+                              className="rounded-md px-2 py-1 text-xs font-medium text-[#ED1C24] hover:bg-[#FEF2F2] transition-colors"
                             >
                               Mark read
                             </button>

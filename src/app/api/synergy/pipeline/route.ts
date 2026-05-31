@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const status = searchParams.get("status");
 
-  let where: any = {};
+  let where: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ = {};
   if (status) {
     where.status = status as PipelineStatus;
   }
@@ -54,7 +54,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Pipeline not found" }, { status: 404 });
     }
 
-    let updateData: any = {};
+    let updateData: any /* eslint-disable-line @typescript-eslint/no-explicit-any */ = {};
     if (status) updateData.status = status as PipelineStatus;
     if (notes !== undefined) updateData.notes = notes;
     if (assignedTo !== undefined) updateData.assignedTo = assignedTo;
