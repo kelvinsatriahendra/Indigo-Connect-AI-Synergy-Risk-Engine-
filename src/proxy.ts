@@ -17,7 +17,7 @@ const routePermissions: Record<string, string[]> = {
 // Protected routes that require authentication
 const protectedRoutes = Object.keys(routePermissions);
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Check if it's a protected route
