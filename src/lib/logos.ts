@@ -12,6 +12,13 @@ export const getLogoForName = (name: string | undefined | null): string | undefi
   if (n.includes('xurya')) return '/startups/xurya.png';
   if (n.includes('goers')) return '/startups/goers.png';
   if (n.includes('linkaja')) return '/startups/linkaja.svg';
+  if (n.includes('agrolink')) return '/startups/agrolink.png';
+  if (n.includes('finaccess')) return '/startups/finaccess.png';
+  if (n.includes('edukita')) return '/startups/edukita.png';
+  if (n.includes('healthsync')) return '/startups/healthsync.png';
+  if (n.includes('greenenergy')) return '/startups/greenenergy.png';
+  if (n.includes('tourlocal')) return '/startups/tourlocal.png';
+  if (n.includes('paydesa')) return '/startups/paydesa.png';
   if (n.includes('ada medika')) return '/startups/ada-medika.png';
   if (n.includes('agate')) return '/startups/agate.jpeg';
   if (n.includes('angin')) return '/startups/angin.jpeg';
