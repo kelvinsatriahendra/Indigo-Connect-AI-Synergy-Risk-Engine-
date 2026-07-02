@@ -54,7 +54,7 @@ export default function LoginPage() {
           <p className="text-sm text-slate-300">AI Synergy & Risk Engine — Internal Platform</p>
         </div>
 
-        <form action={action} className="card-legion space-y-5 p-6 bg-white rounded-2xl shadow-xl border border-slate-100">
+        <form id="login-form" action={action} className="card-legion space-y-5 p-6 bg-white rounded-2xl shadow-xl border border-slate-100">
           <div>
             <label className="mb-2.5 block text-xs font-bold text-[#344054] uppercase tracking-wider">
               Pilih Akses Akun Peran
@@ -154,6 +154,28 @@ export default function LoginPage() {
             className="btn-primary-solid w-full justify-center py-2.5 text-sm font-bold shadow-lg shadow-[#ED1C24]/10 hover:scale-[1.01] active:scale-95 transition-all"
           >
             {pending ? "Memproses Masuk..." : `Masuk sebagai ${selectedRole === "admin" ? "Executive" : selectedRole === "synergy" ? "Synergy Manager" : "Founder"}`}
+          </button>
+
+          <div className="relative flex items-center py-1">
+            <div className="flex-grow border-t border-slate-200"></div>
+            <span className="flex-shrink-0 mx-4 text-[11px] uppercase tracking-wider font-semibold text-slate-400">Atau</span>
+            <div className="flex-grow border-t border-slate-200"></div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              handleRoleSelect("admin");
+              setTimeout(() => {
+                const form = document.getElementById("login-form") as HTMLFormElement;
+                if (form) form.requestSubmit();
+              }, 50);
+            }}
+            disabled={pending}
+            className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold bg-slate-800 text-white rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-md border border-slate-700"
+          >
+            <Rocket className="w-4 h-4 text-emerald-400" />
+            Login Demo (Akses Reviewer)
           </button>
 
           <p className="text-center text-xs text-[#8c8f93]">
