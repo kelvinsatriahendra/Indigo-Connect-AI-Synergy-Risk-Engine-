@@ -173,8 +173,6 @@ export default function LoginPage() {
             }}
             disabled={pending}
             className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold bg-slate-800 text-white rounded-lg hover:bg-slate-700 active:scale-95 transition-all shadow-md border border-slate-700"
-          >
-            <Rocket className="w-4 h-4 text-emerald-400" />
             Login Demo (Akses Reviewer)
           </button>
 
